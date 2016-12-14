@@ -1,0 +1,51 @@
+<div class="container">
+    <h1> View Activity </h1>
+    <div class="row">
+        <div class="col-sm-12">
+           <div class="input-group">
+              <input type="text" class="form-control" placeholder="Search for..." [(ngModel)] = "search_str">
+              <span class="input-group-btn">
+                <button class="btn btn-secondary" type="button">Go!</button>
+              </span>
+            </div>
+            <p> Search by user name or content name </p>
+        </div>
+    </div>  
+
+    <div class="row">
+        <div class="offset-sm-9 col-sm-3 form-group offset-sm-1 col-sm-3">
+            <label for="filter">Filter/Sort</label>
+            <select class="form-control" id="filter">
+                <option>Name</option>
+                <option>Department</option>
+                <option>Account Value</option>
+                <option>Date Joined</option>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <table class="table table-bordered table-striped">
+            <thead class="thead-default">
+                <tr>
+                    <th>User</th>
+                    <th>Content Name</th>
+                    <th>Points Awarded</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody *ngIf="activities.length === 0">
+                <tr>
+                    <td colspan="4">There are no rewards in the DB. Add a new user below.</td>
+                </tr>  
+            </tbody>
+            <tbody>
+                <tr *ngFor="let activity of activities | search: search_str">
+                    <td>{{activity.user}}</td>
+                    <td>{{activity.content.content}}</td>
+                    <td>{{activity.points_awarded}}</td>
+                    <td>{{activity.date | date: 'dd/MM/yyyy'}}</td>
+                </tr>  
+            </tbody>
+        </table>
+    </div>
+</div>

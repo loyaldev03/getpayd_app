@@ -1,0 +1,30 @@
+<div>
+    <h1>New Employee</h1>
+    <form name="form" (ngSubmit)="f.form.valid && register()" #f="ngForm" novalidate>
+        <div class="input-group mb-1" [ngClass]="{ 'has-error': f.submitted && !first_name.valid }">
+            <input type="text" class="form-control" name="first_name" placeholder="First Name" [(ngModel)]="model.first_name" #first_name="ngModel" required />
+            <div *ngIf="f.submitted && !first_name.valid" class="help-block">First Name is required</div>
+        </div>
+        <div class="input-group mb-1" [ngClass]="{ 'has-error': f.submitted && !last_name.valid }">
+            <input type="text" class="form-control" name="last_name" placeholder="Last Name" [(ngModel)]="model.last_name" #last_name="ngModel" required />
+            <div *ngIf="f.submitted && !last_name.valid" class="help-block">Last Name is required</div>
+        </div>
+        <div class="input-group mb-1" [ngClass]="{ 'has-error': f.submitted && !employee_id.valid }">
+            <input type="text" class="form-control" name="employee_id" placeholder="Employee ID" [(ngModel)]="model.employee_id" #employee_id="ngModel" required />
+            <div *ngIf="f.submitted && !employee_id.valid" class="help-block">Employee id is required</div>
+        </div>
+        <div class="input-group mb-1" [ngClass]="{ 'has-error': f.submitted && !department.valid }">
+            <input type="text" class="form-control" name="department" placeholder="department" [(ngModel)]="model.department" #department="ngModel" required />
+            <div *ngIf="f.submitted && !department.valid" class="help-block">Department is required</div>
+        </div>
+        <div class="input-group mb-1" [ngClass]="{ 'has-error': f.submitted && ( !email.valid || user_emails.indexOf(model.email) != -1) }">
+            <input type="email" class="form-control" name="email" placeholder="email" [(ngModel)]="model.email" #email="ngModel" required />
+            <div *ngIf="f.submitted && user_emails.indexOf(email) === -1 && !email.valid" class="help-block">Email is required</div>
+            <div *ngIf="f.submitted && user_emails.indexOf(model.email) != -1" class="help-block">Email is already existing</div>            
+        </div>
+        <div class="input-group mb-1">
+            <button [disabled]="loading" class="btn btn-block btn-success">Add New User</button>
+            <a [routerLink]="['/admin/manage_user']" class="btn btn-link">Cancel</a>
+        </div>
+    </form>
+</div>

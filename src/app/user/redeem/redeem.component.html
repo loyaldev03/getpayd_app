@@ -1,0 +1,38 @@
+<div class="container">
+  <h1 class='title'>Employee - Redeem</h1>
+  <div class="row goto-label">
+    <div class="offset-sm-10 col-sm-2">
+      <a [routerLink]="['/user/user']"><h5>Go To Dashboard</h5></a>
+    </div>
+  </div>
+
+  <div class="row">
+    <table class="table table-bordered table-striped">
+        <thead class="thead-default">
+            <tr>
+                <th>Name</th>
+                <th>Cost</th>
+                <th>Details</th>
+                <th>Date End</th>
+            </tr>
+        </thead>
+        <tbody *ngIf="rewards.length === 0">
+            <tr>
+                <td colspan="4">There are no active rewards in the DB. Add a new reward below.</td>
+            </tr>  
+        </tbody>
+        <tbody>
+          <tr *ngFor="let reward of rewards">
+            <td>
+              <a [routerLink]="['/user/reward_detail/', reward._id]">
+                {{reward.name}}
+              </a>
+            </td>
+            <td>{{reward.cost}}</td>
+            <td>{{reward.details}}</td>
+            <td>{{reward.date_end | date: 'dd/MM/yyyy'}}</td>
+          </tr>  
+        </tbody>
+    </table>
+  </div>
+</div>

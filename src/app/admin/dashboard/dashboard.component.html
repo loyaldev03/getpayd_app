@@ -1,0 +1,28 @@
+<div>
+    <h1> Admin Dashboard </h1>
+    <div class="row" *ngIf="account_type === 0">
+        <div class="col-md-6 offset-md-3">
+            <a class="btn btn-success btn-lg btn-block" [routerLink] = "'/admin/manage_company'">Manage Companies</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <a class="btn btn-success btn-lg btn-block" [routerLink] = "'/admin/manage_user'">Manage Users</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <a class="btn btn-success btn-lg btn-block" [routerLink] = "'/admin/manage_content'">Manage Content</a>
+        </div>
+    </div>
+    <div class="row">            
+        <div class="col-md-6 offset-md-3">
+            <a class="btn btn-success btn-lg btn-block" [routerLink] = "'/admin/manage_reward'">Manage Rewards</a>
+        </div>
+    </div>
+    <div class="row">        
+        <div class="col-md-6 offset-md-3">
+            <a class="btn btn-success btn-lg btn-block" [routerLink] = "'/admin/view_activity'">View Activities</a>
+        </div>
+    </div>
+</div>

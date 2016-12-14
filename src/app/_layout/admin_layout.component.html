@@ -1,0 +1,46 @@
+<header class="navbar">
+    <div class="container-fluid">
+        <button class="navbar-toggler hidden-lg-up" type="button" mobile-nav-toggle>&#9776;</button>
+        <a class="navbar-brand" href="#"></a>
+        <ul class="nav navbar-nav float-xs-right hidden-md-down">
+            <li class="nav-item dropdown" dropdown>
+                <a href="#"><h3 class="user-name">{{user_name}}</h3></a>  
+            </li>
+            <li class="nav-item dropdown" dropdown (onToggle)="toggled($event)">
+                <a [routerLink]="'/login'">Log Out</a>
+            </li>
+        </ul>
+
+    </div>
+</header>
+
+<div class="sidebar">
+    <nav class="sidebar-nav">
+        <ul class="nav">
+            <li class="nav-item">
+                <a class="nav-link" routerLinkActive="active" [routerLink]="['./dashboard']"><i class="icon-speedometer"></i> Dashboard</a>
+            </li>
+            <li class="divider"></li>
+            <li class="nav-item" *ngIf="account_type === 0">
+                <a class="nav-link" routerLinkActive="active" [routerLink]="['./manage_company']"><i class="icon-speedometer"></i> Manage Companies</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" routerLinkActive="active" [routerLink]="['./manage_user']"><i class="icon-speedometer"></i> Manage Users</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" routerLinkActive="active" [routerLink]="['./manage_content']"><i class="icon-speedometer"></i> Manage Content</a>
+            </li>            <li class="nav-item">
+                <a class="nav-link" routerLinkActive="active" [routerLink]="['./manage_reward']"><i class="icon-speedometer"></i> Manage Reward</a>
+            </li>            <li class="nav-item">
+                <a class="nav-link" routerLinkActive="active" [routerLink]="['./view_activity']"><i class="icon-speedometer"></i> View Activities</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<!-- Main content -->
+<main class="main">
+    <div class="container-fluid">
+        <router-outlet></router-outlet>
+    </div>
+</main>

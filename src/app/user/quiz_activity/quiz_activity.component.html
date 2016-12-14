@@ -1,0 +1,29 @@
+<div *ngIf="quizzes.length > 0" class="container">
+  <div class="row question">
+    <div class="col-sm-10">
+      <h2>{{quiz_index + 1}}.  {{quizzes[quiz_index].question}}</h2>
+    </div>
+    <div class="col-sm-2">
+      <h2>{{correct_answers_number}}</h2>
+    </div>
+  </div>
+  <hr size="30">
+  <div *ngFor="let answer of quizzes[quiz_index].answers;let i=index;" class="row">
+    <div class="col-sm-12">
+      <label for="radio1">
+        <input class="radio" type="radio" [value]="i+1" [(ngModel)]="result[quiz_index]">
+        <h4>{{answer}}</h4>
+      </label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="offset-sm-5 col-sm-2">
+      <button class="btn btn-primary btn-sm" (click)="clickNext()" *ngIf="quiz_index < quizzes.length - 1">Next</button>
+      <!-- <button class="btn btn-primary btn-sm" (click)="clickBack()" *ngIf="quiz_index > 0">Back</button> -->
+      <button class="btn btn-primary btn-sm" (click)="finalizeTest()" *ngIf="quiz_index ===  quizzes.length - 1">Finailze</button>
+    </div>
+    <div class="offset-sm-4 col-sm-1">
+      <button class="btn-primary btn btn-sm" (click)="onFinish()">Finish</button>
+    </div>
+  </div>
+</div>

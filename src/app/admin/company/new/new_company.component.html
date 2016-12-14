@@ -1,0 +1,18 @@
+<div>
+    <h1>New Employee</h1>
+    <form name="form" (ngSubmit)="f.form.valid && register()" #f="ngForm" novalidate>
+        <div class="input-group mb-1" [ngClass]="{ 'has-error': f.submitted && !company_name.valid }">
+            <input type="text" class="form-control" name="company_name" placeholder="Company Name" [(ngModel)]="model.company_name" #company_name="ngModel" required />
+            <div *ngIf="f.submitted && !company_name.valid" class="help-block">Company Name is required</div>
+        </div>
+        <div class="input-group mb-1" [ngClass]="{ 'has-error': f.submitted && ( !email.valid || company_emails.indexOf(model.email) != -1) }">
+            <input type="email" class="form-control" name="email" placeholder="email" [(ngModel)]="model.email" #email="ngModel" required />
+            <div *ngIf="f.submitted && company_emails.indexOf(email) === -1 && !email.valid" class="help-block">Email is required</div>
+            <div *ngIf="f.submitted && company_emails.indexOf(model.email) != -1" class="help-block">Email is already existing</div>            
+        </div>
+        <div class="input-group mb-1">
+            <button [disabled]="loading" class="btn btn-block btn-success">Add New Company</button>
+            <a [routerLink]="['/admin/manage_company']" class="btn btn-link">Cancel</a>
+        </div>
+    </form>
+</div>

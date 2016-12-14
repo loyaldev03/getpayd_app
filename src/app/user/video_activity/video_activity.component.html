@@ -1,0 +1,21 @@
+<div *ngIf="content" class="container">
+  <video #video width="80%" height="50%" (timeupdate)="updateDisplayTime(video)">
+    <source [src]="content.content" type="video/mp4">
+  </video>
+  <div class="row">
+    <div class="offset-sm-5 col-sm-1">
+      <button class="btn-success btn btn-sm" (click)="playPause(video)">Play/Pause</button>
+    </div>
+    <div class="col-sm-1">
+      <h3> {{currTime}} </h3>
+    </div>
+    <div class="offset-sm-1 col-sm-1">
+      <button class="btn-primary btn btn-sm" (click)="onFinish()">Finish</button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="offset-sm-4 col-sm-3">
+      <h3> Tokens: {{tokens_awarded}}</h3>
+    </div>
+  </div>
+</div>

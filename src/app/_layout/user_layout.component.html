@@ -1,0 +1,23 @@
+<header class="navbar">
+    <div class="container-fluid">
+        <button class="navbar-toggler hidden-lg-up" type="button" mobile-nav-toggle>&#9776;</button>
+        <a class="navbar-brand" href="#"></a>
+        <ul class="nav navbar-nav float-xs-right hidden-md-down">
+            <li class="nav-item dropdown" dropdown>
+                <a href="#"><h3 class="user-name">{{user_name}}</h3></a>  
+            </li>
+            <li class="nav-item dropdown" dropdown (onToggle)="toggled($event)">
+                <a [routerLink]="'/login'">Log Out</a>
+            </li>
+        </ul>
+
+    </div>
+</header>
+
+
+<!-- Main content -->
+<main class="main">
+    <div class="container-fluid">
+        <router-outlet></router-outlet>
+    </div>
+</main>

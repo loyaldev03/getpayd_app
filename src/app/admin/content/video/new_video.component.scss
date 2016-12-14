@@ -1,0 +1,27 @@
+h1{
+  margin: 50px 0;
+  text-align: center;
+}
+.file-over { border: dotted 3px red; }
+
+.my-drop-zone { border: dotted 3px lightgray; }
+.nv-file-over { border: dotted 3px red; } /* Default class applied to drop zones on over */
+.another-file-over-class { border: dotted 3px green; }
+
+html, body { height: 100%; }
+
+.isUploading{
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: black;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  opacity: .5;
+}
+.uploading-icon{
+  position: fixed;
+  left: 50%;
+  top: 50%;
+}

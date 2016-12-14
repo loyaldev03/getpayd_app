@@ -1,0 +1,39 @@
+<div class="container">
+    <h1 class='title'> User Interface </h1>
+    <div class="row">
+        <h3 class="col-sm-6"> My Tokens: {{available_tokens}} </h3>
+        <span class="col-sm-6">
+            <a class="btn btn-primary btn-l btn-block" [routerLink] = "'/user/redeem'">Redeem</a>
+        </span> 
+    </div>
+    <div class="row">
+        <table class="table table-bordered table-striped">
+            <thead class="thead-default">
+                <tr>
+                    <th>Content Name</th>
+                    <th>Quiz/Video Type</th>
+                    <th>Tokens Value</th>
+                    <th>Date End</th>
+                </tr>
+            </thead>
+            <tbody *ngIf="available_contents.length === 0">
+                <tr>
+                    <td colspan="4">There are currently no available assignments.</td>
+                </tr>  
+            </tbody>
+            <tbody>
+                <tr *ngFor="let content of available_contents">
+                    <td *ngIf="content.type==='video'">
+                        <a [routerLink]="['/user/video_activity/', content._id]">{{content.content}}</a>
+                    </td>
+                    <td *ngIf="content.type==='quiz'">
+                        <a [routerLink]="['/user/quiz_activity/', content._id]">{{content.content}}</a>
+                    </td>
+                    <td>{{content.type}}</td>
+                    <td>{{content.reward}}</td>
+                    <td>{{content.date_end | date: 'dd/MM/yyyy'}}</td>
+                </tr>  
+            </tbody>
+        </table>
+    </div>
+</div>

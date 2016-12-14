@@ -1,0 +1,27 @@
+<div *ngIf="reward" class="container">
+  <div class="row detail">
+    <div class="col-sm-6 detail-spec">
+      <h3>Name: {{reward.name}}</h3>
+      <h3>Cost: {{reward.cost}}</h3>
+      <hr>
+      <h3>Detail</h3>
+      <p>{{reward.details}}</p>
+    </div>
+    <div class="col-sm-6">
+      <div class="row select-number">
+        <label for="number">Number:</label>
+        <input type="number" name="number" min="0" [max]="max_num" [(ngModel)]="number" (change)="onNumberChange($event)">
+        <label for="available_tokens">Available Tokens: {{available_tokens}}</label>
+      </div>
+      <div class="row buyable-label">        
+        <label *ngIf="!isBuyable" for="isBuyable">Unavailable to buy.Over tokens</label>
+      </div>
+      <div class="row">
+        <div class="offset-sm-3 col-sm-3">
+          <button class="btn btn-primary btn-sm" (click)="onBuy()" [disabled]="number===0 || !isBuyable">Buy</button>
+          <button class="btn btn-primary btn-sm" (click)="onBack()">Back</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

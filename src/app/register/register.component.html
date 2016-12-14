@@ -1,0 +1,31 @@
+ <div class="container d-table">
+    <div class="d-100vh-va-middle">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="card mx-2">
+                    <div class="card-block p-2">
+                        <h1>Password</h1>
+                        <p class="text-muted">Set your password</p>
+                        <form name="form" (ngSubmit)="f.form.valid && register()" #f="ngForm" novalidate>
+                            <input type="hidden" name="_id" [(ngModel)]="model._id" #_id="ngModel">
+                            <div class="input-group mb-1" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
+                                <span class="input-group-addon"><i class="icon-lock"></i></span>
+                                <input type="password" class="form-control" name="password" placeholder="Password" [(ngModel)]="model.password" #password="ngModel" required />
+                                <div *ngIf="f.submitted && !password.valid" class="help-block">Password is required</div>
+                            </div>
+                            <div class="input-group mb-1" [ngClass]="{ 'has-error': f.submitted && !password_confirm.valid }">
+                                <span class="input-group-addon"><i class="icon-lock"></i></span>
+                                <input type="password" class="form-control" name="password_confirm" placeholder="Confirm Password" [(ngModel)]="model.password_confirm" #password_confirm="ngModel" required />
+                                <div *ngIf="f.submitted && !password_confirm.valid" class="help-block">Confirmation Password is required</div>
+                            </div>                            
+                            <div class="input-group mb-1">
+                                <button [disabled]="loading || model.password_confirm!=model.password || !password.valid" class="btn btn-block btn-success">Register</button>
+                                <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
