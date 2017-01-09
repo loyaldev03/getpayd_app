@@ -1,3 +1,4 @@
+//title
 //content
 //type
 //available_to
@@ -19,6 +20,7 @@
 var mongoose = require('mongoose');
 
 var contentSchema = mongoose.Schema({
+    title: String,
     content: String,
     type: String,
     available_to: Array,
