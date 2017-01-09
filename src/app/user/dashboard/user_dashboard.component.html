@@ -23,7 +23,12 @@
             </tbody>
             <tbody>
                 <tr *ngFor="let content of available_contents">
-                    <td>{{content.title}}</td>
+                    <td *ngIf="content.type==='video'">
+                        <a [routerLink]="['/user/video_activity/', content._id]">{{content.title}}</a>
+                    </td>
+                    <td *ngIf="content.type==='quiz'">
+                        <a [routerLink]="['/user/quiz_activity/', content._id]">{{content.title}}</a>
+                    </td>
                     <td>{{content.type}}</td>
                     <td>{{content.reward}}</td>
                     <td>{{content.date_end | date: 'dd/MM/yyyy'}}</td>
