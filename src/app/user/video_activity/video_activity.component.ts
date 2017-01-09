@@ -38,7 +38,7 @@ export class VideoActivityComponent implements OnInit{
   updateDisplayTime(video) {
     this.currTime = this.secondsToMinutesAndSeconds(video.currentTime);
     this.currentTimeRange = video.currentTime;
-    this.tokens_awarded = Math.round(this.currentTimeRange) * this.content.reward
+    this.tokens_awarded = this.user.available_tokens + Math.round(this.currentTimeRange) * this.content.reward
   }
 
   secondsToMinutesAndSeconds(time) {
@@ -66,7 +66,8 @@ export class VideoActivityComponent implements OnInit{
   getUserInfo(id){
     this.adminService.getUser(id).subscribe(
       data => {
-        this.user = data;
+        this.user = data
+        this.tokens_awarded = this.user.available_tokens
       },
       error => console.log(error),
       () => {this.isLoading = false}

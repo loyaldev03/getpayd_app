@@ -34,6 +34,7 @@ export class NewVideoComponent implements OnInit{
   private addVideoForm: FormGroup;
   private content = new FormControl("", Validators.required);
   private type = "video"
+  private title = new FormControl("", Validators.required);
   private available_to = new FormControl();
   private reward = new FormControl(0, Validators.required);
   private date_end = new FormControl("", Validators.required);
@@ -61,6 +62,7 @@ export class NewVideoComponent implements OnInit{
 
   ngOnInit() {
     this.addVideoForm = this.formBuilder.group({
+      title: this.title,
       available_to: this.available_to,
       reward: this.reward,
       date_end: this.date_end,

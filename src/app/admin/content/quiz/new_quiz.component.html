@@ -1,6 +1,9 @@
 <div class="container">
   <h1>New Quiz</h1>
   <form class="form" [formGroup]="addQuizForm" (ngSubmit)="createQuizzes()" style="text-align:center">
+    <div class="form-group">
+      <input class="form-control" type="text" name="title" formControlName="title" placeholder="Title">
+    </div>    
     <div *ngFor="let quiz of quizzes" class="quiz">
       <div class="form-group">
         <input class="form-control" type="text" name="content" [(ngModel)] = "quiz.question" [ngModelOptions]="{standalone: true}" placeholder="Question">

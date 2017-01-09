@@ -1,10 +1,10 @@
 <div *ngIf="quizzes.length > 0" class="container">
   <div class="row question">
-    <div class="col-sm-10">
+    <div class="col-sm-8">
       <h2>{{quiz_index + 1}}.  {{quizzes[quiz_index].question}}</h2>
     </div>
-    <div class="col-sm-2">
-      <h2>{{correct_answers_number}}</h2>
+    <div class="col-sm-4">
+      <h2>Tokens: {{tokens_awarded}}</h2>
     </div>
   </div>
   <hr size="30">
