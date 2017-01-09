@@ -29,8 +29,9 @@ var Company = require('./company.model.js');
 
 var development_server_ip = "http://localhost:3000";
 var production_server_ip = "http://app.getpayd.io";
-//var server_ip = development_server_ip;
-var server_ip = production_server_ip;
+var server_ip = development_server_ip;
+//var server_ip = production_server_ip;
+
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
   console.log('Connected to MongoDB');
