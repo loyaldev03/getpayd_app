@@ -29,8 +29,8 @@ var Company = require('./company.model.js');
 
 var development_server_ip = "http://localhost:3000";
 var production_server_ip = "http://app.getpayd.io";
-var server_ip = development_server_ip;
-//var server_ip = production_server_ip;
+//var server_ip = development_server_ip;
+var server_ip = production_server_ip;
 
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
@@ -148,6 +148,7 @@ db.once('open', function() {
   //content
   //get all content
   app.get('/contents/:id', function(req, res) {
+    console.log('content user id', req.params.id);
     User.find({_id: req.params.id}, function(err, docs) {
       if(err) return console.error(err);
       if (docs.length != 0) {
@@ -191,7 +192,7 @@ db.once('open', function() {
   });
   //get available contents
   app.get('/get_available_contents/:company_id/:department_v/:department_id/:department_name', function(req, res) {
-    Content.find({'company._id':req.params.company_id,available_to: {__v: Number(req.params.department_v), _id : req.params.department_id, department : req.params.department_name }}, function(err, docs) {
+    Content.find({'company._id':req.params.company_id,available_to: {__v: Number(req.params.department_v), department : req.params.department_name, _id : req.params.department_id }}, function(err, docs) {
       if(err) return console.error(err);
       res.json(docs);
     });
@@ -225,7 +226,7 @@ db.once('open', function() {
   //get available rewards
   app.get('/get_available_rewards/:company_id/:department_v/:department_id/:department_name', function(req, res) {
     console.log(req.params.company_id);
-    Reward.find({'company._id': req.params.company_id, available_to: {__v: Number(req.params.department_v), _id : req.params.department_id, department : req.params.department_name }}, function(err, docs) {
+    Reward.find({'company._id': req.params.company_id, available_to: {__v: Number(req.params.department_v), department : req.params.department_name, _id : req.params.department_id }}, function(err, docs) {
       if(err) return console.error(err);
       res.json(docs);
     });
