@@ -27,6 +27,10 @@ var Reward = require('./reward.model.js');
 var Department = require('./department.model.js');
 var Company = require('./company.model.js');
 
+var development_server_ip = "http://localhost:3000";
+var production_server_ip = "http://app.getpayd.io";
+//var server_ip = development_server_ip;
+var server_ip = production_server_ip;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
   console.log('Connected to MongoDB');
@@ -322,94 +326,196 @@ db.once('open', function() {
   app.post('/send_password_reset_email', function(req,res){
     console.log(req.body);
     var email   = require("../../node_modules/emailjs/email");
-    var server  = email.server.connect({
-       user:    "ptulr2016@gmail.com", 
-       password:"dkzcviwerkzcv123", 
-       host:    "smtp.gmail.com", 
-       ssl:     true
-    });
-    // // send the message and get a callback with an error or details of the message that was sent
-    server.send({
-      text:    "We heard that you lost your GetPayd password. Sorry about that! But don’t worry! You can use the following link to reset your password: http://localhost:3000/register/" + req.body["_id"], 
-      from:    "ptulr2016@gmail.com", 
-      to:      req.body["email"],
-      subject: "testing emailjs"
-    }, function(err, message) {  
-      if(err)
+
+    var api_key = 'key-9cc58f4c99d912d09f852845200a4803';
+    var domain = 'app.getpayd.io';
+    var mailgun = require('mailgun-js')({apiKey: api_key, domain: domain});
+    
+    var data = {
+      from: 'Excited User <me@samples.mailgun.org>',
+      to: req.body["email"],
+      subject: 'Hello',
+      text: "We heard that you lost your GetPayd password. Sorry about that! But don’t worry! You can use the following link to reset your password: " + server_ip + "/register/" + req.body["_id"]
+    };
+     
+    mailgun.messages().send(data, function (err, body) {
+      if (err) {
         console.log(err);
-      else
+      } else {
         res.json({success: true, msg: 'sent'});
+      }
     });
+
+    // var server  = email.server.connect({
+    //    user:    "ptulr2016@gmail.com", 
+    //    password:"dkzcviwerkzcv123", 
+    //    host:    "smtp.gmail.com", 
+    //    ssl:     true
+    // });
+    // // // send the message and get a callback with an error or details of the message that was sent
+    // server.send({
+    //   text:    "We heard that you lost your GetPayd password. Sorry about that! But don’t worry! You can use the following link to reset your password: " + server_ip + "/register/" + req.body["_id"], 
+    //   from:    "ptulr2016@gmail.com", 
+    //   to:      req.body["email"],
+    //   subject: "testing emailjs"
+    // }, function(err, message) {  
+    //   if(err)
+    //     console.log(err);
+    //   else
+    //     res.json({success: true, msg: 'sent'});
+    // });
   });
   //send invitation email to user
   app.post('/send_invitation_to_user', function(req, res){
-    var email   = require("../../node_modules/emailjs/email");
-    var server  = email.server.connect({
-      user:    "ptulr2016@gmail.com",
-      password:"dkzcviwerkzcv123", 
-      host:    "smtp.gmail.com", 
-      ssl:     true
-    });
-    // send the message and get a callback with an error or details of the message that was sent
-    server.send({
-      text:    "We would like to invite you for our website. Please confirm at http://localhost:3000/register/" + JSON.parse(req.body["_body"])._id + " to our website", 
-      from:    "ptulr2016@gmail.com", 
-      to:      JSON.parse(req.body["_body"])["email"],
-      subject: "testing email"
-    }, function(err, message) {  
-      if(err)
+    var api_key = 'key-9cc58f4c99d912d09f852845200a4803';
+    var domain = 'app.getpayd.io';
+    var mailgun = require('mailgun-js')({apiKey: api_key, domain: domain});
+    
+    var data = {
+      from: 'Excited User <me@samples.mailgun.org>',
+      to: JSON.parse(req.body["_body"])["email"],
+      subject: 'Hello',
+      text: "We would like to invite you for our website. Please confirm at " + server_ip + "/register/" + JSON.parse(req.body["_body"])._id + " to our website",
+    };
+     
+    mailgun.messages().send(data, function (err, body) {
+      if (err) {
         console.log(err);
-      else
+      } else {
         res.json({success: true, msg: 'sent'});
+      }
     });
+
+    // var email   = require("../../node_modules/emailjs/email");
+    // var server  = email.server.connect({
+    //   user:    "ptulr2016@gmail.com",
+    //   password:"dkzcviwerkzcv123", 
+    //   host:    "smtp.gmail.com", 
+    //   ssl:     true
+    // });
+    // // send the message and get a callback with an error or details of the message that was sent
+    // server.send({
+    //   text:    "We would like to invite you for our website. Please confirm at " + server_ip + "/register/" + JSON.parse(req.body["_body"])._id + " to our website", 
+    //   from:    "ptulr2016@gmail.com", 
+    //   to:      JSON.parse(req.body["_body"])["email"],
+    //   subject: "testing email"
+    // }, function(err, message) {  
+    //   if(err)
+    //     console.log(err);
+    //   else
+    //     res.json({success: true, msg: 'sent'});
+    // });
   })
 
   //send invitation email to company
   app.post('/send_invitation_to_company', function(req, res){
-    var email   = require("../../node_modules/emailjs/email");
-    var server  = email.server.connect({
-      user:    "ptulr2016@gmail.com",
-      password:"dkzcviwerkzcv123", 
-      host:    "smtp.gmail.com", 
-      ssl:     true
-    });
-    // send the message and get a callback with an error or details of the message that was sent
-    server.send({
-      text:    "We would like to invite you as manger for your company group. Please confirm at http://localhost:3000/register_company/" + JSON.parse(req.body["_body"])._id + " to our website", 
-      from:    "ptulr2016@gmail.com", 
-      to:      JSON.parse(req.body["_body"])["email"],
-      subject: "testing email"
-    }, function(err, message) {  
-      if(err)
+    
+    var api_key = 'key-9cc58f4c99d912d09f852845200a4803';
+    var domain = 'app.getpayd.io';
+    var mailgun = require('mailgun-js')({apiKey: api_key, domain: domain});
+    
+    var data = {
+      from: 'Excited User <me@samples.mailgun.org>',
+      to: JSON.parse(req.body["_body"])["email"],
+      subject: 'Hello',
+      text: "We would like to invite you as manger for your company group. Please confirm at " + server_ip + "/register_company/" + JSON.parse(req.body["_body"])._id + " to our website",
+    };
+     
+    mailgun.messages().send(data, function (err, body) {
+      if (err) {
         console.log(err);
-      else
+      } else {
         res.json({success: true, msg: 'sent'});
+      }
     });
+
+    // var api_key = 'key-9cc58f4c99d912d09f852845200a4803';
+    // var domain = 'app.getpayd.io';
+    // var mailgun = require('mailgun-js')({apiKey: api_key, domain: domain});
+    
+    // var data = {
+    //   from: 'Excited User <me@samples.mailgun.org>',
+    //   to: JSON.parse(req.body["_body"])["email"],
+    //   subject: 'Hello',
+    //   text: "We would like to invite you as manger for your company group. Please confirm at " + server_ip + "/register_company/" + JSON.parse(req.body["_body"])._id + " to our website",
+    // };
+     
+    // mailgun.messages().send(data, function (err, body) {
+    //   if (err) {
+    //     console.log(err);
+    //   } else {
+    //     res.json({success: true, msg: 'sent'});
+    //   }
+    // });
+
+    // var email   = require("../../node_modules/emailjs/email");
+    // var server  = email.server.connect({
+    //   user:    "ptulr2016@gmail.com",
+    //   password:"dkzcviwerkzcv123", 
+    //   host:    "smtp.gmail.com", 
+    //   ssl:     true
+    // });
+    // // send the message and get a callback with an error or details of the message that was sent
+    // server.send({
+    //   text:    "We would like to invite you as manger for your company group. Please confirm at " + server_ip + "/register_company/" + JSON.parse(req.body["_body"])._id + " to our website", 
+    //   from:    "ptulr2016@gmail.com", 
+    //   to:      JSON.parse(req.body["_body"])["email"],
+    //   subject: "testing email"
+    // }, function(err, message) {  
+    //   if(err)
+    //     console.log(err);
+    //   else
+    //     res.json({success: true, msg: 'sent'});
+    // });
   })
 
   //send invitation email to company
   app.post('/send_email_regarding_reward', function(req, res){
-    var email   = require("../../node_modules/emailjs/email");
-    var server  = email.server.connect({
-      user:    "ptulr2016@gmail.com",
-      password:"dkzcviwerkzcv123", 
-      host:    "smtp.gmail.com", 
-      ssl:     true
-    });
+    
     var user = req.body.user;
     var reward = req.body.reward;
     var number = req.body.number;
-    server.send({
-      text:    user.first_name + " " + user.last_name + " bought " + number + " " + reward.name + "(s)", 
-      from:    "ptulr2016@gmail.com", 
-      to:      user.company.email,
-      subject: "testing email"
-    }, function(err, message) {  
-      if(err)
+
+    var api_key = 'key-9cc58f4c99d912d09f852845200a4803';
+    var domain = 'app.getpayd.io';
+    var mailgun = require('mailgun-js')({apiKey: api_key, domain: domain});
+    
+    var data = {
+      from: 'Excited User <me@samples.mailgun.org>',
+      to: user.company.email,      
+      subject: 'Hello',
+      text: user.first_name + " " + user.last_name + " bought " + number + " " + reward.name + "(s)",
+    };
+     
+    mailgun.messages().send(data, function (err, body) {
+      if (err) {
         console.log(err);
-      else
+      } else {
         res.json({success: true, msg: 'sent'});
+      }
     });
+
+    // var email   = require("../../node_modules/emailjs/email");
+    // var server  = email.server.connect({
+    //   user:    "ptulr2016@gmail.com",
+    //   password:"dkzcviwerkzcv123", 
+    //   host:    "smtp.gmail.com", 
+    //   ssl:     true
+    // });
+    // var user = req.body.user;
+    // var reward = req.body.reward;
+    // var number = req.body.number;
+    // server.send({
+    //   text:    user.first_name + " " + user.last_name + " bought " + number + " " + reward.name + "(s)", 
+    //   from:    "ptulr2016@gmail.com", 
+    //   to:      user.company.email,
+    //   subject: "testing email"
+    // }, function(err, message) {  
+    //   if(err)
+    //     console.log(err);
+    //   else
+    //     res.json({success: true, msg: 'sent'});
+    // });
   })
 
   // all other routes are handled by Angular
