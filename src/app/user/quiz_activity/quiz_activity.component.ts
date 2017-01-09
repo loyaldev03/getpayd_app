@@ -17,7 +17,7 @@ export class QuizActivityComponent implements OnInit{
   private correct_answers_number: number = 0;
   private user;
   private points_awarded:number = 0;
-
+  
   constructor(
     private adminService: AdminService,
     private userService: UserService,

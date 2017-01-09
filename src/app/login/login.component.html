@@ -5,7 +5,10 @@
                 <div class="card-group">
                     <div class="card p-2">
                         <div class="card-block">
-                            <h1>Login</h1>
+                            <div class="row">
+                                <h1 class="col-sm-3">Login</h1>
+                                <a class="col-sm-3 offset-sm-6 btn btn-link px-0" href="http://getpayd.io">Back to Landing Page</a>
+                            </div>
                             <p class="text-muted">Sign In to your account</p>
                             <form name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
                                 <div class="input-group mb-1" [ngClass]="{ 'has-error': f.submitted && !username.valid }">
