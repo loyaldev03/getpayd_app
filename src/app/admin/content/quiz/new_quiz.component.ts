@@ -15,6 +15,7 @@ export class NewQuizComponent implements OnInit{
   private available_tos: Department[] = [];
   private addQuizForm: FormGroup;
   private type = "quiz"
+  private title = new FormControl("", Validators.required);
   private content = new FormControl("", Validators.required);
   private answers = new FormControl();
   private correct_answer = new FormControl();
@@ -30,6 +31,7 @@ export class NewQuizComponent implements OnInit{
 
   ngOnInit() {
     this.addQuizForm = this.formBuilder.group({
+      title: this.title,
       available_to: this.available_to,
       reward: this.reward,
       date_end: this.date_end,

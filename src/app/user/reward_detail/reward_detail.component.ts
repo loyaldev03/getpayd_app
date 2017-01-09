@@ -14,6 +14,8 @@ export class RewardDetailComponent{
   private isLoading = true;
   private number: number=0;
   private available_tokens: number;
+  private original_number: number = 0;
+  private original_tokens: number = 0;
   private user;
   private max_num: number = 0;
   private isBuyable: boolean = true;
@@ -50,13 +52,14 @@ export class RewardDetailComponent{
       data => {
         this.user = data;
         this.rewards = data.rewards;
+        this.original_tokens = this.user.available_tokens
         for (let index in this.rewards) {
           let reward_item = this.rewards[index];
           if (reward_item.reward._id == id) {
             this.reward = reward_item.reward;
-            this.number = reward_item.number;
-            this.available_tokens = this.user.available_tokens - this.reward.cost * this.number;
-            this.max_num = this.user.available_tokens / this.reward.cost;
+            this.number = this.original_number = reward_item.number;
+            this.available_tokens = this.user.available_tokens;
+            this.max_num = this.user.available_tokens / this.reward.cost + this.number;
             this.reward_id_for_user = Number(index);
             return;
           }
@@ -79,13 +82,13 @@ export class RewardDetailComponent{
   }
 
   onNumberChange(data){
-    if (this.user.available_tokens - this.reward.cost * this.number < 0) {
-      this.available_tokens = this.user.available_tokens;
+    if (this.original_tokens - this.reward.cost * (this.number - this.original_number) < 0) {
+      this.available_tokens = this.original_tokens + this.reward.cost * this.original_number;
       this.number = 0;
       this.isBuyable = false;
       return;
     }
-    this.available_tokens = this.user.available_tokens - this.reward.cost * this.number;
+    this.available_tokens = this.original_tokens + this.reward.cost * (this.original_number - this.number);;
     this.isBuyable = true;
   }
 

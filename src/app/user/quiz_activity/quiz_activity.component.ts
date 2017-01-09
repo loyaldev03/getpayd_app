@@ -15,9 +15,10 @@ export class QuizActivityComponent implements OnInit{
   private isLoading: boolean = true;
   private result: number[] = [];
   private correct_answers_number: number = 0;
+  private tokens_awarded: number = 0;
   private user;
   private points_awarded:number = 0;
-  
+
   constructor(
     private adminService: AdminService,
     private userService: UserService,
@@ -31,6 +32,7 @@ export class QuizActivityComponent implements OnInit{
       this.getContent(params['id']);
       this.quiz_index = 0;
       this.correct_answers_number = 0;
+      this.tokens_awarded = 0;
       this.getUserInfo(JSON.parse(localStorage.getItem('currentUser'))._id);
       this.points_awarded = 100;
     });
@@ -51,6 +53,7 @@ export class QuizActivityComponent implements OnInit{
   clickNext(){
     if (this.result[this.quiz_index] === this.quizzes[this.quiz_index].correct_answer){
       this.correct_answers_number += 1;
+      this.tokens_awarded = this.user.available_tokens + this.correct_answers_number * this.content.reward;
     }
     this.quiz_index += 1;
   }
@@ -62,6 +65,7 @@ export class QuizActivityComponent implements OnInit{
   finalizeTest(){
     if (this.result[this.quiz_index] === this.quizzes[this.quiz_index].correct_answer){
       this.correct_answers_number += 1;
+      this.tokens_awarded = this.user.available_tokens + this.correct_answers_number * this.content.reward;
     }
     this.onFinish();
   }
@@ -70,6 +74,7 @@ export class QuizActivityComponent implements OnInit{
     this.adminService.getUser(id).subscribe(
       data => {
         this.user = data;
+        this.tokens_awarded = this.user.available_tokens
       },
       error => console.log(error),
       () => {this.isLoading = false}

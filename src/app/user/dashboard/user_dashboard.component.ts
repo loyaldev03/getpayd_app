@@ -52,6 +52,7 @@ export class UserDashboardComponent implements OnInit{
             }
             this.available_contents.push(data[index]);
           }
+          console.log(this.available_contents);
         },
         error => console.log(error),
         () => {this.isLoading = false}

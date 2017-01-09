@@ -15,7 +15,7 @@
         <table class="table table-bordered table-striped">
             <thead class="thead-default">
                 <tr>
-                    <th>Content</th>
+                    <th>Title</th>
                     <th>Type</th>
                     <th>Company</th>
                     <th>Available To</th>
@@ -31,7 +31,7 @@
             </tbody>
             <tbody>
                 <tr *ngFor="let content of contents">
-                    <td>{{content.content}}</td>
+                    <td>{{content.title}}</td>
                     <td>{{content.type}}</td>
                     <td>{{content.company.company_name}}</td>
                     <td>

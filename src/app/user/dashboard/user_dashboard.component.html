@@ -10,7 +10,7 @@
         <table class="table table-bordered table-striped">
             <thead class="thead-default">
                 <tr>
-                    <th>Content Name</th>
+                    <th>Title</th>
                     <th>Quiz/Video Type</th>
                     <th>Tokens Value</th>
                     <th>Date End</th>
@@ -23,12 +23,7 @@
             </tbody>
             <tbody>
                 <tr *ngFor="let content of available_contents">
-                    <td *ngIf="content.type==='video'">
-                        <a [routerLink]="['/user/video_activity/', content._id]">{{content.content}}</a>
-                    </td>
-                    <td *ngIf="content.type==='quiz'">
-                        <a [routerLink]="['/user/quiz_activity/', content._id]">{{content.content}}</a>
-                    </td>
+                    <td>{{content.title}}</td>
                     <td>{{content.type}}</td>
                     <td>{{content.reward}}</td>
                     <td>{{content.date_end | date: 'dd/MM/yyyy'}}</td>
