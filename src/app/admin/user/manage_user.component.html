@@ -10,7 +10,7 @@
             </div> 
         </div>
         <div class="offset-sm-2 col-sm-2">
-            <a class="btn btn-primary btn-block" [routerLink] = "'/admin/new_user'">ADD</a>
+            <button class="btn btn-primary btn-block" [disabled]="!addable_new_user" (click)="newUser()">ADD</button>
         </div>
     </div>
 

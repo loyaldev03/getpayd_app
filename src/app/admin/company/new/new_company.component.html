@@ -10,6 +10,10 @@
             <div *ngIf="f.submitted && company_emails.indexOf(email) === -1 && !email.valid" class="help-block">Email is required</div>
             <div *ngIf="f.submitted && company_emails.indexOf(model.email) != -1" class="help-block">Email is already existing</div>            
         </div>
+        <div class="input-group mb-1" [ngClass]="{'has-error': f.submitted && !number_of_users.valid}">
+            <input type="Number" class="form-control" name="number_of_users" placeholder="Number of users to invite" [(ngModel)]="model.number_of_users" #number_of_users="ngModel" required />
+            <div *ngIf="f.submitted && !number_of_users.valid" class="help-bloack">Number of users to invite is required</div>
+        </div>        
         <div class="input-group mb-1">
             <button [disabled]="loading" class="btn btn-block btn-success">Add New Company</button>
             <a [routerLink]="['/admin/manage_company']" class="btn btn-link">Cancel</a>

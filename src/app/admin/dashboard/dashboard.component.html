@@ -1,5 +1,10 @@
 <div>
     <h1> Admin Dashboard </h1>
+    <div class="row" *ngIf="account_type != 0">
+        <div class="col-md-6 offset-md-3">
+            <a class="btn btn-success btn-lg btn-block" [routerLink] = "'/admin/analytics'">Analytics</a>
+        </div>
+    </div>
     <div class="row" *ngIf="account_type === 0">
         <div class="col-md-6 offset-md-3">
             <a class="btn btn-success btn-lg btn-block" [routerLink] = "'/admin/manage_company'">Manage Companies</a>

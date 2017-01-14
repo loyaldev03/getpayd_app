@@ -5,6 +5,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { Ng2UploaderModule } from 'ng2-uploader';
 import { FileUploadModule } from 'ng2-file-upload'
+import { ChartsModule }      from 'ng2-charts/ng2-charts';
+
 import { AdminRoutingModule } from './admin.routing';
 
 import { AuthenticationService, UserService } from '../_services/index';
@@ -17,8 +19,13 @@ import { ManageContentComponent }   from './content/manage_content.component';
 import { NewVideoComponent } from './content/video/new_video.component';
 import { NewQuizComponent } from './content/quiz/new_quiz.component'; 
 import { ManageRewardComponent }   from './reward/manage_reward.component';
+import { ManageAwardedRewardsComponent } from './reward/manage_awarded_rewards/manage_awarded_rewards.component';
 import { NewRewardComponent }      from './reward/new/new_reward.component';
 import { ViewActivityComponent }   from './activity/view_activity.component';
+import { AnalyticsComponent } from './analytics/analytics.component';
+import { BlockIframeComponent} from './analytics/block_iframe/block_iframe.component';
+import { BlockChartComponent} from './analytics/block_chart/block_chart.component';
+
 
 import { OrderByPipe } from '../_pipes/order_by.pipe';
 import { SearchPipe } from '../_pipes/search.pipe';
@@ -31,7 +38,8 @@ import { SearchPipe } from '../_pipes/search.pipe';
     HttpModule,
     Ng2UploaderModule,
     FileUploadModule,
-    AdminRoutingModule
+    AdminRoutingModule,
+    ChartsModule,
   ],
   declarations: [
     DashboardComponent,
@@ -44,7 +52,11 @@ import { SearchPipe } from '../_pipes/search.pipe';
     NewQuizComponent,
     ManageRewardComponent,
     NewRewardComponent,
+    ManageAwardedRewardsComponent,
     ViewActivityComponent,
+    AnalyticsComponent,
+    BlockIframeComponent,
+    BlockChartComponent,
 
     SearchPipe,
     OrderByPipe

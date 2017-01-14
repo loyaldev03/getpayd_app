@@ -4,6 +4,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { AppRoutingModule } from './app.routing';
+import { ChartsModule }             from 'ng2-charts/ng2-charts';
 
 // used to create fake backend
 // import { fakeBackendProvider } from './_helpers/fake-backend';
@@ -36,6 +37,7 @@ import { ToastComponent } from './shared/toast/toast.component';
     ReactiveFormsModule,
     HttpModule,
     AppRoutingModule,
+    ChartsModule,
   ],
   declarations: [
     AppComponent,

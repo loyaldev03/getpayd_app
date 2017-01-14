@@ -15,6 +15,7 @@
 //   company_name:
 //   email:
 // }
+// reference_link
 //]
 
 var mongoose = require('mongoose');
@@ -27,7 +28,9 @@ var contentSchema = mongoose.Schema({
     reward: Number,
     date_end: Date,
     quizzes: Array,
-    company: Object
+    company: Object,
+    reference_link: String,
+    date_created: Date,
 });
 
 var Content = mongoose.model('Content', contentSchema);

@@ -26,11 +26,18 @@ var Content = require('./content.model.js');
 var Reward = require('./reward.model.js');
 var Department = require('./department.model.js');
 var Company = require('./company.model.js');
+var UserLogOns = require('./user_log_ons.model.js');
+var TaskCompleted = require('./task_completed.model.js');
+var RewardRedemptions = require('./reward_redemptions.model.js');
 
 var development_server_ip = "http://localhost:3000";
 var production_server_ip = "http://app.getpayd.io";
-//var server_ip = development_server_ip;
-var server_ip = production_server_ip;
+var server_ip = development_server_ip;
+// var server_ip = production_server_ip;
+
+var api_key = 'key-9cc58f4c99d912d09f852845200a4803';
+var domain = 'app.getpayd.io';
+var mailgun = require('mailgun-js')({apiKey: api_key, domain: domain});   
 
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
@@ -39,8 +46,10 @@ db.once('open', function() {
   //authenticate user
   app.post('/authenticate', function(req, res){
       // find if any user matches login credentials
+      console.log(req.body.email, "    ", req.body.password);
       User.findOne({email:req.body.email, password:req.body.password}, function(err, docs){
         if (err) return console.log(err);
+        console.log("none user");
         if (docs === null) {
           Company.findOne({email:req.body.email, password:req.body.password}, function(err, docs){
             if (err) return console.log(err);
@@ -48,7 +57,18 @@ db.once('open', function() {
           });
         }
         else {
-          return res.status(200).json(docs);
+          var obj = new UserLogOns();
+          obj.user_id = docs._id;
+          obj.time = new Date();
+          if (docs.company){
+            obj.company_id = docs.company._id;
+          }
+          obj.department_id = docs.department._id;
+          console.log("UserLogOns", obj);
+          obj.save(function(err, res1) {
+            if (err) return console.log(err);
+            return res.status(200).json(docs);
+          });
         }
       });
     });
@@ -175,10 +195,39 @@ db.once('open', function() {
   // create content
   app.post('/content', function(req, res) {
     var obj = new Content(req.body);
+    obj.date_created = new Date();
     obj.save(function(err, obj) {
       if(err) return console.error(err);
-
-      res.status(200).json(obj);
+      if (req.body["isSendMessage"] === 1) {
+        User.find({'company._id': obj["company"]["_id"]}, function(err1, users){
+          if (err1) console.log(err1);
+          for (var user of users) {
+            var subject = "New Task Available";
+            var content = "Hello, there is a new task available on PAYD.  Please log in to complete at your convenience." + " " +server_ip; 
+            if (req.body["message_subject"] != "") {
+              subject = req.body["message_subject"];
+            }
+            if (req.body["message_content"] != "") {
+              content = req.body["message_content"] + " " + server_ip;
+            }
+            var data = {
+              from: 'Excited User <me@samples.mailgun.org>',
+              to: user["email"],
+              subject: subject,
+              text: content
+            };             
+            mailgun.messages().send(data, function (err, body) {
+              if (err) {
+                console.log(err);
+              } 
+            });
+          }
+          res.status(200).json(obj);
+        })
+      }
+      else {
+        res.status(200).json(obj);
+      }
     });
   });
   // update by id
@@ -192,7 +241,8 @@ db.once('open', function() {
   });
   //get available contents
   app.get('/get_available_contents/:company_id/:department_v/:department_id/:department_name', function(req, res) {
-    Content.find({'company._id':req.params.company_id,available_to: {__v: Number(req.params.department_v), department : req.params.department_name, _id : req.params.department_id }}, function(err, docs) {
+    // Content.find({'company._id':req.params.company_id,available_to: {__v: Number(req.params.department_v), department : req.params.department_name, _id : req.params.department_id }}, function(err, docs) {
+    Content.find({'company._id':req.params.company_id,available_to: {__v: Number(req.params.department_v), _id : req.params.department_id, department : req.params.department_name }}, function(err, docs) {
       if(err) return console.error(err);
       res.json(docs);
     });
@@ -226,9 +276,43 @@ db.once('open', function() {
   //get available rewards
   app.get('/get_available_rewards/:company_id/:department_v/:department_id/:department_name', function(req, res) {
     console.log(req.params.company_id);
-    Reward.find({'company._id': req.params.company_id, available_to: {__v: Number(req.params.department_v), department : req.params.department_name, _id : req.params.department_id }}, function(err, docs) {
+    // Reward.find({'company._id': req.params.company_id, available_to: {__v: Number(req.params.department_v), department : req.params.department_name, _id : req.params.department_id }}, function(err, docs) {
+    Reward.find({'company._id': req.params.company_id, available_to: {__v: Number(req.params.department_v), _id : req.params.department_id, department : req.params.department_name }}, function(err, docs) {
       if(err) return console.error(err);
       res.json(docs);
+    });
+  });
+
+  //transfer value
+  app.post('/transfer_tokens/:sender_id/:receiver_id/:value', function(req, res) {
+    var message_body = req.body["message_body"];
+    var sender_email, receiver_email;
+    User.findOne({_id: req.params.sender_id},function(err, user){
+      user.available_tokens = parseInt(user.available_tokens) - parseInt(req.params.value);
+      sender_email = user.email;
+      console.log("sender email", sender_email);
+      user.save();
+      User.findOne({_id: req.params.receiver_id},function(err, user){
+        user.available_tokens = parseInt(user.available_tokens) + parseInt(req.params.value);
+        receiver_email = user.email;
+        console.log("receiver email", receiver_email);
+        user.save();
+
+        var data = {
+          from: "Excited User <me@samples.mailgun.org>",
+          to: receiver_email,
+          subject: "Transfer Tokens",
+          text: message_body
+        };         
+        mailgun.messages().send(data, function (err, body) {
+          if (err) {
+            console.log(err);
+          } else {
+            res.json({success: true, msg: 'sent'});
+          }
+        });
+
+      });
     });
   });
   //get reward
@@ -327,12 +411,8 @@ db.once('open', function() {
   //send password reset email 
   app.post('/send_password_reset_email', function(req,res){
     console.log(req.body);
-    var email   = require("../../node_modules/emailjs/email");
-
-    var api_key = 'key-9cc58f4c99d912d09f852845200a4803';
-    var domain = 'app.getpayd.io';
-    var mailgun = require('mailgun-js')({apiKey: api_key, domain: domain});
     
+
     var data = {
       from: 'Excited User <me@samples.mailgun.org>',
       to: req.body["email"],
@@ -348,30 +428,9 @@ db.once('open', function() {
       }
     });
 
-    // var server  = email.server.connect({
-    //    user:    "ptulr2016@gmail.com", 
-    //    password:"dkzcviwerkzcv123", 
-    //    host:    "smtp.gmail.com", 
-    //    ssl:     true
-    // });
-    // // // send the message and get a callback with an error or details of the message that was sent
-    // server.send({
-    //   text:    "We heard that you lost your GetPayd password. Sorry about that! But don’t worry! You can use the following link to reset your password: " + server_ip + "/register/" + req.body["_id"], 
-    //   from:    "ptulr2016@gmail.com", 
-    //   to:      req.body["email"],
-    //   subject: "testing emailjs"
-    // }, function(err, message) {  
-    //   if(err)
-    //     console.log(err);
-    //   else
-    //     res.json({success: true, msg: 'sent'});
-    // });
   });
   //send invitation email to user
   app.post('/send_invitation_to_user', function(req, res){
-    var api_key = 'key-9cc58f4c99d912d09f852845200a4803';
-    var domain = 'app.getpayd.io';
-    var mailgun = require('mailgun-js')({apiKey: api_key, domain: domain});
     
     var data = {
       from: 'Excited User <me@samples.mailgun.org>',
@@ -388,33 +447,10 @@ db.once('open', function() {
       }
     });
 
-    // var email   = require("../../node_modules/emailjs/email");
-    // var server  = email.server.connect({
-    //   user:    "ptulr2016@gmail.com",
-    //   password:"dkzcviwerkzcv123", 
-    //   host:    "smtp.gmail.com", 
-    //   ssl:     true
-    // });
-    // // send the message and get a callback with an error or details of the message that was sent
-    // server.send({
-    //   text:    "We would like to invite you for our website. Please confirm at " + server_ip + "/register/" + JSON.parse(req.body["_body"])._id + " to our website", 
-    //   from:    "ptulr2016@gmail.com", 
-    //   to:      JSON.parse(req.body["_body"])["email"],
-    //   subject: "testing email"
-    // }, function(err, message) {  
-    //   if(err)
-    //     console.log(err);
-    //   else
-    //     res.json({success: true, msg: 'sent'});
-    // });
   })
 
   //send invitation email to company
   app.post('/send_invitation_to_company', function(req, res){
-    
-    var api_key = 'key-9cc58f4c99d912d09f852845200a4803';
-    var domain = 'app.getpayd.io';
-    var mailgun = require('mailgun-js')({apiKey: api_key, domain: domain});
     
     var data = {
       from: 'Excited User <me@samples.mailgun.org>',
@@ -431,44 +467,6 @@ db.once('open', function() {
       }
     });
 
-    // var api_key = 'key-9cc58f4c99d912d09f852845200a4803';
-    // var domain = 'app.getpayd.io';
-    // var mailgun = require('mailgun-js')({apiKey: api_key, domain: domain});
-    
-    // var data = {
-    //   from: 'Excited User <me@samples.mailgun.org>',
-    //   to: JSON.parse(req.body["_body"])["email"],
-    //   subject: 'Hello',
-    //   text: "We would like to invite you as manger for your company group. Please confirm at " + server_ip + "/register_company/" + JSON.parse(req.body["_body"])._id + " to our website",
-    // };
-     
-    // mailgun.messages().send(data, function (err, body) {
-    //   if (err) {
-    //     console.log(err);
-    //   } else {
-    //     res.json({success: true, msg: 'sent'});
-    //   }
-    // });
-
-    // var email   = require("../../node_modules/emailjs/email");
-    // var server  = email.server.connect({
-    //   user:    "ptulr2016@gmail.com",
-    //   password:"dkzcviwerkzcv123", 
-    //   host:    "smtp.gmail.com", 
-    //   ssl:     true
-    // });
-    // // send the message and get a callback with an error or details of the message that was sent
-    // server.send({
-    //   text:    "We would like to invite you as manger for your company group. Please confirm at " + server_ip + "/register_company/" + JSON.parse(req.body["_body"])._id + " to our website", 
-    //   from:    "ptulr2016@gmail.com", 
-    //   to:      JSON.parse(req.body["_body"])["email"],
-    //   subject: "testing email"
-    // }, function(err, message) {  
-    //   if(err)
-    //     console.log(err);
-    //   else
-    //     res.json({success: true, msg: 'sent'});
-    // });
   })
 
   //send invitation email to company
@@ -478,10 +476,6 @@ db.once('open', function() {
     var reward = req.body.reward;
     var number = req.body.number;
 
-    var api_key = 'key-9cc58f4c99d912d09f852845200a4803';
-    var domain = 'app.getpayd.io';
-    var mailgun = require('mailgun-js')({apiKey: api_key, domain: domain});
-    
     var data = {
       from: 'Excited User <me@samples.mailgun.org>',
       to: user.company.email,      
@@ -496,30 +490,232 @@ db.once('open', function() {
         res.json({success: true, msg: 'sent'});
       }
     });
-
-    // var email   = require("../../node_modules/emailjs/email");
-    // var server  = email.server.connect({
-    //   user:    "ptulr2016@gmail.com",
-    //   password:"dkzcviwerkzcv123", 
-    //   host:    "smtp.gmail.com", 
-    //   ssl:     true
-    // });
-    // var user = req.body.user;
-    // var reward = req.body.reward;
-    // var number = req.body.number;
-    // server.send({
-    //   text:    user.first_name + " " + user.last_name + " bought " + number + " " + reward.name + "(s)", 
-    //   from:    "ptulr2016@gmail.com", 
-    //   to:      user.company.email,
-    //   subject: "testing email"
-    // }, function(err, message) {  
-    //   if(err)
-    //     console.log(err);
-    //   else
-    //     res.json({success: true, msg: 'sent'});
-    // });
   })
 
+  // get_log_ons 
+  app.get('/get_log_ons/:company_id/:department_id/:user_id/:date_from/:date_end', function(req, res){
+    console.log("user id",req.params.user_id);
+    if (req.params.user_id === "null") {
+      UserLogOns.find({company_id:req.params.company_id, department_id: req.params.department_id, time: {$gte: req.params.date_from, $lte:req.params.date_end}}, function(err, log_ons) {
+          if (err) return console.log(err);
+          res.json(log_ons);
+      });
+    } else {
+      UserLogOns.find({user_id: req.params.user_id, time: {$gte: req.params.date_from, $lte:req.params.date_end}}, function(err, log_ons) {
+          if (err) return console.log(err);
+          res.json(log_ons);
+      });      
+    }
+  })
+  // get task completed
+  app.get('/get_task_completed/:company_id/:department_id/:user_id/:date_from/:date_end', function(req, res) {
+    if (req.params.user_id === "null") {
+      TaskCompleted.find({'user.company._id':req.params.company_id, 'user.department._id': req.params.department_id, time: {$gte: req.params.date_from, $lte:req.params.date_end}}, function(err, tasks) {
+        if (err) return console.log(err);
+        res.json(tasks);
+      });
+    }
+    else {
+      TaskCompleted.find({'user._id': req.params.user_id, time: {$gte: req.params.date_from, $lte:req.params.date_end}}, function(err, tasks){
+          if (err) return console.log(err);
+          res.json(tasks);
+      });
+    }
+  })
+  app.post('/new_task_completed', function(req, res){
+    var new_task_completed = new TaskCompleted(req.body);
+    new_task_completed.save(function(err, res1){
+      if (err) return console.log(err);
+      res.status(200).json(res1);
+    });
+  })
+
+  // get points awarded
+  app.get('/get_points_awarded/:company_id/:department_id/:user_id/:date_from/:date_end', function(req, res) {
+    if (req.params.user_id === "null") {
+      PointsAwarded.find({'user.company._id':req.params.company_id, 'user.department._id': req.params.department_id, time: {$gte: req.params.date_from, $lte:req.params.date_end}}, function(err, tasks) {
+        if (err) return console.log(err);
+        res.json(tasks);
+      });
+    }
+    else {
+      PointsAwarded.find({'user._id': req.params.user_id, time: {$gte: req.params.date_from, $lte:req.params.date_end}}, function(err, tasks){
+          if (err) return console.log(err);
+          res.json(tasks);
+      });
+    }
+  })
+  app.post('/new_points_awarded', function(req, res){
+    var new_points_awarded = new PointsAwarded(req.body);
+    new_points_awarded.save(function(err, res1){
+      if (err) return console.log(err);
+      res.status(200).json(res1);
+    });
+  })
+
+  // get reward redemptions
+  app.get('/get_reward_redemptions/:company_id/:department_id/:user_id/:date_from/:date_end', function(req, res) {
+    if (req.params.user_id === "null") {
+      RewardRedemptions.find({'user.company._id':req.params.company_id, 'user.department._id': req.params.department_id, time: {$gte: req.params.date_from, $lte:req.params.date_end}}, function(err, tasks) {
+        if (err) return console.log(err);
+        res.json(tasks);
+      });
+    }
+    else {
+      console.log("user_id", req.params.user_id);
+      console.log("date_from", req.params.date_from);
+      console.log("date_end", req.params.date_end);
+      RewardRedemptions.find({'user._id': req.params.user_id, time: {$gte: req.params.date_from, $lte:req.params.date_end}}, function(err, tasks){
+          if (err) return console.log(err);
+          res.json(tasks);
+      });
+    }
+  })
+  app.post('/new_reward_redemptions', function(req, res){
+    var new_points_awarded = new RewardRedemptions(req.body);
+    new_points_awarded.save(function(err, res1){
+      if (err) return console.log(err);
+      res.status(200).json(res1);
+    });
+  })
+
+  app.put('/update_reward_redemptions', function(req, res){
+    RewardRedemptions.findOneAndUpdate({'reward._id': req.body.reward_id, 'user._id':req.body.user._id}, {number_of_reward: req.body.number_of_reward}, function(err, reward){
+      if (err) console.log(err);
+      res.status(200).json(reward);
+    });
+  })
+
+  //get top 10 videos
+  app.get('/get_top_videos/:company_id/:department_id/:user_id/:date_from/:date_end', function(req, res) {
+    var date_from = new Date(req.params.date_from);
+    var date_end = new Date(req.params.date_end);
+    if (req.params.user_id === "null") {
+      TaskCompleted.aggregate([{$match: {'user.company._id':req.params.company_id, 'user.department._id': req.params.department_id, 'task.type':'video', time: {$gte: date_from, $lte: date_end}}}, {$group: {_id: '$task.title', total: {$sum: 1}}}, {$sort: {total:-1}}, {$limit: 10}], function(err, res1){
+        if (err) console.log(err);
+        res.json(res1);
+      });
+    }
+    else {
+      TaskCompleted.aggregate([{$match: {'user._id':req.params.user_id, 'task.type':'video', time: {$gte: date_from, $lte: date_end}}}, {$group: {_id: '$task.title', total: {$sum: 1}}}, {$sort: {total:-1}}, {$limit: 10}], function(err, res1){
+        if (err) console.log(err);
+        res.json(res1);
+      });
+    }
+  })
+  //get top 10 videos
+  app.get('/get_top_quizzes/:company_id/:department_id/:user_id/:date_from/:date_end', function(req, res) {
+    var date_from = new Date(req.params.date_from);
+    var date_end = new Date(req.params.date_end);
+    if (req.params.user_id === "null") {
+      TaskCompleted.aggregate([{$match: {'user.company._id':req.params.company_id, 'user.department._id': req.params.department_id, 'task.type':'quiz', time: {$gte: date_from, $lte: date_end}}}, {$group: {_id: '$task.title', total: {$sum: 1}}}, {$sort: {total:-1}}, {$limit: 10}], function(err, res1){
+        if (err) console.log(err);
+        res.json(res1);
+      });
+    }
+    else {
+      TaskCompleted.aggregate([{$match: {'user._id':req.params.user_id, 'task.type':'quiz', time: {$gte: date_from, $lte: date_end}}}, {$group: {_id: '$task.title', total: {$sum: 1}}}, {$sort: {total:-1}}, {$limit: 10}], function(err, res1){
+        if (err) return console.log(err);
+        res.json(res1);
+      });
+    }
+  })
+  //get top Point Users
+  app.get('/get_most_point_users/:company_id/:department_id/:date_from/:date_end', function(req, res) {
+    var date_from = new Date(req.params.date_from);
+    var date_end = new Date(req.params.date_end);
+
+    console.log(req.params.company_id);
+    console.log(req.params.department_id);
+    console.log(date_from);
+    console.log(date_end);
+
+    User.aggregate([{$match: {'company._id':req.params.company_id, 'department._id': req.params.department_id, date_joined: {$gte: date_from, $lte: date_end}}}, {$sort: {available_tokens: -1}}, {$limit: 10}], function(err, res1){
+      if (err) return console.log(err);
+      console.log("users", res1);
+      res.json(res1);
+    });
+  })
+  //get top Point Departments
+  app.get('/get_most_point_departments/:company_id/:date_from/:date_end', function(req, res) {
+    var date_from = new Date(req.params.date_from);
+    var date_end = new Date(req.params.date_end);
+
+    User.aggregate([{$match: {'company._id':req.params.company_id, date_joined: {$gte: date_from, $lte: date_end}}}, {$group: {_id: '$department.department', total: {$sum : '$available_tokens'}}}, {$sort: {total: -1}}, {$limit: 10}], function(err, res1){
+      if (err) return console.log(err);
+      console.log("departments", res1);
+      res.json(res1);
+    });
+  })
+
+  //get total number of tasks by department
+  app.get('/get_total_number_of_tasks_by_department/:company_id/:date_from/:date_end', function(req, res) {
+    var date_from = new Date(req.params.date_from);
+    var date_end = new Date(req.params.date_end);
+
+    Department.find({}, function(err, res1) {
+      if (err) console.log(err);
+      var return_value = [];
+      for (var department of res1) {
+        Content.find({'company._id':req.params.company_id, date_created: {$gte: date_from, $lte: date_end}, 'available_to' : {department}}, function(err, res2) {
+            return_value.push({department_name: department.department, number_of_tasks: res2.length()});
+        })
+
+      }
+    });
+  })
+  //get total tasks completed by users
+  app.get('/get_total_tasks_completed_by_users/:company_id/:department_id/:date_from/:date_end', function(req, res) {
+    var date_from = new Date(req.params.date_from);
+    var date_end = new Date(req.params.date_end);
+    TaskCompleted.aggregate([{$match: {'user.company._id':req.params.company_id, 'user.department._id':req.params.department_id, time: {$gte: date_from, $lte: date_end}}}, {$group: {_id: {first_name: '$user.first_name', last_name: '$user.last_name', user_id: '$user._id'}, total: {$sum: 1}}}, {$sort: {total: -1}}, {$limit: 10}], function(err, res1) {
+      if (err) console.log(err);
+      res.json(res1);
+    })    
+  })
+  //get average points per assignment
+  app.get('/get_average_points_per_assignment/:company_id/:department_id/:date_from/:date_end', function(req, res) {
+    var date_from = new Date(req.params.date_from);
+    var date_end = new Date(req.params.date_end);
+    User.find({'company._id':req.params.company_id, 'department._id':req.params.department_id}, function(err, users){
+      if (err) return console.log(err);
+      var avg_array = [];
+      for (var user of users) {
+        var sum = 0.0;
+        for (var activity of user.activities) {
+          sum += activity.points_awarded;
+        }
+        avg_array.push({user: user, avg: sum/user.activities.length});
+      }
+      for (var i=0;i<users.length;i++) {
+        for (var j=i+1;j<users.length;j++) {
+          if (avg_array[i].avg < avg_array[j].avg) {
+            var temp = avg_array[i];
+            avg_array[i] = avg_array[j];
+            avg_array[j] = temp;
+          }
+        }
+      }
+      res.json(avg_array.slice(0, 10));
+    });
+  })
+  //get most reward redemptions
+  app.get('/get_most_reward_redemptions/:company_id/:department_id/:user_id/:date_from/:date_end', function(req, res) {
+    var date_from = new Date(req.params.date_from);
+    var date_end = new Date(req.params.date_end);
+    if (req.params.user_id === 'null') {
+      RewardRedemptions.aggregate([{$match: {'user.company._id':req.params.company_id, 'user.department._id':req.params.department_id, time: {$gte: date_from, $lte: date_end}}},{$sort: {number_of_reward: -1}}, {$limit: 10} ], function(err, res1) {
+        if (err) return console.log(err);
+        res.json(res1);
+      })    
+    }
+    else {
+      RewardRedemptions.aggregate([{$match: {'user._id':req.params.user_id, time: {$gte: date_from, $lte: date_end}}},{$sort: {number_of_reward: -1}}, {$limit: 10} ], function(err, res1) {
+        if (err) return console.log(err);
+        res.json(res1);
+      })    
+    }
+  })
   // all other routes are handled by Angular
   app.get('/*', function(req, res) {
     res.sendFile(path.join(__dirname,'/../../dist/index.html'));

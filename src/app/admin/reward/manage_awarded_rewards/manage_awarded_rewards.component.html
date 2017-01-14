@@ -1,0 +1,61 @@
+<div class="container">
+    <h1> Manage Reward </h1>
+    <div class="row">
+        <div class="col-sm-8">
+           <div class="input-group">
+              <input type="text" class="form-control" placeholder="Search for...">
+              <span class="input-group-btn">
+                <button class="btn btn-secondary" type="button">Go!</button>
+              </span>
+            </div> 
+        </div>
+    </div>
+    <div class="row">
+        <h3>Reward</h3>
+    </div>
+    <div class="row">
+        <table class="table table-bordered table-striped">
+            <thead class="thead-default">
+                <tr>
+                    <th>User name</th>
+                    <th>Department</th>
+                    <th>Reward</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody *ngIf="users.length === 0">
+                <tr>
+                    <td colspan="4">There are no active rewards in the DB. Add a new reward below.</td>
+                </tr>  
+            </tbody>
+            <tbody *ngIf="users.length > 0">
+                <template ngFor [ngForOf]="users" let-user>
+                    <tr *ngIf="user.rewards.length > 0">
+                        <td [attr.rowspan]="user.rewards.length">{{user.first_name + " " + user.last_name}}</td>
+                        <td [attr.rowspan]="user.rewards.length">{{user.department.department}}</td>
+                        <td>{{user.rewards[0].number}} X {{user.rewards[0].reward.name}}</td>
+                        <td>
+                            <select class="form-control" #status (change)="OnChangeStatus(user, status.value, 0)">
+                                <option value="pending" [selected]="user.rewards[0].status === 'pending'">Pending</option>
+                                <option value="completed" [selected]="user.rewards[0].status === 'completed'">Completed</option>
+                                <option value="cancelled" [selected]="user.rewards[0].status === 'cancelled'">Cancelled</option>
+                            </select>
+                        </td>
+                    </tr>  
+                    <template ngFor [ngForOf]="user.rewards" let-reward>
+                        <tr *ngIf="user.rewards.indexOf(reward) > 0">
+                            <td>{{reward.number}} X {{reward.reward.name}}</td> 
+                            <td>
+                                <select #status class="form-control" (change)="OnChangeStatus(user,  status.value, user.rewards.indexOf(reward))">
+                                    <option value="pending" [selected]="reward.status === 'pending'">Pending</option>
+                                    <option value="completed" [selected]="reward.status === 'completed'">Completed</option>
+                                    <option value="cancelled" [selected]="reward.status === 'cancelled'">Cancelled</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </template>
+                </template>
+            </tbody>
+        </table>
+    </div>
+</div>

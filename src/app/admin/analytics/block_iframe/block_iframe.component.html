@@ -1,0 +1,19 @@
+<div class="card card-inverse" [class.card-primary]="iframe_class === 'card-primary'" [class.card-info]="iframe_class === 'card-info'" [class.card-warning]="iframe_class === 'card-warning'" [class.card-danger]="iframe_class === 'card-danger'">
+    <div class="card-block pb-0">
+        <div class="btn-group float-xs-right" dropdown>
+            <button type="button" class="btn btn-transparent dropdown-toggle p-0" dropdownToggle>
+                <i class="icon-settings"></i>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right" dropdownMenu>
+                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+        </div>
+        <h4 class="mb-0">{{iframe_number}}</h4>
+        <p>{{iframe_title}}</p>
+    </div>
+    <div class="chart-wrapper px-1" style="height:70px;">
+        <canvas baseChart class="chart" [datasets]="iframe_data_sets" [labels]="iframe_labels" [options]="iframe_options" [colors]="iframe_color" [legend]="iframe_legent" [chartType]="iframe_type" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)"></canvas>
+    </div>
+</div>

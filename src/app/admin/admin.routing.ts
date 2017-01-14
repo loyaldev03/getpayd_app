@@ -9,9 +9,11 @@ import { ManageContentComponent }   from './content/manage_content.component';
 import { NewVideoComponent }        from './content/video/new_video.component';
 import { NewQuizComponent }         from './content/quiz/new_quiz.component'; 
 import { ManageRewardComponent }   from './reward/manage_reward.component';
+import { ManageAwardedRewardsComponent } from './reward/manage_awarded_rewards/manage_awarded_rewards.component';
 import { NewRewardComponent }      from './reward/new/new_reward.component';
 import { ViewActivityComponent }   from './activity/view_activity.component';
 import { DashboardComponent }         from './dashboard/dashboard.component';
+import { AnalyticsComponent } from './analytics/analytics.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -23,9 +25,11 @@ export const routes: Routes = [
     { path: 'new_video',               component: NewVideoComponent },
     { path: 'new_quiz',                component: NewQuizComponent },
     { path: 'manage_reward',          component: ManageRewardComponent },
+    { path: 'manage_awarded_rewards',  component:ManageAwardedRewardsComponent},
     { path: 'new_reward',              component: NewRewardComponent },
     { path: 'view_activity',         component: ViewActivityComponent },
     { path: 'dashboard',                component: DashboardComponent},
+    { path: 'analytics',                 component: AnalyticsComponent},
     { path: '**', redirectTo: '' }
 ];
 

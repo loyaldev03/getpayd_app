@@ -24,6 +24,7 @@ export class RegisterCompanyComponent implements OnInit{
 
     register() {
         this.loading = true;
+        console.log("company id", this.model._id);
         if (this.model._id){
             this.adminService.editCompany(this.model)
             .subscribe(

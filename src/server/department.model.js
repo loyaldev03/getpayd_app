@@ -6,4 +6,4 @@ var departmentSchema = mongoose.Schema({
 
 var Department = mongoose.model('Department', departmentSchema);
 
-module.exports = Department;
+module.exports = Department;  

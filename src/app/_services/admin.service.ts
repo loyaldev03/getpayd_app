@@ -127,4 +127,72 @@ export class AdminService {
     return this.http.get('/departments').map(res => res.json());
   }
 
+  //get Log Ons
+  getLogOns(company_id, department_id, user_id, date_from, date_end){
+    return this.http.get(`/get_log_ons/${company_id}/${department_id}/${user_id}/${date_from}/${date_end}`).map(res => res.json());
+  }
+
+  //add task completed
+  addTaskCompleted(task_completed) {
+    return this.http.post(`/new_task_completed`, JSON.stringify(task_completed), this.options);
+  }
+
+  //Get Task Completd
+  getTaskCompleted(company_id, department_id, user_id, date_from, date_end) {
+    return this.http.get(`/get_task_completed/${company_id}/${department_id}/${user_id}/${date_from}/${date_end}`).map(res => res.json());
+  }
+
+  //add Points Awarded
+  addPointsAwarded(points_awarded) {
+    return this.http.post(`/new_points_awarded`, JSON.stringify(points_awarded), this.options);
+  }
+
+  //Get Task Completd
+  getPointsAwarded(company_id, department_id, user_id, date_from, date_end) {
+    return this.http.get(`/get_points_awarded/${company_id}/${department_id}/${user_id}/${date_from}/${date_end}`).map(res => res.json());
+  }
+
+ //add Reward Redemptions
+  addRewardRedemptions(reward_redemptions) {
+    return this.http.post(`/new_reward_redemptions`, JSON.stringify(reward_redemptions), this.options);
+  }
+
+ //update Reward Redemptions
+  updateRewardRedemptions(reward_redemptions) {
+    return this.http.put(`/update_reward_redemptions`, JSON.stringify(reward_redemptions), this.options);
+  }
+
+  //Get Reward Redemptions
+  getRewardRedemptions(company_id, department_id, user_id, date_from, date_end) {
+    return this.http.get(`/get_reward_redemptions/${company_id}/${department_id}/${user_id}/${date_from}/${date_end}`).map(res => res.json());
+  }
+
+  //Get Top Videos
+  getTopVideos(company_id, department_id, user_id, date_from, date_end) {
+    return this.http.get(`/get_top_videos/${company_id}/${department_id}/${user_id}/${date_from}/${date_end}`).map(res => res.json());
+  }
+  //Get Top Quizzes
+  getTopQuizzes(company_id, department_id, user_id, date_from, date_end) {
+    return this.http.get(`/get_top_quizzes/${company_id}/${department_id}/${user_id}/${date_from}/${date_end}`).map(res => res.json());
+  }
+  //Get Most Point Users
+  getMostPointUsers(company_id, department_id, date_from, date_end) {
+    return this.http.get(`/get_most_point_users/${company_id}/${department_id}/${date_from}/${date_end}`).map(res => res.json());
+  }
+  //Get Most Point Departments
+  getMostPointDepartments(company_id, date_from, date_end) {
+    return this.http.get(`/get_most_point_departments/${company_id}/${date_from}/${date_end}`).map(res => res.json());
+  }
+  //Get total tasks by users
+  getTotalNumberOfTasksByUser(company_id, department_id, date_from, date_end) {
+    return this.http.get(`/get_total_tasks_completed_by_users/${company_id}/${department_id}/${date_from}/${date_end}`).map(res => res.json());
+  }
+  //Get Average Point per assignment
+  getAveragePointPerAssignment(company_id, department_id, date_from, date_end){
+    return this.http.get(`/get_average_points_per_assignment/${company_id}/${department_id}/${date_from}/${date_end}`).map(res => res.json());
+  }
+  //Get Most Reward Redemptions
+  getMostRewardRedemptions(company_id, department_id, user_id, date_from, date_end) {
+    return this.http.get(`/get_most_reward_redemptions/${company_id}/${department_id}/${user_id}/${date_from}/${date_end}`).map(res => res.json());
+  }
 }

@@ -2,8 +2,11 @@
     <h1 class='title'> User Interface </h1>
     <div class="row">
         <h3 class="col-sm-6"> My Tokens: {{available_tokens}} </h3>
-        <span class="col-sm-6">
+        <span class="col-sm-3">
             <a class="btn btn-primary btn-l btn-block" [routerLink] = "'/user/redeem'">Redeem</a>
+        </span> 
+        <span class="col-sm-3">
+            <a class="btn btn-primary btn-l btn-block" [routerLink] = "'/user/transfer_tokens'">Transfer</a>
         </span> 
     </div>
     <div class="row">
@@ -27,7 +30,7 @@
                         <a [routerLink]="['/user/video_activity/', content._id]">{{content.title}}</a>
                     </td>
                     <td *ngIf="content.type==='quiz'">
-                        <a [routerLink]="['/user/quiz_activity/', content._id]">{{content.title}}</a>
+                        <a [routerLink]="['/user/quiz_show/', content._id]">{{content.title}}</a>
                     </td>
                     <td>{{content.type}}</td>
                     <td>{{content.reward}}</td>

@@ -82,9 +82,24 @@ export class VideoActivityComponent implements OnInit{
     this.user.activities.push({
       user: this.user.first_name+" "+this.user.last_name,
       content: this.content,
-      points_awarded: this.points_awarded,
+      points_awarded: Math.round(this.currentTimeRange) * this.content.reward,
       date: current_date,
-    });  
+    });
+
+    let task_completed = {
+      task: this.content,
+      user: this.user,
+      points_awarded: Math.round(this.currentTimeRange) * this.content.reward,
+      time: new Date(),
+    }
+    this.adminService.addTaskCompleted(task_completed).subscribe(
+      data => {
+        console.log("success", data);
+      },
+      error => {
+        console.log("error", error);
+      });
+
     this.user.available_tokens += Math.round(this.currentTimeRange) * this.content.reward;
     console.log(this.currentTimeRange);
     this.adminService.editUser(this.user)

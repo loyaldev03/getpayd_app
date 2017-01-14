@@ -21,4 +21,8 @@ export class UserService {
     let currentUser = JSON.parse(localStorage.getItem('currentUser'))
     return this.http.get(`/get_available_contents/${currentUser.company._id}/${department_v}/${department_id}/${department_name}`).map(res => res.json());
   }
+
+  transferTokens(sender_id, receiver_id, value, message) {
+    return this.http.post(`/transfer_tokens/${sender_id}/${receiver_id}/${value}`, {message_body: message}, this.options);
+  }
 }

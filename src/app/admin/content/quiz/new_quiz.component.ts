@@ -22,6 +22,10 @@ export class NewQuizComponent implements OnInit{
   private available_to = new FormControl();
   private reward = new FormControl(0, Validators.required);
   private date_end = new FormControl("", Validators.required);
+  private message_subject = new FormControl("");
+  private message_content = new FormControl("");
+  private reference_link = new FormControl("");
+  private isSendMessage = 1;
 
   constructor( 
     private router: Router,
@@ -35,6 +39,9 @@ export class NewQuizComponent implements OnInit{
       available_to: this.available_to,
       reward: this.reward,
       date_end: this.date_end,
+      message_subject: this.message_subject,
+      message_content: this.message_content,
+      reference_link: this.reference_link      
     });
     this.getAvailableTo();
   }
@@ -53,6 +60,7 @@ export class NewQuizComponent implements OnInit{
     content.type = "quiz";
     content.content = this.quizzes[0].question;
     content.company = JSON.parse(localStorage.getItem('currentUser'));
+    content.isSendMessage = this.isSendMessage;
     content.quizzes = this.quizzes.map(function(quiz){
       let result = {question:"", answers:[], correct_answer:1};
       result.question = quiz.question;
@@ -85,5 +93,10 @@ export class NewQuizComponent implements OnInit{
 
   removeAnswer(quiz_index, answer_index) {
     this.quizzes[quiz_index].answers.splice(answer_index, 1);
+  }
+
+  toggleSendMessage() {
+    this.isSendMessage = 1 - this.isSendMessage;
+    console.log("SendMessage", this.isSendMessage);
   }
 }

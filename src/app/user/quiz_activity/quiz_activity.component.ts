@@ -89,9 +89,24 @@ export class QuizActivityComponent implements OnInit{
     this.user.activities.push({
       user: this.user.first_name+" "+this.user.last_name,
       content: this.content,
-      points_awarded: this.points_awarded,
+      points_awarded: this.correct_answers_number * this.content.reward,
       date: current_date
     });  
+    
+    let task_completed = {
+      task: this.content,
+      user: this.user,
+      points_awarded: this.correct_answers_number * this.content.reward,
+      time: new Date(),
+    }
+    this.adminService.addTaskCompleted(task_completed).subscribe(
+      data => {
+        console.log("success", data);
+      },
+      error => {
+        console.log("error", error);
+      });
+
     this.user.available_tokens += this.correct_answers_number * this.content.reward;
     this.adminService.editUser(this.user)
       .subscribe(

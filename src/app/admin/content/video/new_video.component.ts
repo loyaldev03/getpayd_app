@@ -38,10 +38,13 @@ export class NewVideoComponent implements OnInit{
   private available_to = new FormControl();
   private reward = new FormControl(0, Validators.required);
   private date_end = new FormControl("", Validators.required);
+  private message_subject = new FormControl("");
+  private message_content = new FormControl("");
   private video_to_upload = null;
   private isUploading = false;
   private config;
-  
+  private isSendMessage = 1;
+
   uploadFile: any;
   options: Object = {
     url: 'http://localhost:3000/upload'
@@ -66,6 +69,8 @@ export class NewVideoComponent implements OnInit{
       available_to: this.available_to,
       reward: this.reward,
       date_end: this.date_end,
+      message_subject: this.message_subject,
+      message_content: this.message_content
     });
     this.video_to_upload = null;
     this.getAvailableTo();
@@ -102,6 +107,7 @@ export class NewVideoComponent implements OnInit{
       content.type = "video";
       content.content = res.Location;
       content.company = JSON.parse(localStorage.getItem('currentUser'));
+      content.isSendMessage = this.isSendMessage;
       this.adminService.addContent(content)
       .subscribe(
           data => {
@@ -112,5 +118,9 @@ export class NewVideoComponent implements OnInit{
               console.log("service error");
           });
     });
+  }
+  toggleSendMessage() {
+    this.isSendMessage = 1 - this.isSendMessage;
+    console.log("SendMessage", this.isSendMessage);
   }
 }

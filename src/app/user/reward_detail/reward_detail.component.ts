@@ -95,20 +95,43 @@ export class RewardDetailComponent{
   onBuy() {
     if (this.isBuyable){
       this.user.available_tokens = this.available_tokens;
+      var reward_redemption = {
+        reward: this.reward,
+        number_of_reward: this.number,
+        user: this.user,
+        time: new Date()
+      }
       if (this.reward_id_for_user === -1){
         if (!this.user.rewards){
           this.user.rewards = [];
         }
         this.user.rewards.push({
           reward: this.reward,
-          number: this.number
+          number: this.number,
+          status: 'pending'
         });        
+        this.adminService.addRewardRedemptions(reward_redemption).subscribe(
+          data => {
+            console.log("success", data);
+          },
+          error => {
+            console.log("error");
+          });
       }
       else {
         this.rewards[this.reward_id_for_user] = {
           reward: this.reward,
-          number: this.number
+          number: this.number,
+          status: 'pending'
         }
+        this.adminService.updateRewardRedemptions(reward_redemption).subscribe(
+          data => {
+            console.log("success", data);
+          },
+          error => {
+            console.log("error");
+          });
+
         this.user.rewards = this.rewards;
       }
       this.adminService.sendEmailRegardingReward(this.user, this.reward, this.number)

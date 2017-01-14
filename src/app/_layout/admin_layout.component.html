@@ -21,6 +21,9 @@
                 <a class="nav-link" routerLinkActive="active" [routerLink]="['./dashboard']"><i class="icon-speedometer"></i> Dashboard</a>
             </li>
             <li class="divider"></li>
+            <li class="nav-item"  *ngIf="account_type != 0">
+                <a class="nav-link" routerLinkActive="active" [routerLink] = "'/admin/analytics'"><i class="icon-speedometer"></i>Analytics</a>
+            </li>
             <li class="nav-item" *ngIf="account_type === 0">
                 <a class="nav-link" routerLinkActive="active" [routerLink]="['./manage_company']"><i class="icon-speedometer"></i> Manage Companies</a>
             </li>

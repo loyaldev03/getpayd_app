@@ -1,0 +1,16 @@
+    <div class="card-header">
+        {{iframe_title}}
+    </div>
+    <div class="card-block">
+        <div class="chart-wrapper px-1" style="height:70px;" *ngIf="isDataSet === '1'">
+            <canvas baseChart class="chart" [datasets]="iframe_data_sets" [labels]="iframe_labels" [options]="iframe_options" [colors]="iframe_color" [legend]="iframe_legent" [chartType]="iframe_type" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)"></canvas>
+        </div>
+
+        <div class="chart-wrapper px-1" style="height:70px;" *ngIf="isDataSet === '0'"> 
+          <canvas baseChart class="chart" [data]="iframe_data" [labels]="iframe_labels" [chartType]="iframe_type" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)"></canvas>
+        </div>
+
+        <div class="chart-wrapper px-1" style="height:70px;" *ngIf="isDataSet === '0' && iframe_data.length === 0">
+          No Data 
+        </div>
+    </div>

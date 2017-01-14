@@ -1,0 +1,15 @@
+<div class="container">
+  <h1> Transfer Tokens </h1>
+  <form class="form-horizontal" [formGroup]="transfer_form" (ngSubmit)="transferTokens()" style="text-align:center">
+    <div class="form-group">
+      <autocomplete (setUser)="setUser($event)" [data]="users" ></autocomplete>
+    </div>
+    <div class="form-group">
+      <input class="form-control" type="Number" #number_of_tokens name="value" formControlName="value" placeholder="Number Of Tokens" min="0" [max]="user.available_tokens">
+    </div>
+    <div class="form-group">
+      <input class="form-control" type="text" name="message" formControlName="message" placeholder="Message">
+    </div>    
+    <button class="btn btn-primary" type="submit" [disabled]="user_id === 0 || !transfer_form.valid ||  number_of_tokens.value > user.available_tokens"><i class="fa fa-floppy-o"></i> Transfer</button>
+  </form>
+</div>
