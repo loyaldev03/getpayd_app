@@ -381,7 +381,7 @@ db.once('open', function() {
   });
   
   function create_department(department, cb) {
-    let department_return = null;
+    var department_return = null;
     Department.findOne({department: department}, function(err, obj) {
         if (err) return console.errror(err);
         if (obj) {
