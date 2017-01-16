@@ -195,4 +195,15 @@ export class AdminService {
   getMostRewardRedemptions(company_id, department_id, user_id, date_from, date_end) {
     return this.http.get(`/get_most_reward_redemptions/${company_id}/${department_id}/${user_id}/${date_from}/${date_end}`).map(res => res.json());
   }
+  //Get Most Sent Point User
+  getMostSentPointUser(company_id, department_id, date_from, date_end) {
+    return this.http.get(`/get_most_sent_point_user/${company_id}/${department_id}/${date_from}/${date_end}`).map(res => res.json());
+  }
+  getMostReceivedPointUser(company_id, department_id, date_from, date_end) {
+    return this.http.get(`/get_most_received_point_user/${company_id}/${department_id}/${date_from}/${date_end}`).map(res => res.json());
+  }
+  getUsersForAnalytic(company_id, department_id, date_from, date_end) {
+    return this.http.get(`/get_user_for_analytic/${company_id}/${department_id}/${date_from}/${date_end}`).map(res => res.json());
+  }
+   
 }

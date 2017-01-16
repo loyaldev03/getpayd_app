@@ -1,48 +1,92 @@
 <div class="container">
-  <div class="row">
-    <div class="col-sm-3">
-      <block_iframe [iframe_class]="'card-primary'" [iframe_options]="lineChart1Options" [iframe_color]="lineChart1Colours" [iframe_type]="lineChart1Type" [iframe_labels]="lineChart1Labels" [iframe_data_sets]="lineChart1Data" [iframe_legent]="lineChart1Legend" [iframe_number]="total_logons" [iframe_title]="'Log Ons'"></block_iframe>
+  <div class="animated fadeIn">
+    <div class="row">
+      <div class="col-sm-6 col-lg-3">
+        User
+        <autocomplete (setUser)="setUser($event)" [data]="users" ></autocomplete>
+      </div>
+      <div class="col-sm-6 col-lg-3">
+        Department
+        <select class="form-control" [(ngModel)]="department_id" (change)="select_department()">
+            <option *ngFor="let department of departments" [value]="department._id">{{department.department}}</option>
+        </select>
+      </div>
+      <div class="col-sm-6 col-lg-3">
+        Start Date
+        <input #date_from_el type="text" class="form-control" [(ngModel)]="date_from">
+      </div>
+      <div class="col-sm-6 col-lg-3">
+        End Date
+        <input #date_end_el type="text" class="form-control" [(ngModel)]="date_end">
+      </div>
+      <div class="col-sm-6 col-lg-3">
+        <!-- <datetime [(ngModel)]="date_end"></datetime> -->
+      </div>
     </div>
-    <div class="col-sm-3">
-      <block_iframe [iframe_class]="'card-info'" [iframe_options]="lineChart2Options" [iframe_color]="lineChart2Colours" [iframe_data_sets]="lineChart2Data" [iframe_type]="lineChart2Type" [iframe_labels]="lineChart2Labels" [iframe_legent]="lineChart2Legend" [iframe_number]="total_tasks_completed" [iframe_title]="'Tasks Completed'"></block_iframe>
+    <div class="row">
+      <div class="col-sm-6 col-lg-3">
+        <block_iframe [iframe_class]="'card-primary'" [iframe_options]="lineChart1Options" [iframe_color]="lineChart1Colours" [iframe_type]="lineChart1Type" [iframe_labels]="lineChart1Labels" [iframe_data_sets]="lineChart1Data" [iframe_legent]="lineChart1Legend" [iframe_number]="total_logons" [iframe_title]="'Log Ons'"  [users]="users" [departments]="departments" [user_id]="user_id_log_ons" [department_id]="department_id_log_ons" [date_from]="date_from_log_ons" [date_end]="date_end_log_ons" (changeSettingEvent)="change_setting_for_log_ons($event)"></block_iframe>
+      </div>
+      <div class="col-sm-6 col-lg-3">
+        <block_iframe [iframe_class]="'card-info'" [iframe_options]="lineChart2Options" [iframe_color]="lineChart2Colours" [iframe_data_sets]="lineChart2Data" [iframe_type]="lineChart2Type" [iframe_labels]="lineChart2Labels" [iframe_legent]="lineChart2Legend" [iframe_number]="total_tasks_completed" [iframe_title]="'Tasks Completed'"  [users]="users" [departments]="departments" [user_id]="user_id_tasks_completed" [department_id]="department_id_tasks_completed" [date_from]="date_from_tasks_completed" [date_end]="date_end_tasks_completed" (changeSettingEvent)="change_setting_for_tasks_completed($event)"></block_iframe>
+      </div>
+      <div class="col-sm-6 col-lg-3">
+        <block_iframe [iframe_class]="'card-warning'" [iframe_options]="lineChart3Options" [iframe_color]="lineChart3Colours" [iframe_data_sets]="lineChart3Data" [iframe_type]="lineChart3Type" [iframe_labels]="lineChart3Labels" [iframe_legent]="lineChart3Legend" [iframe_number]="total_points_awarded" [iframe_title]="'Points Awarded'"   [users]="users" [departments]="departments" [user_id]="user_id_points_awarded" [department_id]="department_id_points_awarded" [date_from]="date_from_points_awarded" [date_end]="date_end_points_awarded" (changeSettingEvent)="change_setting_for_points_awarded($event)"></block_iframe>
+      </div>
+      <div class="col-sm-6 col-lg-3">
+        <block_iframe [iframe_class]="'card-danger'" [iframe_options]="lineChart4Options" [iframe_color]="lineChart4Colours" [iframe_data_sets]="lineChart4Data" [iframe_type]="lineChart4Type" [iframe_labels]="lineChart4Labels" [iframe_legent]="lineChart4legend" [iframe_number]="total_reward_redemptions" [iframe_title]="'Reward Redemptions'"   [users]="users" [departments]="departments" [user_id]="user_id_reward_redemptions" [department_id]="department_id_reward_redemptions" [date_from]="date_from_reward_redemptions" [date_end]="date_end_reward_redemptions" (changeSettingEvent)="change_setting_for_reward_redemptions($event)"></block_iframe>
+      </div>
     </div>
-    <div class="col-sm-3">
-      <block_iframe [iframe_class]="'card-warning'" [iframe_options]="lineChart3Options" [iframe_color]="lineChart3Colours" [iframe_data_sets]="lineChart3Data" [iframe_type]="lineChart3Type" [iframe_labels]="lineChart3Labels" [iframe_legent]="lineChart3Legend" [iframe_number]="total_points_awarded" [iframe_title]="'Points Awarded'"></block_iframe>
+    <div class="row">
+      <div class="col-sm-6">
+        <block_chart [isDataSet] = "'1'" [iframe_class]="'card-danger'" [iframe_options]="lineChartOptions" [iframe_color]="lineChartColours" [iframe_data_sets]="lineChartData" [iframe_type]="chart_type_top_videos" [iframe_labels]="lineChartLabels" [iframe_legent]="lineChartlegend" [iframe_number]="total_reward_redemptions" [iframe_title]="'Top Videos'"  [users]="users" [departments]="departments" [user_id]="user_id_top_videos" [department_id]="department_id_top_videos" [date_from]="date_from_top_videos" [date_end]="date_end_top_videos"
+        (changeSettingEvent)="change_setting_top_videos($event)"></block_chart>
+      </div>
+      <div class="col-sm-6">
+        <block_chart [isDataSet] = "'1'" [iframe_class]="'card-danger'" [iframe_options]="barChartOptions" [iframe_color]="barChartColours" [iframe_data_sets]="barChartData" [iframe_type]="chart_type_top_quizzes" [iframe_labels]="barChartLabels" [iframe_legent]="barChartlegend" [iframe_number]="total_reward_redemptions" [iframe_title]="'Top Quizzes'"  [users]="users" [departments]="departments" [user_id]="user_id_top_quizzes" [department_id]="department_id_top_quizzes" [date_from]="date_from_top_quizzes" [date_end]="date_end_top_quizzes"
+        (changeSettingEvent)="change_setting_top_quizzes($event)"></block_chart>
+      </div>
     </div>
-    <div class="col-sm-3">
-      <block_iframe [iframe_class]="'card-danger'" [iframe_options]="lineChart4Options" [iframe_color]="lineChart4Colours" [iframe_data_sets]="lineChart4Data" [iframe_type]="lineChart4Type" [iframe_labels]="lineChart4Labels" [iframe_legent]="lineChart4legend" [iframe_number]="total_reward_redemptions" [iframe_title]="'Reward Redemptions'"></block_iframe>
+    <div class="row second">
+      <div class="col-sm-6">
+        <block_chart [isDataSet] = "'0'" [iframe_data]="doughnutChartData" [iframe_type]="chart_type_most_point_users" [iframe_labels]="doughnutChartLabels" [iframe_title]="'Most Point Users'"  [users]="users" [departments]="departments" [user_id]="user_id_most_point_users" [department_id]="department_id_most_point_users" [date_from]="date_from_most_point_users" [date_end]="date_end_most_point_users"
+        (changeSettingEvent)="change_setting_most_point_users($event)"></block_chart>
+      </div>
+      <div class="col-sm-6">
+        <block_chart [isDataSet] = "'1'" [iframe_data_sets]="radarChartData" [iframe_type]="chart_type_most_point_departments" [iframe_labels]="radarChartLabels" [iframe_title]="'Most Point Departments'"  [users]="users" [departments]="departments" [user_id]="user_id_most_point_departments" [department_id]="department_id_most_point_departments" [date_from]="date_from_most_point_departments" [date_end]="date_end_most_point_departments"
+        (changeSettingEvent)="change_setting_most_point_departments($event)"></block_chart>
+      </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-sm-6">
-      <block_chart [isDataSet] = "'1'" [iframe_class]="'card-danger'" [iframe_options]="lineChartOptions" [iframe_color]="lineChartColours" [iframe_data_sets]="lineChartData" [iframe_type]="lineChartType" [iframe_labels]="lineChartLabels" [iframe_legent]="lineChartlegend" [iframe_number]="total_reward_redemptions" [iframe_title]="'Top Videos'"></block_chart>
+    <div class="row third">
+      <div class="col-sm-6">
+        <block_chart [isDataSet] = "'1'" [iframe_class]="'card-danger'" [iframe_options]="barChartOptions" [iframe_color]="barChartColours" [iframe_data_sets]="numberOfTasksByUserData" [iframe_type]="chart_type_number_of_tasks_completed_by_user" [iframe_labels]="numberOfTasksByUserLabels" [iframe_legent]="barChartlegend" [iframe_number]="total_reward_redemptions" [iframe_title]="'Number Of Tasks Completed By User'"  [users]="users" [departments]="departments" [user_id]="user_id_number_of_tasks_completed_by_user" [department_id]="department_id_number_of_tasks_completed_by_user" [date_from]="date_from_number_of_tasks_completed_by_user" [date_end]="date_end_number_of_tasks_completed_by_user"
+        (changeSettingEvent)="change_setting_number_of_tasks_completed_by_user($event)"></block_chart>
+      </div>
+      <div class="col-sm-6">
+        <block_chart [isDataSet] = "'1'" [iframe_class]="'card-danger'" [iframe_options]="lineChartOptions" [iframe_color]="lineChartColours" [iframe_data_sets]="mostRewardRedemptionsChardData" [iframe_type]="chart_type_most_reward_redemptions" [iframe_labels]="mostRewardRedemptionsChardLabels" [iframe_legent]="lineChartlegend" [iframe_number]="total_reward_redemptions" [iframe_title]="'Most Reward Redemptions'"  [users]="users" [departments]="departments" [user_id]="user_id_most_reward_redemptions" [department_id]="department_id_most_reward_redemptions" [date_from]="date_from_most_reward_redemptions" [date_end]="date_end_most_reward_redemptions"
+        (changeSettingEvent)="change_setting_most_reward_redemptions($event)"></block_chart>
+      </div>
     </div>
-    <div class="col-sm-6">
-      <block_chart [isDataSet] = "'1'" [iframe_class]="'card-danger'" [iframe_options]="barChartOptions" [iframe_color]="barChartColours" [iframe_data_sets]="barChartData" [iframe_type]="barChartType" [iframe_labels]="barChartLabels" [iframe_legent]="barChartlegend" [iframe_number]="total_reward_redemptions" [iframe_title]="'Top Quizzes'"></block_chart>
+    <div class="row third">
+      <div class="col-sm-6">
+        <block_chart [isDataSet] = "'0'" [iframe_data]="avgPointOfAssignmentChartData" [iframe_type]="chart_type_average_point_of_assignment" [iframe_labels]="avgPointOfAssignmentChartLabels" [iframe_title]="'Average Point of Assignment'"  [users]="users" [departments]="departments" [user_id]="user_id_average_point_of_assignment" [department_id]="department_id_average_point_of_assignment" [date_from]="date_from_average_point_of_assignment" [date_end]="date_end_average_point_of_assignment"
+        (changeSettingEvent)="change_setting_average_point_of_assignment($event)"></block_chart>
+      </div>
+      <div class="col-sm-6">
+        <block_chart [isDataSet] = "'1'" [iframe_class]="'card-danger'" [iframe_options]="lineChartOptions" [iframe_color]="lineChartColours" [iframe_data_sets]="pointValueOverTimeChartData" [iframe_type]="chart_type_point_value_over_time" [iframe_labels]="pointValueOverTimeChartLabels" [iframe_legent]="lineChartlegend" [iframe_number]="total_reward_redemptions" [iframe_title]="'Point Value Over Time'"  [users]="users" [departments]="departments" [user_id]="user_id_point_value_over_time" [department_id]="department_id_point_value_over_time" [date_from]="date_from_point_value_over_time" [date_end]="date_end_point_value_over_time"
+        (changeSettingEvent)="change_setting_point_value_over_time($event)"></block_chart>
+      </div>
     </div>
-  </div>
-  <div class="row second">
-    <div class="col-sm-6">
-      <block_chart [isDataSet] = "'0'" [iframe_data]="doughnutChartData" [iframe_type]="doughnutChartType" [iframe_labels]="doughnutChartLabels" [iframe_title]="'Most Point Users'"></block_chart>
+    <div class="row third">
+      <div class="col-sm-6">
+        <block_chart [isDataSet] = "'1'" [iframe_class]="'card-danger'" [iframe_options]="lineChartOptions" [iframe_color]="lineChartColours" [iframe_data_sets]="mostSentPointUserChartData" [iframe_type]="chart_type_most_sent_point_user" [iframe_labels]="mostSentPointUserChartLabels" [iframe_legent]="lineChartlegend" [iframe_number]="total_reward_redemptions" [iframe_title]="'Most Sent Point User'"  [users]="users" [departments]="departments" [user_id]="user_id_most_sent_point_user" [department_id]="department_id_most_sent_point_user" [date_from]="date_from_most_sent_point_user" [date_end]="date_end_most_sent_point_user"
+        (changeSettingEvent)="change_setting_most_sent_point_user($event)"></block_chart>
+      </div>
+      <div class="col-sm-6">
+        <block_chart [isDataSet] = "'1'" [iframe_class]="'card-danger'" [iframe_options]="lineChartOptions" [iframe_color]="lineChartColours" [iframe_data_sets]="mostReceivedPointUserChartData" [iframe_type]="chart_type_most_received_point_user" [iframe_labels]="mostReceivedPointUserChartLabels" [iframe_legent]="lineChartlegend" [iframe_number]="total_reward_redemptions" [iframe_title]="'Most Received Point User'"  [users]="users" [departments]="departments" [user_id]="user_id_most_received_point_user" [department_id]="department_id_most_received_point_user" [date_from]="date_from_most_received_point_user" [date_end]="date_end_most_received_point_user"
+        (changeSettingEvent)="change_setting_most_received_point_user($event)"></block_chart>
+      </div>
     </div>
-    <div class="col-sm-6">
-      <block_chart [isDataSet] = "'1'" [iframe_data_sets]="radarChartData" [iframe_type]="radarChartType" [iframe_labels]="radarChartLabels" [iframe_title]="'Most Point Departments'"></block_chart>
-    </div>
-  </div>
-  <div class="row third">
-    <div class="col-sm-6">
-      <block_chart [isDataSet] = "'1'" [iframe_class]="'card-danger'" [iframe_options]="barChartOptions" [iframe_color]="barChartColours" [iframe_data_sets]="numberOfTasksByUserData" [iframe_type]="barChartType" [iframe_labels]="numberOfTasksByUserLabels" [iframe_legent]="barChartlegend" [iframe_number]="total_reward_redemptions" [iframe_title]="'Number Of Tasks Completed By User'"></block_chart>
-    </div>
-    <div class="col-sm-6">
-      <block_chart [isDataSet] = "'1'" [iframe_class]="'card-danger'" [iframe_options]="lineChartOptions" [iframe_color]="lineChartColours" [iframe_data_sets]="mostRewardRedemptionsChardData" [iframe_type]="lineChartType" [iframe_labels]="mostRewardRedemptionsChardLabels" [iframe_legent]="lineChartlegend" [iframe_number]="total_reward_redemptions" [iframe_title]="'Most Reward Redemptions'"></block_chart>
-    </div>
-  </div>
-  <div class="row third">
-    <div class="col-sm-6">
-      <block_chart [isDataSet] = "'0'" [iframe_data]="avgPointOfAssignmentChartData" [iframe_type]="doughnutChartType" [iframe_labels]="avgPointOfAssignmentChartLabels" [iframe_title]="'Average Point of Assignment'"></block_chart>
-    </div>
-    <div class="col-sm-6">
-      <block_chart [isDataSet] = "'1'" [iframe_class]="'card-danger'" [iframe_options]="lineChartOptions" [iframe_color]="lineChartColours" [iframe_data_sets]="pointValueOverTimeChartData" [iframe_type]="lineChartType" [iframe_labels]="pointValueOverTimeChartLabels" [iframe_legent]="lineChartlegend" [iframe_number]="total_reward_redemptions" [iframe_title]="'Point Value Over Time'"></block_chart>
-    </div>
+    <users_for_analytics [company_id]="company_id" [department_id]="department_id"></users_for_analytics>
   </div>
 </div>

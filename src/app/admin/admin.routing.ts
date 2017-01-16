@@ -27,7 +27,7 @@ export const routes: Routes = [
     { path: 'manage_reward',          component: ManageRewardComponent },
     { path: 'manage_awarded_rewards',  component:ManageAwardedRewardsComponent},
     { path: 'new_reward',              component: NewRewardComponent },
-    { path: 'view_activity',         component: ViewActivityComponent },
+    { path: 'view_activity/:user_id',         component: ViewActivityComponent },
     { path: 'dashboard',                component: DashboardComponent},
     { path: 'analytics',                 component: AnalyticsComponent},
     { path: '**', redirectTo: '' }

@@ -1,16 +1,63 @@
-    <div class="card-header">
-        {{iframe_title}}
+<div class="card-header">
+    {{iframe_title}}
+</div>
+<div class="card-block">
+    <div class="chart-wrapper px-1" style="height:70px;" *ngIf="isDataSet === '1'">
+        <canvas baseChart class="chart" [datasets]="iframe_data_sets" [labels]="iframe_labels" [options]="iframe_options" [colors]="iframe_color" [legend]="iframe_legent" [chartType]="iframe_type" (chartHover)="chartHovered($event)" (chartClick)="modal.open()"></canvas>
     </div>
-    <div class="card-block">
-        <div class="chart-wrapper px-1" style="height:70px;" *ngIf="isDataSet === '1'">
-            <canvas baseChart class="chart" [datasets]="iframe_data_sets" [labels]="iframe_labels" [options]="iframe_options" [colors]="iframe_color" [legend]="iframe_legent" [chartType]="iframe_type" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)"></canvas>
-        </div>
 
-        <div class="chart-wrapper px-1" style="height:70px;" *ngIf="isDataSet === '0'"> 
-          <canvas baseChart class="chart" [data]="iframe_data" [labels]="iframe_labels" [chartType]="iframe_type" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)"></canvas>
-        </div>
-
-        <div class="chart-wrapper px-1" style="height:70px;" *ngIf="isDataSet === '0' && iframe_data.length === 0">
-          No Data 
-        </div>
+    <div class="chart-wrapper px-1" style="height:70px;" *ngIf="isDataSet === '0'"> 
+      <canvas baseChart class="chart" [data]="iframe_data" [labels]="iframe_labels" [chartType]="iframe_type" (chartHover)="chartHovered($event)" (chartClick)="modal.open()"></canvas>
     </div>
+
+</div>
+
+<modal #modal [animation]="'true'" [cssClass]="'.modal-header { border-bottom: none !important;} .modal-footer { border-top: none !important;}'">
+    <modal-header>
+        <h4 class="modal-title">Settings</h4>
+    </modal-header>
+    <modal-body>
+      <div class="row">
+        <div class="col-sm-6 col-lg-6">
+          User
+          <autocomplete (setUser)="changeSetting()" [data]="users" [init_value]="user_name"></autocomplete>
+        </div>
+        <div class="col-sm-6 col-lg-6">
+          Department
+          <select class="form-control" [(ngModel)]="department_id" (change)="changeSetting()">
+              <option *ngFor="let department of departments" [value]="department._id">{{department.department}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6 col-lg-6">
+          Start Date
+          <input #date_from_el type="text" class="form-control" [(ngModel)]="date_from" (change)="changeSetting()">
+        </div>
+        <div class="col-sm-6 col-lg-6">
+          End Date
+          <input #date_end_el type="text" class="form-control" [(ngModel)]="date_end" (change)="changeSetting()">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6 col-lg-6">
+          Chart type
+          <select class="form-control" [(ngModel)]="iframe_type">
+            <option value="line">LineChart</option>
+            <option value="bar">BarChart</option>
+            <option value="doughnut">Doughnut</option>
+            <option value="radar">Radar</option>
+            <option value="pie">Pie</option>
+            <option value="polarArea">PolarArea</option>
+          </select>
+        </div>
+      </div>
+    </modal-body>
+    <modal-footer>
+      <div class="row">
+        <div class="offset-sm-5 col-sm-2">
+          <button type="button" class="btn btn-default" data-dismiss="modal" autofocus (click)="modal.dismiss()">OK</button>
+        </div>
+      </div>
+    </modal-footer>
+</modal>

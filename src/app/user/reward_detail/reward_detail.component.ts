@@ -108,7 +108,8 @@ export class RewardDetailComponent{
         this.user.rewards.push({
           reward: this.reward,
           number: this.number,
-          status: 'pending'
+          status: 'pending',
+          date: new Date()
         });        
         this.adminService.addRewardRedemptions(reward_redemption).subscribe(
           data => {
@@ -122,7 +123,8 @@ export class RewardDetailComponent{
         this.rewards[this.reward_id_for_user] = {
           reward: this.reward,
           number: this.number,
-          status: 'pending'
+          status: 'pending',
+          date: new Date()
         }
         this.adminService.updateRewardRedemptions(reward_redemption).subscribe(
           data => {

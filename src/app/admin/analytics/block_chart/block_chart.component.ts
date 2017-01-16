@@ -1,12 +1,24 @@
-import { Component, OnInit, Input }        from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef }        from '@angular/core';
+import { Ng2Bs3ModalModule } from 'ng2-bs3-modal/ng2-bs3-modal';
+import { AdminService }             from '../../../_services/admin.service.ts';
+declare var jQuery: any;
 
 @Component({
     selector: 'block_chart',
-    templateUrl: 'block_chart.component.html'
+    templateUrl: 'block_chart.component.html',
+    styles: [`
+    .modal-header {
+        border-bottom: none !important;
+    }
+    .modal-footer {
+          border-top: none !important;
+    }`]
 })
 export class BlockChartComponent implements OnInit {
 
-  
+    @ViewChild('date_from_el') date_from_el: ElementRef;
+    @ViewChild('date_end_el') date_end_el: ElementRef;
+
     @Input() public iframe_class: string = "card-primary";
     @Input() public iframe_options: any;
     @Input() public iframe_color: any;
@@ -19,10 +31,67 @@ export class BlockChartComponent implements OnInit {
     @Input() public isDataSet: number = 1;
     @Input() public iframe_data: any;
     
-    ngOnInit() {
-    }
-    constructor() { }
+    @Input() public users:any;
+    @Input() public departments:any;
+    @Input() public user_id: string;
+    @Input() public department_id: string;
+    @Input() public date_from: Date;
+    @Input() public date_end: Date;
 
+    @Output() public changeSettingEvent:EventEmitter<any> = new EventEmitter<any>();
+ 
+    public user_name: string;
+ 
+    setUser(e) {
+
+    }
+
+    ngOnInit() {
+        if (this.user_name != null) {
+            this.adminService.getUser(this.user_id).subscribe(
+                user => {
+                    this.user_name = user.first_name + user.last_name;
+                },
+                error => {
+                    console.log(error);
+                }
+            );            
+        }
+        this.init_date_picker();
+    }
+    
+    init_date_picker() {
+        jQuery(this.date_from_el.nativeElement).datepicker({
+              onSelect: (value) => {
+                this.date_from = new Date(value);
+              }
+            })
+            .datepicker('setDate', this.date_from);
+        jQuery(this.date_end_el.nativeElement).datepicker({
+              onSelect: (value) => {
+                this.date_end = new Date(value);
+              }
+            })
+            .datepicker('setDate', this.date_end);
+    }
+    constructor(private adminService: AdminService) { }
+
+    settingDismissed() {
+        console.log()
+    }
+    settingOK() {
+
+    }
+
+    changeSetting() {
+        this.changeSettingEvent.emit({
+            user_id: this.user_id,
+            department_id: this.department_id,
+            date_from: this.date_from,
+            date_end: this.date_end,
+            chart_type: this.iframe_type
+        });
+    }
     // events
     public chartClicked(e:any):void {
         console.log(e);

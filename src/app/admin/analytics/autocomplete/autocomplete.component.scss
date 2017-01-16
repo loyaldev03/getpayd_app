@@ -1,0 +1,54 @@
+@keyframes myanim {
+    0%   {background-color:white;  }
+    50%  {background-color:#fefefe; }
+    100% {background-color:white;  }
+}
+
+.autocomplete{
+}   
+.autocomplete input{
+}
+.autocomplete .suggestions{
+  position: relative;
+}
+.autocomplete .suggestions ul{
+    width: 100%;
+  list-style: none;
+  padding:  0px;
+  margin: 0px;
+  border:1px solid black;
+    position:absolute;
+}
+
+.autocomplete .suggestions ul li a{
+}
+.autocomplete .suggestions ul li{
+  margin:0px;
+  cursor:pointer;
+    font-size: 14px;
+    height: 30px;
+    line-height: 30px;
+    outline: none;
+    border-bottom: 1px solid black;
+    position: relative;
+}
+.autocomplete .suggestions ul li.active a{
+    animation-name: lianim;
+    animation-duration: 1s;
+    animation-timing-function: ease-in-out;
+    position: absolute;
+    color: #37a000;
+}
+/*.autocomplete .suggestions ul li:hover{
+    text-shadow: 1px 1px 0.3;
+}
+.autocomplete .suggestions ul li:hover a{
+    animation-name: lianim;
+    animation-duration: 1s;
+    animation-timing-function: ease-in-out;
+    position: absolute;
+    color: #37a000;
+}*/
+.autocomplete .suggestions ul li:hover a .stressWord{
+    font-weight: bold;
+}

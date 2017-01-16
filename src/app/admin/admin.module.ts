@@ -6,6 +6,7 @@ import { HttpModule } from '@angular/http';
 import { Ng2UploaderModule } from 'ng2-uploader';
 import { FileUploadModule } from 'ng2-file-upload'
 import { ChartsModule }      from 'ng2-charts/ng2-charts';
+import { Ng2Bs3ModalModule } from 'ng2-bs3-modal/ng2-bs3-modal';
 
 import { AdminRoutingModule } from './admin.routing';
 
@@ -25,7 +26,8 @@ import { ViewActivityComponent }   from './activity/view_activity.component';
 import { AnalyticsComponent } from './analytics/analytics.component';
 import { BlockIframeComponent} from './analytics/block_iframe/block_iframe.component';
 import { BlockChartComponent} from './analytics/block_chart/block_chart.component';
-
+import { UsersForAnalyticsComponent } from './analytics/users_for_analytics/users_for_analytics.component';
+import { AutoCompleteComponent } from './analytics/autocomplete/autocomplete.component';
 
 import { OrderByPipe } from '../_pipes/order_by.pipe';
 import { SearchPipe } from '../_pipes/search.pipe';
@@ -40,6 +42,7 @@ import { SearchPipe } from '../_pipes/search.pipe';
     FileUploadModule,
     AdminRoutingModule,
     ChartsModule,
+    Ng2Bs3ModalModule,
   ],
   declarations: [
     DashboardComponent,
@@ -57,6 +60,8 @@ import { SearchPipe } from '../_pipes/search.pipe';
     AnalyticsComponent,
     BlockIframeComponent,
     BlockChartComponent,
+    UsersForAnalyticsComponent,
+    AutoCompleteComponent,
 
     SearchPipe,
     OrderByPipe

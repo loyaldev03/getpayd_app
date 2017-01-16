@@ -29,6 +29,7 @@ var Company = require('./company.model.js');
 var UserLogOns = require('./user_log_ons.model.js');
 var TaskCompleted = require('./task_completed.model.js');
 var RewardRedemptions = require('./reward_redemptions.model.js');
+var TransferTokens = require('./transfer_tokens.model.js');
 
 var development_server_ip = "http://localhost:3000";
 var production_server_ip = "http://app.getpayd.io";
@@ -287,9 +288,11 @@ db.once('open', function() {
   app.post('/transfer_tokens/:sender_id/:receiver_id/:value', function(req, res) {
     var message_body = req.body["message_body"];
     var sender_email, receiver_email;
+    var sender, receiver;
     User.findOne({_id: req.params.sender_id},function(err, user){
       user.available_tokens = parseInt(user.available_tokens) - parseInt(req.params.value);
       sender_email = user.email;
+      sender = user;
       console.log("sender email", sender_email);
       user.save();
       User.findOne({_id: req.params.receiver_id},function(err, user){
@@ -297,6 +300,19 @@ db.once('open', function() {
         receiver_email = user.email;
         console.log("receiver email", receiver_email);
         user.save();
+        receiver = user;
+
+        //Save to Transfer Tokens
+        var transfer_tokens = new TransferTokens({
+          number_of_tokens: req.params.value,
+          send_user: sender,
+          receive_user: receiver,
+          time: new Date()
+        });
+        
+        transfer_tokens.save(function(err, transfer_tokens) {
+          if (err) console.log(err);
+        })
 
         var data = {
           from: "Excited User <me@samples.mailgun.org>",
@@ -494,7 +510,6 @@ db.once('open', function() {
 
   // get_log_ons 
   app.get('/get_log_ons/:company_id/:department_id/:user_id/:date_from/:date_end', function(req, res){
-    console.log("user id",req.params.user_id);
     if (req.params.user_id === "null") {
       UserLogOns.find({company_id:req.params.company_id, department_id: req.params.department_id, time: {$gte: req.params.date_from, $lte:req.params.date_end}}, function(err, log_ons) {
           if (err) return console.log(err);
@@ -714,6 +729,51 @@ db.once('open', function() {
         if (err) return console.log(err);
         res.json(res1);
       })    
+    }
+  })
+  //get most sent point user
+  app.get('/get_most_sent_point_user/:company_id/:department_id/:date_from/:date_end', function(req, res) {
+    var date_from = new Date(req.params.date_from);
+    var date_end = new Date(req.params.date_end);
+    TransferTokens.aggregate([{$match: {'send_user.company._id':req.params.company_id, 'send_user.department._id':req.params.department_id, time: {$gte: date_from, $lte: date_end}}}, {$group: {_id:{sender: '$send_user._id', first_name: '$send_user.first_name', last_name: '$send_user.last_name'}, total: {$sum: '$number_of_tokens'}}}, {$limit: 10}], function(err, res1) {
+      if (err) return console.log(err);
+      res.json(res1);
+    });
+  })
+  //get most received point user
+  app.get('/get_most_received_point_user/:company_id/:department_id/:date_from/:date_end', function(req, res) {
+    var date_from = new Date(req.params.date_from);
+    var date_end = new Date(req.params.date_end);
+    TransferTokens.aggregate([{$match: {'receive_user.company._id':req.params.company_id, 'receive_user.department._id':req.params.department_id, time: {$gte: date_from, $lte: date_end}}}, {$group: {_id:{receiver: '$receive_user._id', first_name: '$receive_user.first_name', last_name: '$receive_user.last_name'}, total: {$sum: '$number_of_tokens'}}}, {$limit: 10}], function(err, res1) {
+      if (err) return console.log(err);
+      res.json(res1);
+    });
+  })
+  //get user for analytic
+  app.get('/get_user_for_analytic/:company_id/:department_id/:date_from/:date_end', function(req, res) {
+    if (req.params.department_id === "undefined"){
+      User.find({'company._id': req.params.company_id}, function(err, users){
+        if (err) return console.log(err);
+        UserLogOns.find({company_id: req.params.company_id}, function(err_log_ons, user_log_ons){
+          if (err_log_ons) return console.log(err_log_ons);
+          res.json({
+            users: users,
+            user_log_ons: user_log_ons
+          });
+        });
+      })      
+    }
+    else {
+      User.find({'company._id': req.params.company_id, 'department._id': req.params.department_id}, function(err, users){
+        if (err) return console.log(err);
+        UserLogOns.find({company_id: req.params.company_id, department_id: req.params.department_id}, function(err_log_ons, user_log_ons){
+          if (err_log_ons) return console.log(err_log_ons);
+          res.json({
+            users: users,
+            user_log_ons: user_log_ons
+          });
+        });
+      })            
     }
   })
   // all other routes are handled by Angular
