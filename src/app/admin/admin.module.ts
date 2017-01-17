@@ -7,6 +7,7 @@ import { Ng2UploaderModule } from 'ng2-uploader';
 import { FileUploadModule } from 'ng2-file-upload'
 import { ChartsModule }      from 'ng2-charts/ng2-charts';
 import { Ng2Bs3ModalModule } from 'ng2-bs3-modal/ng2-bs3-modal';
+// import {SelectModule} from 'angular2-select/dist/angular2-select';
 
 import { AdminRoutingModule } from './admin.routing';
 
@@ -43,6 +44,7 @@ import { SearchPipe } from '../_pipes/search.pipe';
     AdminRoutingModule,
     ChartsModule,
     Ng2Bs3ModalModule,
+    // SelectModule
   ],
   declarations: [
     DashboardComponent,
