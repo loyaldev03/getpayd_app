@@ -114,6 +114,7 @@ export class AutoCompleteComponent implements OnInit {
       return false;
     }
     filter(event:any) {
+        this.setUser.emit("undefined");
         this.selected = false;
         if(this.handleSpecialKey(event))
           return;
@@ -126,11 +127,11 @@ export class AutoCompleteComponent implements OnInit {
         }
 
         this.filteredList = this.data.filter((item:any) => {
-            return (item["first_name"] + " " + item["last_name"]).toString().toLowerCase().includes(this.query);
+            return (item["first_name"] +  item["last_name"]).toString().toLowerCase().includes(this.query);
         });
         
   }
-   
+  
   select(item:any){
       this.setUser.emit(item._id);
 

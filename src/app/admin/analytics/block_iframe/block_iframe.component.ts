@@ -67,12 +67,16 @@ export class BlockIframeComponent implements OnInit {
     constructor(public adminService: AdminService) { 
     }
 
+    changeUser(e) {
+        this.user_id = e;
+    }
     changeSetting() {
         this.changeSettingEvent.emit({
             user_id: this.user_id,
             department_id: this.department_id,
             date_from: this.date_from,
-            date_end: this.date_end
+            date_end: this.date_end,
+            chart_type: this.iframe_type
         });
     }
     // events

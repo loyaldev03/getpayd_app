@@ -7,7 +7,9 @@ import { Ng2UploaderModule } from 'ng2-uploader';
 import { FileUploadModule } from 'ng2-file-upload'
 import { ChartsModule }      from 'ng2-charts/ng2-charts';
 import { Ng2Bs3ModalModule } from 'ng2-bs3-modal/ng2-bs3-modal';
-// import {SelectModule} from 'angular2-select/dist/angular2-select';
+import { DropdownModule } from 'ng2-bootstrap/dropdown';
+import {CsvService} from "angular2-json2csv";
+// import { DropdownModule } from 'ng2-bootstrap';
 
 import { AdminRoutingModule } from './admin.routing';
 
@@ -33,6 +35,8 @@ import { AutoCompleteComponent } from './analytics/autocomplete/autocomplete.com
 import { OrderByPipe } from '../_pipes/order_by.pipe';
 import { SearchPipe } from '../_pipes/search.pipe';
 
+
+
 @NgModule({
   imports: [
     FormsModule,
@@ -44,7 +48,7 @@ import { SearchPipe } from '../_pipes/search.pipe';
     AdminRoutingModule,
     ChartsModule,
     Ng2Bs3ModalModule,
-    // SelectModule
+    // DropdownModule.forRoot(),
   ],
   declarations: [
     DashboardComponent,
@@ -71,6 +75,7 @@ import { SearchPipe } from '../_pipes/search.pipe';
   providers: [
     AuthenticationService,
     UserService,
+    CsvService
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

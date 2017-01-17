@@ -83,6 +83,9 @@ export class BlockChartComponent implements OnInit {
 
     }
 
+    changeUser(e) {
+        this.user_id = e;
+    }
     changeSetting() {
         this.changeSettingEvent.emit({
             user_id: this.user_id,

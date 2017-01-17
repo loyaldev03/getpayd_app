@@ -26,11 +26,11 @@
       <div class="row">
         <div class="col-sm-6 col-lg-6">
           User
-          <autocomplete (setUser)="changeSetting()" [data]="users" [init_value]="user_name"></autocomplete>
+          <autocomplete (setUser)="changeUser($event)" [data]="users" [init_value]="user_name"></autocomplete>
         </div>
         <div class="col-sm-6 col-lg-6">
           Department
-          <select class="form-control" [(ngModel)]="department_id" (change)="changeSetting()">
+          <select class="form-control" [(ngModel)]="department_id">
               <option *ngFor="let department of departments" [value]="department._id">{{department.department}}</option>
           </select>
         </div>
@@ -38,18 +38,18 @@
       <div class="row">
         <div class="col-sm-6 col-lg-6">
           Start Date
-          <input #date_from_el type="text" class="form-control" [(ngModel)]="date_from" (change)="changeSetting()">
+          <input #date_from_el type="text" class="form-control" [(ngModel)]="date_from">
         </div>
         <div class="col-sm-6 col-lg-6">
           End Date
-          <input #date_end_el type="text" class="form-control" [(ngModel)]="date_end" (change)="changeSetting()">
+          <input #date_end_el type="text" class="form-control" [(ngModel)]="date_end">
         </div>
       </div>
     </modal-body>
     <modal-footer>
       <div class="row">
         <div class="offset-sm-5 col-sm-2">
-          <button type="button" class="btn btn-default" data-dismiss="modal" autofocus (click)="modal.dismiss()">OK</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal" autofocus (click)="modal.dismiss(); changeSetting();">OK</button>
         </div>
       </div>
     </modal-footer>

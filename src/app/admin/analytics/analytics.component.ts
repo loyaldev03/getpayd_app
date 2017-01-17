@@ -1,7 +1,10 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit }        from '@angular/core';
 import { ChartsModule }             from 'ng2-charts/ng2-charts';
 import { AdminService } from '../../_services/admin.service';            
-import { UserService } from '../../_services/user.service';            
+import { UserService } from '../../_services/user.service';         
+import {CsvService} from "angular2-json2csv";
+
+import 'rxjs/Rx' ;
 declare var jQuery: any;
 
 @Component({
@@ -119,876 +122,44 @@ export class AnalyticsComponent implements OnInit {
     public total_reward_redemptions: number = 0;
     public base_reward_redemptions: number = 100;
     
-    public numberOfTasksByUserData: any[] = [
+    public data_set_number_of_tasks_completed_by_user: any[] = [
         {data: [65, 59, 80, 81, 56, 55, 40], label:'Series A'},
         {data: [28, 48, 40, 19, 86, 27, 90], label:'Series B'}
     ];
-    public numberOfTasksByUserLabels: string[] = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
+    public labels_number_of_tasks_completed_by_user: string[] = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
 
-    public avgPointOfAssignmentChartData: any[] = [65, 59, 80, 81, 56, 55, 40];
-    public avgPointOfAssignmentChartLabels: string[] = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
+    public data_set_average_point_of_assignment: any[] = [65, 59, 80, 81, 56, 55, 40];
+    public labels_average_point_of_assignment: string[] = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
 
-    public mostRewardRedemptionsChardData: any[] = [
+    public data_set_most_reward_redemptions: any[] = [
         {data: [65, 59, 80, 81, 56, 55, 40], label:'Series A'},
         {data: [28, 48, 40, 19, 86, 27, 90], label:'Series B'}
     ];
-    public mostRewardRedemptionsChardLabels: string[] = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
+    public labels_most_reward_redemptions: string[] = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
 
-    public pointValueOverTimeChartData: any[] = [
+    public data_set_point_value_over_time: any[] = [
         {data: [65, 59, 80, 81, 56, 55, 40], label:'Series A'},
         {data: [28, 48, 40, 19, 86, 27, 90], label:'Series B'}
     ];
-    public pointValueOverTimeChartLabels: string[] = ['2006', '2007', '2008', '2009', '2010', '2011', '2012']
+    public labels_point_value_over_time: string[] = ['2006', '2007', '2008', '2009', '2010', '2011', '2012']
 
-    public mostSentPointUserChartData: any[] = [
+    public data_set_most_sent_point_user: any[] = [
         {data: [65, 59, 80, 81, 56, 55, 40], label:'Series A'},
         {data: [28, 48, 40, 19, 86, 27, 90], label:'Series B'}
     ];
-    public mostSentPointUserChartLabels: string[] = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
+    public labels_most_sent_point_user: string[] = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
 
-    public mostReceivedPointUserChartData: any[] = [
+    public data_set_most_received_point_user: any[] = [
         {data: [65, 59, 80, 81, 56, 55, 40], label:'Series A'},
         {data: [28, 48, 40, 19, 86, 27, 90], label:'Series B'}
     ];
-    public mostReceivedPointUserChartLabels: string[] = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
+    public labels_most_received_point_user: string[] = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
 
     public users_for_analytics: any = [];
     public users: any = [];
     public departments: any = [];
     public export_list: any = [];
-    constructor(
-        private adminService: AdminService,
-        private userService: UserService) 
-    {
-        // // this.user_id = "587881a10eff174f93740995";
-        // // this.user_id = "5879c34f88701f3c1194665a"
-        // this.user_id = null;
-        // this.department_id = "5879f63530456b6947c6d665";
-        // console.log("current user", localStorage.getItem('currentUser'));
-
-        //monthly test
-        this.date_end = new Date();
-        this.date_from = new Date();
-        this.date_from.setDate(this.date_end.getDate() - 15);
-        this.company_id = JSON.parse(localStorage.getItem('currentUser'))._id;
-        this.mode = "daily"
-
-        this.user_id_log_ons = this.user_id;
-        this.department_id_log_ons = this.department_id;
-        this.date_from_log_ons = this.date_from;
-        this.date_end_log_ons = this.date_end;
-
-        this.user_id_tasks_completed = this.user_id;
-        this.department_id_tasks_completed = this.department_id;
-        this.date_from_tasks_completed = this.date_from;
-        this.date_end_tasks_completed = this.date_end;
-
-        this.user_id_points_awarded = this.user_id;
-        this.department_id_points_awarded = this.department_id;
-        this.date_from_points_awarded = this.date_from;
-        this.date_end_points_awarded = this.date_end;
-
-        this.user_id_reward_redemptions = this.user_id;
-        this.department_id_reward_redemptions = this.department_id;
-        this.date_from_reward_redemptions = this.date_from;
-        this.date_end_reward_redemptions = this.date_end;
-                        
-        this.user_id_top_videos = this.user_id;
-        this.department_id_top_videos = this.department_id;
-        this.date_from_top_videos = this.date_from;
-        this.date_end_top_videos = this.date_end;
-        this.chart_type_top_videos = "line";
-
-        this.user_id_top_quizzes = this.user_id;
-        this.department_id_top_quizzes = this.department_id;
-        this.date_from_top_quizzes = this.date_from;
-        this.date_end_top_quizzes = this.date_end;
-        this.chart_type_top_quizzes = "bar";
-
-        this.user_id_most_point_users = this.user_id;
-        this.department_id_most_point_users = this.department_id;
-        this.date_from_most_point_users = this.date_from;
-        this.date_end_most_point_users = this.date_end;
-        this.chart_type_most_point_users = "doughnut";
-
-        this.user_id_most_point_departments = this.user_id;
-        this.department_id_most_point_departments = this.department_id;
-        this.date_from_most_point_departments = this.date_from;
-        this.date_end_most_point_departments = this.date_end;
-        this.chart_type_most_point_departments = "radar";
-
-        this.user_id_number_of_tasks_completed_by_user = this.user_id;
-        this.department_id_number_of_tasks_completed_by_user = this.department_id;
-        this.date_from_number_of_tasks_completed_by_user = this.date_from;
-        this.date_end_number_of_tasks_completed_by_user = this.date_end;
-        this.chart_type_number_of_tasks_completed_by_user = "bar";
-
-        this.user_id_most_reward_redemptions = this.user_id;
-        this.department_id_most_reward_redemptions = this.department_id;
-        this.date_from_most_reward_redemptions = this.date_from;
-        this.date_end_most_reward_redemptions = this.date_end;
-        this.chart_type_most_reward_redemptions = "line";
-
-        this.user_id_average_point_of_assignment = this.user_id;
-        this.department_id_average_point_of_assignment = this.department_id;
-        this.date_from_average_point_of_assignment = this.date_from;
-        this.date_end_average_point_of_assignment = this.date_end;
-        this.chart_type_average_point_of_assignment = "doughnut";
-
-        this.user_id_point_value_over_time = this.user_id;
-        this.department_id_point_value_over_time = this.department_id;
-        this.date_from_point_value_over_time = this.date_from;
-        this.date_end_point_value_over_time = this.date_end;
-        this.chart_type_point_value_over_time = "line";
-
-        this.user_id_most_sent_point_user = this.user_id;
-        this.department_id_most_sent_point_user = this.department_id;
-        this.date_from_most_sent_point_user = this.date_from;
-        this.date_end_most_sent_point_user = this.date_end;
-        this.chart_type_most_sent_point_user = "line";
-
-        this.user_id_most_received_point_user = this.user_id;
-        this.department_id_most_received_point_user = this.department_id;
-        this.date_from_most_received_point_user = this.date_from;
-        this.date_end_most_received_point_user = this.date_end;
-        this.chart_type_most_received_point_user = "line";
-
-        this.export_list = [
-            {value:'top_videos', label: 'top videos'}, 
-            {value:'top_quizzes', label: 'top quizzes'},
-            {value: 'most_point_users', label: 'most point users'}, 
-            {value: 'most_point_departments', label: 'most point departments'}, 
-            {value: 'number_of_tasks_completed_by_user', label: 'number of tasks completed by user'}, 
-            {value: 'most_reward_redemptions', label: 'most reward redemptions'}, 
-            {value: 'average_point_of_assignment', label: 'average point of assignment'}, 
-            {value: 'point_value_over_time', label: 'point value over time'}, 
-            {value: 'most_sent_point_user', label: 'most sent point users'}, 
-            {value: 'most_received_point_user', label: 'most received point users'}
-        ];
-
-        // //daily test
-        // this.date_from.setDate(this.date_end.getDate() - 5);
-        // // console.log("current user", localStorage.getItem('currentUser'));
-        // this.company_id = JSON.parse(localStorage.getItem('currentUser'))._id;
-        // this.department_id = "587881a10eff174f93740996";
-        // this.mode = "daily"
-
-        //hourly test
-        // this.date_from.setTime(this.date_end.getTime() - (24*60*60*1000));
-        // console.log("date from", this.date_from);
-        // this.company_id = JSON.parse(localStorage.getItem('currentUser'))._id;
-        // this.mode = "hourly"
-    }
-    chart_for_log_ons() {
-        this.adminService.getLogOns(this.company_id, this.department_id_log_ons, this.user_id_log_ons, this.date_from_log_ons, this.date_end_log_ons).subscribe(
-            data => {
-                console.log("get Log ons", data);
-                this.lineChart1Data = [
-                    {
-                        data: [],
-                        label: 'Series A'
-                    }
-                ];
-                this.lineChart1Labels = [];
-                this.total_logons = data.length;
-                if (this.mode == 'monthly') {
-                    // lineChart1
-                    for (var date=new Date(this.date_from); date <= this.date_end; date.setMonth(date.getMonth() + 1)){
-                        var number_for_monthly = this.base_log_on;
-                        for (var item of data) {
-                            var date_range = new Date(date);
-                            date_range.setMonth(date.getMonth() + 1);
-                            var item_time = new Date(item.time);
-                            if (item_time >= date && item_time <= date_range) {
-                              number_for_monthly += this.unit_per_user;
-                            }
-                        }
-                        console.log(number_for_monthly, "   ", date.getMonth() + 1)
-                        this.lineChart1Data[0].data.push(number_for_monthly);
-                        this.lineChart1Labels.push(date.getMonth() + 1);
-                    }
-                }
-                if (this.mode == 'daily') {
-                    // lineChart1
-                    for (var date=new Date(this.date_from); date <= this.date_end; date.setDate(date.getDate() + 3)){
-                        var number_for_daily = this.base_log_on;
-                        for (var item of data) {
-                            var date_range = new Date(date);
-                            date_range.setDate(date.getDate() + 2);
-                            var item_time = new Date(item.time);
-                            if (item_time >= date && item_time <= date_range) {
-                              number_for_daily += this.unit_per_user;
-                            }
-                        }
-                        this.lineChart1Data[0].data.push(number_for_daily);
-                        this.lineChart1Labels.push(date.getDate() + 1);
-                    }    
-                }
-                if (this.mode == 'hourly') {
-                    // lineChart1
-                    for (var date=new Date(this.date_from); date <= this.date_end; date.setTime(date.getTime() + (this.hourly_unit*60*60*1000))){
-                        var number_for_hourly = this.base_log_on;
-                        for (var item of data) {
-                            var date_range = new Date(date);
-                            date_range.setTime(date.getTime() + (this.hourly_unit*60*60*1000));
-                            var item_time = new Date(item.time);
-                            if (item_time >= date && item_time <= date_range) {
-                              number_for_hourly += this.unit_per_user;
-                            }
-                        }
-                        this.lineChart1Data[0].data.push(number_for_hourly);
-                        this.lineChart1Labels.push(date.getHours() + 1);
-                    }    
-                }              
-            },
-            error => {
-              console.log(error);
-            }
-        );
-    }
-    change_setting_for_log_ons(e) {
-        console.log(e);
-        this.user_id_log_ons = e.user_id;
-        this.department_id_log_ons = e.department_id;
-        this.date_from_log_ons = e.date_from;
-        this.date_end_log_ons = e.date_end;
-        this.chart_for_log_ons();
-    }
-    chart_for_tasks_completed() {
-        this.adminService.getTaskCompleted(this.company_id, this.department_id_tasks_completed, this.user_id_tasks_completed, this.date_from_tasks_completed, this.date_end_tasks_completed).subscribe(
-            data => {
-                this.lineChart2Data = [
-                    {
-                        data: [],
-                        label: 'Series A'
-                    }
-                ];
-                this.lineChart2Labels = [];
-                this.total_tasks_completed = data.length;
-                if (this.mode == 'monthly') {
-                    // lineChart2
-                    for (var date=new Date(this.date_from); date <= this.date_end; date.setMonth(date.getMonth() + 1)){
-                        var number_for_monthly = this.base_tasks_completed;
-                        for (var item of data) {
-                            var date_range = new Date(date);
-                            date_range.setMonth(date.getMonth() + 1);
-                            var item_time = new Date(item.time);
-                            if (item_time >= date && item_time <= date_range) {
-                              number_for_monthly += this.unit_per_user;
-                            }
-                        }
-                        this.lineChart2Data[0].data.push(number_for_monthly);
-                        this.lineChart2Labels.push(date.getMonth() + 1);
-                    }
-                }
-                if (this.mode == 'daily') {
-                    // lineChart2
-                    for (var date=new Date(this.date_from); date <= this.date_end; date.setDate(date.getDate() + 1)){
-                        var number_for_daily = this.base_tasks_completed;
-                        for (var item of data) {
-                            var date_range = new Date(date);
-                            date_range.setDate(date.getDate() + 1);
-                            var item_time = new Date(item.time);
-                            if (item_time >= date && item_time <= date_range) {
-                              number_for_daily += this.unit_per_user;
-                            }
-                        }
-                        this.lineChart2Data[0].data.push(number_for_daily);
-                        this.lineChart2Labels.push(date.getDate() + 1);
-                    }    
-                }
-                if (this.mode == 'hourly') {
-                    // lineChart2
-                    for (var date=new Date(this.date_from); date <= this.date_end; date.setTime(date.getTime() + (this.hourly_unit*60*60*1000))){
-                        var number_for_hourly = this.base_tasks_completed;
-                        for (var item of data) {
-                            var date_range = new Date(date);
-                            date_range.setTime(date.getTime() + (this.hourly_unit*60*60*1000));
-                            var item_time = new Date(item.time);
-                            if (item_time >= date && item_time <= date_range) {
-                              number_for_hourly += this.unit_per_user;
-                            }
-                        }
-                        this.lineChart2Data[0].data.push(number_for_hourly);
-                        this.lineChart2Labels.push(date.getHours() + 1);
-                    }    
-                }
-            },
-            error => {
-
-            }
-        );
-    }
-    change_setting_for_tasks_completed(e) {
-        console.log(e);
-        this.user_id_tasks_completed = e.user_id;
-        this.department_id_tasks_completed = e.department_id;
-        this.date_from_tasks_completed = e.date_from;
-        this.date_end_tasks_completed = e.date_end;
-        this.chart_for_tasks_completed();
-    }
-    chart_for_points_awarded() {
-        //Points Awarded
-        this.adminService.getTaskCompleted(this.company_id, this.department_id_points_awarded, this.user_id_points_awarded, this.date_from_points_awarded, this.date_end_points_awarded).subscribe(
-            data => {
-                this.lineChart3Data = [
-                    {
-                        data: [],
-                        label: 'Series A'
-                    }
-                ];
-                this.lineChart3Labels = [];
-                if (this.mode == 'monthly') {
-                    // lineChart3
-                    for (var item of data) {
-                        this.total_points_awarded += parseInt(item.points_awarded);
-                    }
-                    for (var date=new Date(this.date_from); date <= this.date_end; date.setMonth(date.getMonth() + 1)){
-                        var number_for_monthly = this.base_points_awarded;
-                        for (var item of data) {
-                            var date_range = new Date(date);
-                            date_range.setMonth(date.getMonth() + 1);
-                            var item_time = new Date(item.time);
-                            if (item_time >= date && item_time <= date_range) {
-                              number_for_monthly += item.points_awarded;
-                            }
-                        }
-                        this.lineChart3Data[0].data.push(number_for_monthly);
-                        this.lineChart3Labels.push(date.getMonth() + 1);
-                    }
-                    // this
-                }
-                if (this.mode == 'daily') {
-                    // lineChart3
-                    for (var item of data) {
-                        this.total_points_awarded += parseInt(item.points_awarded);
-                    }
-                    for (var date=new Date(this.date_from); date <= this.date_end; date.setDate(date.getDate() + 1)){
-                        var number_for_daily = this.base_points_awarded;
-                        for (var item of data) {
-                            var date_range = new Date(date);
-                            date_range.setDate(date.getDate() + 1);
-                            var item_time = new Date(item.time);
-                            if (item_time >= date && item_time <= date_range) {
-                              number_for_daily += item.points_awarded;
-                            }
-                        }
-                        this.lineChart3Data[0].data.push(number_for_daily);
-                        this.lineChart3Labels.push(date.getDate() + 1);
-                    }    
-                }
-                if (this.mode == 'hourly') {
-                    // lineChart3
-                    for (var item of data) {
-                        this.total_points_awarded += parseInt(item.points_awarded);
-                    }
-                    for (var date=new Date(this.date_from); date <= this.date_end; date.setTime(date.getTime() + (this.hourly_unit*60*60*1000))){
-                        var number_for_hourly = this.base_points_awarded;
-                        for (var item of data) {
-                            var date_range = new Date(date);
-                            date_range.setTime(date.getTime() + (this.hourly_unit*60*60*1000));
-                            var item_time = new Date(item.time);
-                            if (item_time >= date && item_time <= date_range) {
-                              number_for_hourly += item.points_awarded;
-                            }
-                        }
-                        this.lineChart3Data[0].data.push(number_for_hourly);
-                        this.lineChart3Labels.push(date.getHours() + 1);
-                    }    
-                }
-            },
-            error => {
-
-            }
-        );
-    }
-    change_setting_for_points_awarded(e) {
-        console.log(e);
-        this.user_id_points_awarded = e.user_id;
-        this.department_id_points_awarded = e.department_id;
-        this.date_from_points_awarded = e.date_from;
-        this.date_end_points_awarded = e.date_end;
-        this.chart_for_points_awarded();
-    }
-    chart_for_reward_redemptions() {
-        this.adminService.getRewardRedemptions(this.company_id, this.department_id_reward_redemptions, this.user_id_reward_redemptions, this.date_from_reward_redemptions, this.date_end_reward_redemptions).subscribe(
-            data => {
-                console.log("reward redemptions", data);
-                this.lineChart4Data = [
-                    {
-                        data: [],
-                        label: 'Series A'
-                    }
-                ];
-                this.lineChart4Labels = [];
-                if (this.mode == 'monthly') {
-                    // lineChart4
-                    for (var item of data) {
-                        this.total_reward_redemptions += parseInt(item.number_of_reward);
-                    }
-                    for (var date=new Date(this.date_from); date <= this.date_end; date.setMonth(date.getMonth() + 1)){
-                        var number_for_monthly = this.base_reward_redemptions;
-                        for (var item of data) {
-                            var date_range = new Date(date);
-                            date_range.setMonth(date.getMonth() + 1);
-                            var item_time = new Date(item.time);
-                            if (item_time >= date && item_time <= date_range) {
-                              number_for_monthly += item.number_of_reward;
-                            }
-                        }
-                        this.lineChart4Data[0].data.push(number_for_monthly);
-                        this.lineChart4Labels.push(date.getMonth() + 1);
-                    }
-                    // this
-                }
-                if (this.mode == 'daily') {
-                    // lineChart4
-                    for (var item of data) {
-                        this.total_reward_redemptions += parseInt(item.number_of_reward);
-                    }
-                    for (var date=new Date(this.date_from); date <= this.date_end; date.setDate(date.getDate() + 1)){
-                        var number_for_daily = this.base_reward_redemptions;
-                        for (var item of data) {
-                            var date_range = new Date(date);
-                            date_range.setDate(date.getDate() + 1);
-                            var item_time = new Date(item.time);
-                            if (item_time >= date && item_time <= date_range) {
-                              number_for_daily += item.number_of_reward;
-                            }
-                        }
-                        this.lineChart4Data[0].data.push(number_for_daily);
-                        this.lineChart4Labels.push(date.getDate() + 1);
-                    }    
-                }
-                if (this.mode == 'hourly') {
-                    // lineChart4
-                    for (var item of data) {
-                        this.total_reward_redemptions += parseInt(item.number_of_reward);
-                    }
-                    for (var date=new Date(this.date_from); date <= this.date_end; date.setTime(date.getTime() + (this.hourly_unit*60*60*1000))){
-                        var number_for_hourly = this.base_reward_redemptions;
-                        for (var item of data) {
-                            var date_range = new Date(date);
-                            date_range.setTime(date.getTime() + (this.hourly_unit*60*60*1000));
-                            var item_time = new Date(item.time);
-                            if (item_time >= date && item_time <= date_range) {
-                              number_for_hourly += item.number_of_reward;
-                            }
-                        }
-                        this.lineChart4Data[0].data.push(number_for_hourly);
-                        this.lineChart4Labels.push(date.getHours() + 1);
-                    }    
-                }
-            },
-            error => {
-
-            }
-        );
-    }
-    change_setting_for_reward_redemptions(e) {
-        console.log(e);
-        this.user_id_reward_redemptions = e.user_id;
-        this.department_id_reward_redemptions = e.department_id;
-        this.date_from_reward_redemptions = e.date_from;
-        this.date_end_reward_redemptions = e.date_end;
-        this.chart_for_reward_redemptions();
-    }
-    chart_for_top_videos() {
-        this.adminService.getTopVideos(this.company_id, this.department_id_top_videos, this.user_id_top_videos, this.date_from_top_videos, this.date_end_top_videos).subscribe(
-            data => {
-                console.log("get top videos", data);
-                this.lineChartData = [
-                    {data: [], label: 'Top Videos'},
-                ];
-                this.lineChartLabels = [];
-                for (let item of data) {
-                    this.lineChartData[0].data.push(item.total);
-                    this.lineChartLabels.push(item._id);
-                }
-            },
-            error => {
-                console.log(error);
-            });
-    }
-    change_setting_top_videos(e) {
-        console.log(e);
-        this.user_id_top_videos = e.user_id;
-        this.department_id_top_videos = e.department_id;
-        this.date_from_top_videos = e.date_from;
-        this.date_end_top_videos = e.date_end;
-        this.chart_for_top_videos();
-    }
-    chart_for_top_quizzes() {
-        this.adminService.getTopQuizzes(this.company_id, this.department_id_top_quizzes, this.user_id_top_quizzes, this.date_from_top_quizzes, this.date_end_top_quizzes).subscribe(
-            data => {
-                console.log("get top quizzes", data);
-                this.barChartData = [
-                    {data: [], label: 'Top Quizzes'},
-                ];
-                this.barChartLabels = [];
-                for (let item of data) {
-                    this.barChartData[0].data.push(item.total);
-                    this.barChartLabels.push(item._id);
-                }
-            },
-            error => {
-                console.log(error);
-            });
-    }
-    change_setting_top_quizzes(e) {
-        console.log(e);
-        this.user_id_top_quizzes = e.user_id;
-        this.department_id_top_quizzes = e.department_id;
-        this.date_from_top_quizzes = e.date_from;
-        this.date_end_top_quizzes = e.date_end;
-        this.chart_for_top_quizzes();
-    }
-    chart_for_most_point_users() {
-        this.adminService.getMostPointUsers(this.company_id, this.department_id_most_point_users, this.date_from_most_point_users, this.date_end_most_point_users).subscribe(
-            data => {
-                this.doughnutChartData = [];
-                this.doughnutChartLabels = [];
-                for (let item of data) {
-                    this.doughnutChartData.push(item.available_tokens);
-                    let full_name = item.first_name + item.last_name;
-                    this.doughnutChartLabels.push(full_name);
-                }    
-            },
-            error => {
-
-            });
-    }
-    change_setting_most_point_users(e) {
-        console.log(e);
-        this.user_id_most_point_users = e.user_id;
-        this.department_id_most_point_users = e.department_id;
-        this.date_from_most_point_users = e.date_from;
-        this.date_end_most_point_users = e.date_end;
-        this.chart_for_most_point_users();
-    }
-    chart_for_most_point_departments() {
-        this.adminService.getMostPointDepartments(this.company_id, this.date_from_most_point_departments, this.date_end_most_point_departments).subscribe(
-            data => {
-                this.radarChartData = [
-                    {data: [], label: 'Top Departments'},
-                ];
-                this.radarChartLabels = [];
-                for (let item of data) {
-                    this.radarChartData[0].data.push(item.total);
-                    this.radarChartLabels.push(item._id);
-                }    
-            },
-            error => {
-
-            }); 
-    }
-    change_setting_most_point_departments(e) {
-        console.log(e);
-        this.user_id_most_point_departments = e.user_id;
-        this.department_id_most_point_departments = e.department_id;
-        this.date_from_most_point_departments = e.date_from;
-        this.date_end_most_point_departments = e.date_end;
-        this.chart_for_most_point_departments();
-    }    
-    chart_for_number_of_tasks_completed_by_user() {
-        this.adminService.getTotalNumberOfTasksByUser(this.company_id, this.department_id_number_of_tasks_completed_by_user, this.date_from_number_of_tasks_completed_by_user, this.date_end_number_of_tasks_completed_by_user).subscribe(
-            data => {
-                console.log(data);
-                this.numberOfTasksByUserData = [
-                    {data: [], label: 'Number Of Tasks By User'}
-                ];
-                this.numberOfTasksByUserLabels = [];
-                for (let item of data) {
-                    this.numberOfTasksByUserData[0].data.push(item.total);
-                    this.numberOfTasksByUserLabels.push(item._id.first_name + " " + item._id.last_name);
-                }    
-            },
-            error => {
-                console.log(error);
-            });
-    }
-    change_setting_number_of_tasks_completed_by_user(e) {
-        console.log(e);
-        this.user_id_number_of_tasks_completed_by_user = e.user_id;
-        this.department_id_number_of_tasks_completed_by_user = e.department_id;
-        this.date_from_number_of_tasks_completed_by_user = e.date_from;
-        this.date_end_number_of_tasks_completed_by_user = e.date_end;
-        this.chart_for_number_of_tasks_completed_by_user();
-    }
-    chart_for_average_point_of_assignment() {
-        this.adminService.getAveragePointPerAssignment(this.company_id, this.department_id_average_point_of_assignment, this.date_from_average_point_of_assignment, this.date_end_average_point_of_assignment).subscribe(
-            data => {
-                console.log(data);
-                this.avgPointOfAssignmentChartData = [];
-                this.avgPointOfAssignmentChartLabels = [];
-                for (let item of data) {
-                    this.avgPointOfAssignmentChartData.push(item.avg);
-                    this.avgPointOfAssignmentChartLabels.push(item.user.first_name + " " + item.user.last_name);
-                }    
-            },
-            error => {
-                console.log(error);
-            });
-    }
-    change_setting_average_point_of_assignment(e) {
-        console.log(e);
-        this.user_id_average_point_of_assignment = e.user_id;
-        this.department_id_average_point_of_assignment = e.department_id;
-        this.date_from_average_point_of_assignment = e.date_from;
-        this.date_end_average_point_of_assignment = e.date_end;
-        this.chart_for_average_point_of_assignment();
-    }
-    chart_for_most_reward_redemptions() {
-        this.adminService.getMostRewardRedemptions(this.company_id, this.department_id_most_reward_redemptions, this.user_id_most_reward_redemptions, this.date_from_most_reward_redemptions, this.date_end_most_reward_redemptions).subscribe(
-            data => {
-                console.log(data);
-                this.mostRewardRedemptionsChardData = [
-                    {data: [], label: 'Most Reward Redemptions'}
-                ];
-                this.mostRewardRedemptionsChardLabels = [];
-                for (let item of data) {
-                    this.mostRewardRedemptionsChardData[0].data.push(item.number_of_reward);
-                    this.mostRewardRedemptionsChardLabels.push(item.reward.name);
-                }    
-            },
-            error => {
-                console.log(error);
-            }); 
-    }
-    change_setting_most_reward_redemptions(e) {
-        console.log(e);
-        this.user_id_most_reward_redemptions = e.user_id;
-        this.department_id_most_reward_redemptions = e.department_id;
-        this.date_from_most_reward_redemptions = e.date_from;
-        this.date_end_most_reward_redemptions = e.date_end;
-        this.chart_for_most_reward_redemptions();
-    }
-    chart_for_point_value_over_time() {
-        this.adminService.getTaskCompleted(this.company_id, this.department_id_point_value_over_time, this.user_id_point_value_over_time, this.date_from_point_value_over_time, this.date_end_point_value_over_time).subscribe(
-            data => {
-                this.pointValueOverTimeChartData = [
-                    {
-                        data: [],
-                        label: 'Series A'
-                    }
-                ];
-                this.pointValueOverTimeChartLabels = [];
-                if (this.mode == 'monthly') {
-                    // lineChart3
-                    for (var item of data) {
-                        this.total_points_awarded += parseInt(item.points_awarded);
-                    }
-                    for (var date=new Date(this.date_from); date <= this.date_end; date.setMonth(date.getMonth() + 1)){
-                        var number_for_monthly = this.base_points_awarded;
-                        for (var item of data) {
-                            var date_range = new Date(date);
-                            date_range.setMonth(date.getMonth() + 1);
-                            var item_time = new Date(item.time);
-                            if (item_time >= date && item_time <= date_range) {
-                              number_for_monthly += item.points_awarded;
-                            }
-                        }
-                        this.pointValueOverTimeChartData[0].data.push(number_for_monthly);
-                        var num = date.getMonth() + 1;
-                        this.pointValueOverTimeChartLabels.push(num.toString());
-
-                    }
-                    // this
-                }
-                if (this.mode == 'daily') {
-                    // lineChart3
-                    for (var item of data) {
-                        this.total_points_awarded += parseInt(item.points_awarded);
-                    }
-                    for (var date=new Date(this.date_from); date <= this.date_end; date.setDate(date.getDate() + 1)){
-                        var number_for_daily = this.base_points_awarded;
-                        for (var item of data) {
-                            var date_range = new Date(date);
-                            date_range.setDate(date.getDate() + 1);
-                            var item_time = new Date(item.time);
-                            if (item_time >= date && item_time <= date_range) {
-                              number_for_daily += item.points_awarded;
-                            }
-                        }
-                        this.pointValueOverTimeChartData[0].data.push(number_for_daily);
-                        var num = date.getDate() + 1;
-                        this.pointValueOverTimeChartLabels.push(num.toString());
-                    }    
-                }
-                if (this.mode == 'hourly') {
-                    // lineChart3
-                    for (var item of data) {
-                        this.total_points_awarded += parseInt(item.points_awarded);
-                    }
-                    for (var date=new Date(this.date_from); date <= this.date_end; date.setTime(date.getTime() + (this.hourly_unit*60*60*1000))){
-                        var number_for_hourly = this.base_points_awarded;
-                        for (var item of data) {
-                            var date_range = new Date(date);
-                            date_range.setTime(date.getTime() + (this.hourly_unit*60*60*1000));
-                            var item_time = new Date(item.time);
-                            if (item_time >= date && item_time <= date_range) {
-                              number_for_hourly += item.points_awarded;
-                            }
-                        }
-                        this.pointValueOverTimeChartData[0].data.push(number_for_hourly);
-                        var num = date.getHours() + 1;
-                        this.pointValueOverTimeChartLabels.push(num.toString());
-
-                    }    
-                }
-            },
-            error => {
-
-            }
-        );
-    }
-    change_setting_point_value_over_time(e) {
-        console.log(e);
-        this.user_id_point_value_over_time = e.user_id;
-        this.department_id_point_value_over_time = e.department_id;
-        this.date_from_point_value_over_time = e.date_from;
-        this.date_end_point_value_over_time = e.date_end;
-        this.chart_for_point_value_over_time();
-    }
-    chart_for_most_sent_point_user() {
-        this.adminService.getMostSentPointUser(this.company_id, this.department_id_most_sent_point_user, this.date_from_most_sent_point_user, this.date_end_most_sent_point_user).subscribe(
-            data => {
-                console.log(data);
-                this.mostSentPointUserChartData = [
-                    {data: [], label: 'Most Sent Point User'}
-                ];
-                this.mostSentPointUserChartLabels = [];
-                for (let item of data) {
-                    this.mostSentPointUserChartData[0].data.push(item.total);
-                    this.mostSentPointUserChartLabels.push(item._id.first_name + " " + item._id.last_name);
-                }    
-            },
-            error => {
-                console.log(error);
-            });
-    }
-    change_setting_most_sent_point_user(e) {
-        console.log(e);
-        this.user_id_most_sent_point_user = e.user_id;
-        this.department_id_most_sent_point_user = e.department_id;
-        this.date_from_most_sent_point_user = e.date_from;
-        this.date_end_most_sent_point_user = e.date_end;
-        this.chart_for_most_sent_point_user();
-    }
-    chart_for_most_received_point_user() {
-        this.adminService.getMostReceivedPointUser(this.company_id, this.department_id_most_received_point_user, this.date_from_most_received_point_user, this.date_end_most_received_point_user).subscribe(
-            data => {
-                console.log(data);
-                this.mostReceivedPointUserChartData = [
-                    {data: [], label: 'Most Received Point User'}
-                ];
-                this.mostReceivedPointUserChartLabels = [];
-                for (let item of data) {
-                    this.mostReceivedPointUserChartData[0].data.push(item.total);
-                    this.mostReceivedPointUserChartLabels.push(item._id.first_name + " " + item._id.last_name);
-                }    
-            },
-            error => {
-                console.log(error);
-            }); 
-    }
-    change_setting_most_received_point_user(e) {
-        console.log(e);
-        this.user_id_most_received_point_user = e.user_id;
-        this.department_id_most_received_point_user = e.department_id;
-        this.date_from_most_received_point_user = e.date_from;
-        this.date_end_most_received_point_user = e.date_end;
-        this.chart_for_most_received_point_user();
-    }
-    employee_part() {
-        this.adminService.getUsers().subscribe(
-            data => {
-                this.users = data;
-            },    
-            error => {
-                console.log(error);
-            });
-        this.adminService.getDepartments().subscribe(
-            data => {
-                this.departments = data;
-            },    
-            error => {
-                console.log(error);
-            }); 
-    }
-    ngOnInit() {
-        this.init_date_picker()
-        this.update_all_chart();
-    }
-
-    init_date_picker() {
-        jQuery(this.date_from_el.nativeElement).datepicker({
-              onSelect: (value) => {
-                this.date_from = new Date(value);
-                this.update_all_chart();
-              }
-            })
-            .datepicker('setDate', this.date_from);
-        jQuery(this.date_end_el.nativeElement).datepicker({
-              onSelect: (value) => {
-                this.date_end = new Date(value);
-                this.update_all_chart();
-              }
-            })
-            .datepicker('setDate', this.date_end);
-    }
-    update_all_chart() {
-        console.log("update all chart");
-        this.chart_for_log_ons();
-        this.chart_for_tasks_completed();
-        this.chart_for_points_awarded();
-        this.chart_for_reward_redemptions();
-        this.chart_for_top_videos();
-        this.chart_for_top_quizzes();
-        this.chart_for_most_point_users();
-        this.chart_for_most_point_departments();
-        this.chart_for_number_of_tasks_completed_by_user();
-        this.chart_for_average_point_of_assignment();
-        this.chart_for_most_reward_redemptions();
-        this.chart_for_point_value_over_time();
-        this.chart_for_most_sent_point_user();
-        this.chart_for_most_received_point_user();
-        this.employee_part();
-    }
-    setUser(e) {
-        this.user_id = e;
-        this.update_all_chart();
-    }
-
-    select_department() {
-        this.update_all_chart();
-    }
-
-    onMultipleSelected(item) {
-        console.log(item.value);
-    }
-    onMultipleDeselected(item) {
-        console.log(item.value);
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    public final_export_list: any = [];
 
 
 
@@ -1032,14 +203,13 @@ export class AnalyticsComponent implements OnInit {
                     fontSize: 2,
                     fontColor: 'transparent',
                 }
-
             }],
             yAxes: [{
                 display: false,
                 ticks: {
                     display: false,
-                    min: 0,
-                    max: 100,
+                    min: 40 - 5,
+                    max: 84 + 5,
                 }
             }],
         },
@@ -1364,12 +534,12 @@ export class AnalyticsComponent implements OnInit {
 
 
     // lineChart
-    public lineChartData:Array<any> = [
+    public data_set_top_videos:Array<any> = [
         {data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A'},
         {data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B'},
         {data: [18, 48, 77, 9, 100, 27, 40], label: 'Series C'}
     ];
-    public lineChartLabels:Array<any> = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+    public labels_top_videos:Array<any> = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
     public lineChartOptions:any = {
         animation: false,
         responsive: true
@@ -1408,24 +578,24 @@ export class AnalyticsComponent implements OnInit {
         scaleShowVerticalLines: false,
         responsive: true
     };
-    public barChartLabels:string[] = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
+    public labels_top_quizzes:string[] = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
     public barChartType:string = 'bar';
     public barChartLegend:boolean = true;
 
-    public barChartData:any[] = [
+    public data_set_top_quizzes:any[] = [
         {data: [65, 59, 80, 81, 56, 55, 40], label:'Series A'},
         {data: [28, 48, 40, 19, 86, 27, 90], label:'Series B'}
     ];
 
     // Doughnut
-    public doughnutChartLabels:string[] = ['Download Sales', 'In-Store Sales', 'Mail-Order Sales'];
-    public doughnutChartData:number[] = [350, 450, 100];
+    public labels_most_point_users:string[] = ['Download Sales', 'In-Store Sales', 'Mail-Order Sales'];
+    public data_set_most_point_users:number[] = [350, 450, 100];
     public doughnutChartType:string = 'doughnut';
 
     // Radar
-    public radarChartLabels:string[] = ['Eating', 'Drinking', 'Sleeping', 'Designing', 'Coding', 'Cycling', 'Running'];
+    public labels_most_point_departments:string[] = ['Eating', 'Drinking', 'Sleeping', 'Designing', 'Coding', 'Cycling', 'Running'];
 
-    public radarChartData:any = [
+    public data_set_most_point_departments:any = [
         {data: [65, 59, 90, 81, 56, 55, 40], label: 'Series A'},
         {data: [28, 48, 40, 19, 96, 27, 100], label: 'Series B'}
     ];
@@ -1442,4 +612,944 @@ export class AnalyticsComponent implements OnInit {
     public polarAreaLegend:boolean = true;
 
     public polarAreaChartType:string = 'polarArea';
+
+    constructor(
+        private adminService: AdminService,
+        private userService: UserService,
+        private csvService: CsvService) 
+    {
+        // // this.user_id = "587881a10eff174f93740995";
+        // // this.user_id = "5879c34f88701f3c1194665a"
+        // this.user_id = null;
+        // this.department_id = "5879f63530456b6947c6d665";
+        // console.log("current user", localStorage.getItem('currentUser'));
+
+        //monthly test
+        this.date_end = new Date();
+        this.date_from = new Date();
+        this.date_from.setDate(this.date_end.getDate() - 15);
+        this.company_id = JSON.parse(localStorage.getItem('currentUser'))._id;
+        this.mode = "daily"
+
+        this.user_id_log_ons = this.user_id;
+        this.department_id_log_ons = this.department_id;
+        this.date_from_log_ons = this.date_from;
+        this.date_end_log_ons = this.date_end;
+
+        this.user_id_tasks_completed = this.user_id;
+        this.department_id_tasks_completed = this.department_id;
+        this.date_from_tasks_completed = this.date_from;
+        this.date_end_tasks_completed = this.date_end;
+
+        this.user_id_points_awarded = this.user_id;
+        this.department_id_points_awarded = this.department_id;
+        this.date_from_points_awarded = this.date_from;
+        this.date_end_points_awarded = this.date_end;
+
+        this.user_id_reward_redemptions = this.user_id;
+        this.department_id_reward_redemptions = this.department_id;
+        this.date_from_reward_redemptions = this.date_from;
+        this.date_end_reward_redemptions = this.date_end;
+                        
+        this.user_id_top_videos = this.user_id;
+        this.department_id_top_videos = this.department_id;
+        this.date_from_top_videos = this.date_from;
+        this.date_end_top_videos = this.date_end;
+        this.chart_type_top_videos = "line";
+
+        this.user_id_top_quizzes = this.user_id;
+        this.department_id_top_quizzes = this.department_id;
+        this.date_from_top_quizzes = this.date_from;
+        this.date_end_top_quizzes = this.date_end;
+        this.chart_type_top_quizzes = "bar";
+
+        this.user_id_most_point_users = this.user_id;
+        this.department_id_most_point_users = this.department_id;
+        this.date_from_most_point_users = this.date_from;
+        this.date_end_most_point_users = this.date_end;
+        this.chart_type_most_point_users = "doughnut";
+
+        this.user_id_most_point_departments = this.user_id;
+        this.department_id_most_point_departments = this.department_id;
+        this.date_from_most_point_departments = this.date_from;
+        this.date_end_most_point_departments = this.date_end;
+        this.chart_type_most_point_departments = "radar";
+
+        this.user_id_number_of_tasks_completed_by_user = this.user_id;
+        this.department_id_number_of_tasks_completed_by_user = this.department_id;
+        this.date_from_number_of_tasks_completed_by_user = this.date_from;
+        this.date_end_number_of_tasks_completed_by_user = this.date_end;
+        this.chart_type_number_of_tasks_completed_by_user = "bar";
+
+        this.user_id_most_reward_redemptions = this.user_id;
+        this.department_id_most_reward_redemptions = this.department_id;
+        this.date_from_most_reward_redemptions = this.date_from;
+        this.date_end_most_reward_redemptions = this.date_end;
+        this.chart_type_most_reward_redemptions = "line";
+
+        this.user_id_average_point_of_assignment = this.user_id;
+        this.department_id_average_point_of_assignment = this.department_id;
+        this.date_from_average_point_of_assignment = this.date_from;
+        this.date_end_average_point_of_assignment = this.date_end;
+        this.chart_type_average_point_of_assignment = "doughnut";
+
+        this.user_id_point_value_over_time = this.user_id;
+        this.department_id_point_value_over_time = this.department_id;
+        this.date_from_point_value_over_time = this.date_from;
+        this.date_end_point_value_over_time = this.date_end;
+        this.chart_type_point_value_over_time = "line";
+
+        this.user_id_most_sent_point_user = this.user_id;
+        this.department_id_most_sent_point_user = this.department_id;
+        this.date_from_most_sent_point_user = this.date_from;
+        this.date_end_most_sent_point_user = this.date_end;
+        this.chart_type_most_sent_point_user = "line";
+
+        this.user_id_most_received_point_user = this.user_id;
+        this.department_id_most_received_point_user = this.department_id;
+        this.date_from_most_received_point_user = this.date_from;
+        this.date_end_most_received_point_user = this.date_end;
+        this.chart_type_most_received_point_user = "line";
+
+        this.export_list = [
+            {value:'top_videos', label: 'top videos'}, 
+            {value:'top_quizzes', label: 'top quizzes'},
+            {value: 'most_point_users', label: 'most point users'}, 
+            {value: 'most_point_departments', label: 'most point departments'}, 
+            {value: 'number_of_tasks_completed_by_user', label: 'number of tasks completed by user'}, 
+            {value: 'most_reward_redemptions', label: 'most reward redemptions'}, 
+            {value: 'average_point_of_assignment', label: 'average point of assignment'}, 
+            {value: 'point_value_over_time', label: 'point value over time'}, 
+            {value: 'most_sent_point_user', label: 'most sent point users'}, 
+            {value: 'most_received_point_user', label: 'most received point users'}
+        ];
+
+        // //daily test
+        // this.date_from.setDate(this.date_end.getDate() - 5);
+        // // console.log("current user", localStorage.getItem('currentUser'));
+        // this.company_id = JSON.parse(localStorage.getItem('currentUser'))._id;
+        // this.department_id = "587881a10eff174f93740996";
+        // this.mode = "daily"
+
+        //hourly test
+        // this.date_from.setTime(this.date_end.getTime() - (24*60*60*1000));
+        // console.log("date from", this.date_from);
+        // this.company_id = JSON.parse(localStorage.getItem('currentUser'))._id;
+        // this.mode = "hourly"
+    }
+
+    exportChart(){
+        let export_data = [];
+        if (this.final_export_list.indexOf("top_videos") >= 0) {
+            let top_videos = {};
+            for (let index in this.data_set_top_videos[0].data) {
+                top_videos[this.labels_top_videos[index]] = this.data_set_top_videos[0].data[index]; 
+            }
+            export_data.push({"top_videos":top_videos});
+        }
+        if (this.final_export_list.indexOf("top_quizzes") >= 0) {
+            let top_quizzes = {};
+            for (let index in this.data_set_top_quizzes[0].data) {
+                top_quizzes[this.labels_top_quizzes[index]] = this.data_set_top_quizzes[0].data[index]; 
+            }
+            export_data.push(top_quizzes);
+        }
+        if (this.final_export_list.indexOf("most_point_users") >= 0) {
+            let most_point_users = {};
+            for (let index in this.data_set_most_point_users) {
+                most_point_users[this.labels_most_point_users[index]] = this.data_set_most_point_users[index]; 
+            }
+            export_data.push(most_point_users);
+        }
+        if (this.final_export_list.indexOf("most_point_departments") >= 0) {
+            let most_point_departments = {};
+            for (let index in this.data_set_most_point_departments[0].data) {
+                most_point_departments[this.labels_most_point_departments[index]] = this.data_set_most_point_departments[0].data[index]; 
+            }
+            export_data.push(most_point_departments);
+        }
+        if (this.final_export_list.indexOf("number_of_tasks_completed_by_user") >= 0) {
+            let data_set_number_of_tasks_completed_by_user = {};
+            for (let index in this.data_set_number_of_tasks_completed_by_user[0].data) {
+                data_set_number_of_tasks_completed_by_user[this.labels_number_of_tasks_completed_by_user[index]] = this.data_set_number_of_tasks_completed_by_user[0].data[index]; 
+            }
+            export_data.push(data_set_number_of_tasks_completed_by_user);
+        }
+        if (this.final_export_list.indexOf("most_reward_redemptions") >= 0) {
+            let most_reward_redemptions = {};
+            for (let index in this.data_set_most_reward_redemptions[0].data) {
+                most_reward_redemptions[this.labels_most_reward_redemptions[index]] = this.data_set_most_reward_redemptions[0].data[index]; 
+            }
+            export_data.push(most_reward_redemptions);
+        }        
+        if (this.final_export_list.indexOf("average_point_of_assignment") >= 0) {
+            let average_point_of_assignment = {};
+            for (let index in this.data_set_average_point_of_assignment[0].data) {
+                average_point_of_assignment[this.labels_average_point_of_assignment[index]] = this.data_set_average_point_of_assignment[0].data[index]; 
+            }
+            export_data.push(average_point_of_assignment);
+        }
+        if (this.final_export_list.indexOf("point_value_over_time") >= 0) {
+            let point_value_over_time = {};
+            for (let index in this.data_set_point_value_over_time[0].data) {
+                point_value_over_time[this.labels_point_value_over_time[index]] = this.data_set_point_value_over_time[0].data[index]; 
+            }
+            export_data.push(point_value_over_time);
+        }
+        if (this.final_export_list.indexOf("most_sent_point_user") >= 0) {
+            let most_sent_point_user = {};
+            for (let index in this.data_set_most_sent_point_user[0].data) {
+                most_sent_point_user[this.labels_most_sent_point_user[index]] = this.data_set_most_sent_point_user[0].data[index]; 
+            }
+            export_data.push(most_sent_point_user);
+        }
+        if (this.final_export_list.indexOf("most_received_point_user") >= 0) {
+            let most_received_point_user = {};
+            for (let index in this.data_set_most_received_point_user[0].data) {
+                most_received_point_user[this.labels_most_received_point_user[index]] = this.data_set_most_received_point_user[0].data[index]; 
+            }
+            export_data.push(most_received_point_user);
+        }
+        // this.downloadFile(this.ConvertToCSV({a:1, b:2, c:3}));
+        this.csvService.download(export_data, 'Filename');
+    }
+    // convert Json to CSV data in Angular2
+    ConvertToCSV(objArray) {
+        var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+        var str = '';
+        var row = "";
+        console.log("convert to csv, ")
+        for (var index in objArray[0]) {
+            //Now convert each value to string and comma-separated
+            row += index + ',';
+        }
+        row = row.slice(0, -1);
+        //append Label row with line break
+        str += row + '\r\n';
+
+        for (var i = 0; i < array.length; i++) {
+            var line = '';
+            for (var index in array[i]) {
+                if (line != '') line += ','
+
+                line += array[i][index];
+            }
+            str += line + '\r\n';
+        }
+        console.log("csv convert", str);
+        return str;
+    }
+    downloadFile(data){
+      let blob = new Blob([data], { type: 'text/csv' });
+      let url= window.URL.createObjectURL(blob);
+      window.open(url);
+    }
+
+    chart_for_log_ons() {
+        this.adminService.getLogOns(this.company_id, this.department_id_log_ons, this.user_id_log_ons, this.date_from_log_ons, this.date_end_log_ons).subscribe(
+            data => {
+                console.log("get Log ons", data);
+                this.lineChart1Data = [
+                    {
+                        data: [],
+                        label: 'Series A'
+                    }
+                ];
+                this.lineChart1Labels = [];
+                this.total_logons = data.length;
+                if (this.mode == 'monthly') {
+                    // lineChart1
+                    for (var date=new Date(this.date_from); date <= this.date_end; date.setMonth(date.getMonth() + 1)){
+                        var number_for_monthly = this.base_log_on;
+                        for (var item of data) {
+                            var date_range = new Date(date);
+                            date_range.setMonth(date.getMonth() + 1);
+                            var item_time = new Date(item.time);
+                            if (item_time >= date && item_time <= date_range) {
+                              number_for_monthly += this.unit_per_user;
+                            }
+                        }
+                        console.log(number_for_monthly, "   ", date.getMonth() + 1)
+                        this.lineChart1Data[0].data.push(number_for_monthly);
+                        this.lineChart1Labels.push(date.getMonth() + 1);
+                    }
+                }
+                if (this.mode == 'daily') {
+                    // lineChart1
+                    for (var date=new Date(this.date_from); date <= this.date_end; date.setDate(date.getDate() + 3)){
+                        var number_for_daily = this.base_log_on;
+                        for (var item of data) {
+                            var date_range = new Date(date);
+                            date_range.setDate(date.getDate() + 2);
+                            var item_time = new Date(item.time);
+                            if (item_time >= date && item_time <= date_range) {
+                              number_for_daily += this.unit_per_user;
+                            }
+                        }
+                        this.lineChart1Data[0].data.push(number_for_daily);
+                        this.lineChart1Labels.push(date.getDate() + 1);
+                    }    
+                }
+                if (this.mode == 'hourly') {
+                    // lineChart1
+                    for (var date=new Date(this.date_from); date <= this.date_end; date.setTime(date.getTime() + (this.hourly_unit*60*60*1000))){
+                        var number_for_hourly = this.base_log_on;
+                        for (var item of data) {
+                            var date_range = new Date(date);
+                            date_range.setTime(date.getTime() + (this.hourly_unit*60*60*1000));
+                            var item_time = new Date(item.time);
+                            if (item_time >= date && item_time <= date_range) {
+                              number_for_hourly += this.unit_per_user;
+                            }
+                        }
+                        this.lineChart1Data[0].data.push(number_for_hourly);
+                        this.lineChart1Labels.push(date.getHours() + 1);
+                    }    
+                }              
+            },
+            error => {
+              console.log(error);
+            }
+        );
+    }
+    change_setting_for_log_ons(e) {
+        console.log(e);
+        this.user_id_log_ons = e.user_id;
+        this.department_id_log_ons = e.department_id;
+        this.date_from_log_ons = e.date_from;
+        this.date_end_log_ons = e.date_end;
+        this.chart_for_log_ons();
+    }
+    chart_for_tasks_completed() {
+        this.adminService.getTaskCompleted(this.company_id, this.department_id_tasks_completed, this.user_id_tasks_completed, this.date_from_tasks_completed, this.date_end_tasks_completed).subscribe(
+            data => {
+                this.lineChart2Data = [
+                    {
+                        data: [],
+                        label: 'Series A'
+                    }
+                ];
+                this.lineChart2Labels = [];
+                this.total_tasks_completed = data.length;
+                if (this.mode == 'monthly') {
+                    // lineChart2
+                    for (var date=new Date(this.date_from); date <= this.date_end; date.setMonth(date.getMonth() + 1)){
+                        var number_for_monthly = this.base_tasks_completed;
+                        for (var item of data) {
+                            var date_range = new Date(date);
+                            date_range.setMonth(date.getMonth() + 1);
+                            var item_time = new Date(item.time);
+                            if (item_time >= date && item_time <= date_range) {
+                              number_for_monthly += this.unit_per_user;
+                            }
+                        }
+                        this.lineChart2Data[0].data.push(number_for_monthly);
+                        this.lineChart2Labels.push(date.getMonth() + 1);
+                    }
+                }
+                if (this.mode == 'daily') {
+                    // lineChart2
+                    for (var date=new Date(this.date_from); date <= this.date_end; date.setDate(date.getDate() + 1)){
+                        var number_for_daily = this.base_tasks_completed;
+                        for (var item of data) {
+                            var date_range = new Date(date);
+                            date_range.setDate(date.getDate() + 1);
+                            var item_time = new Date(item.time);
+                            if (item_time >= date && item_time <= date_range) {
+                              number_for_daily += this.unit_per_user;
+                            }
+                        }
+                        this.lineChart2Data[0].data.push(number_for_daily);
+                        this.lineChart2Labels.push(date.getDate() + 1);
+                    }    
+                }
+                if (this.mode == 'hourly') {
+                    // lineChart2
+                    for (var date=new Date(this.date_from); date <= this.date_end; date.setTime(date.getTime() + (this.hourly_unit*60*60*1000))){
+                        var number_for_hourly = this.base_tasks_completed;
+                        for (var item of data) {
+                            var date_range = new Date(date);
+                            date_range.setTime(date.getTime() + (this.hourly_unit*60*60*1000));
+                            var item_time = new Date(item.time);
+                            if (item_time >= date && item_time <= date_range) {
+                              number_for_hourly += this.unit_per_user;
+                            }
+                        }
+                        this.lineChart2Data[0].data.push(number_for_hourly);
+                        this.lineChart2Labels.push(date.getHours() + 1);
+                    }    
+                }
+            },
+            error => {
+
+            }
+        );
+    }
+    change_setting_for_tasks_completed(e) {
+        console.log(e);
+        this.user_id_tasks_completed = e.user_id;
+        this.department_id_tasks_completed = e.department_id;
+        this.date_from_tasks_completed = e.date_from;
+        this.date_end_tasks_completed = e.date_end;
+        this.chart_for_tasks_completed();
+    }
+    chart_for_points_awarded() {
+        //Points Awarded
+        this.adminService.getTaskCompleted(this.company_id, this.department_id_points_awarded, this.user_id_points_awarded, this.date_from_points_awarded, this.date_end_points_awarded).subscribe(
+            data => {
+                this.lineChart3Data = [
+                    {
+                        data: [],
+                        label: 'Series A'
+                    }
+                ];
+                this.lineChart3Labels = [];
+                if (this.mode == 'monthly') {
+                    // lineChart3
+                    for (var item of data) {
+                        this.total_points_awarded += parseInt(item.points_awarded);
+                    }
+                    for (var date=new Date(this.date_from); date <= this.date_end; date.setMonth(date.getMonth() + 1)){
+                        var number_for_monthly = this.base_points_awarded;
+                        for (var item of data) {
+                            var date_range = new Date(date);
+                            date_range.setMonth(date.getMonth() + 1);
+                            var item_time = new Date(item.time);
+                            if (item_time >= date && item_time <= date_range) {
+                              number_for_monthly += item.points_awarded;
+                            }
+                        }
+                        this.lineChart3Data[0].data.push(number_for_monthly);
+                        this.lineChart3Labels.push(date.getMonth() + 1);
+                    }
+                    // this
+                }
+                if (this.mode == 'daily') {
+                    // lineChart3
+                    for (var item of data) {
+                        this.total_points_awarded += parseInt(item.points_awarded);
+                    }
+                    for (var date=new Date(this.date_from); date <= this.date_end; date.setDate(date.getDate() + 1)){
+                        var number_for_daily = this.base_points_awarded;
+                        for (var item of data) {
+                            var date_range = new Date(date);
+                            date_range.setDate(date.getDate() + 1);
+                            var item_time = new Date(item.time);
+                            if (item_time >= date && item_time <= date_range) {
+                              number_for_daily += item.points_awarded;
+                            }
+                        }
+                        this.lineChart3Data[0].data.push(number_for_daily);
+                        this.lineChart3Labels.push(date.getDate() + 1);
+                    }    
+                }
+                if (this.mode == 'hourly') {
+                    // lineChart3
+                    for (var item of data) {
+                        this.total_points_awarded += parseInt(item.points_awarded);
+                    }
+                    for (var date=new Date(this.date_from); date <= this.date_end; date.setTime(date.getTime() + (this.hourly_unit*60*60*1000))){
+                        var number_for_hourly = this.base_points_awarded;
+                        for (var item of data) {
+                            var date_range = new Date(date);
+                            date_range.setTime(date.getTime() + (this.hourly_unit*60*60*1000));
+                            var item_time = new Date(item.time);
+                            if (item_time >= date && item_time <= date_range) {
+                              number_for_hourly += item.points_awarded;
+                            }
+                        }
+                        this.lineChart3Data[0].data.push(number_for_hourly);
+                        this.lineChart3Labels.push(date.getHours() + 1);
+                    }    
+                }
+            },
+            error => {
+
+            }
+        );
+    }
+    change_setting_for_points_awarded(e) {
+        console.log(e);
+        this.user_id_points_awarded = e.user_id;
+        this.department_id_points_awarded = e.department_id;
+        this.date_from_points_awarded = e.date_from;
+        this.date_end_points_awarded = e.date_end;
+        this.chart_for_points_awarded();
+    }
+    chart_for_reward_redemptions() {
+        this.adminService.getRewardRedemptions(this.company_id, this.department_id_reward_redemptions, this.user_id_reward_redemptions, this.date_from_reward_redemptions, this.date_end_reward_redemptions).subscribe(
+            data => {
+                console.log("reward redemptions", data);
+                this.lineChart4Data = [
+                    {
+                        data: [],
+                        label: 'Series A'
+                    }
+                ];
+                this.lineChart4Labels = [];
+                if (this.mode == 'monthly') {
+                    // lineChart4
+                    for (var item of data) {
+                        this.total_reward_redemptions += parseInt(item.number_of_reward);
+                    }
+                    for (var date=new Date(this.date_from); date <= this.date_end; date.setMonth(date.getMonth() + 1)){
+                        var number_for_monthly = this.base_reward_redemptions;
+                        for (var item of data) {
+                            var date_range = new Date(date);
+                            date_range.setMonth(date.getMonth() + 1);
+                            var item_time = new Date(item.time);
+                            if (item_time >= date && item_time <= date_range) {
+                              number_for_monthly += item.number_of_reward;
+                            }
+                        }
+                        this.lineChart4Data[0].data.push(number_for_monthly);
+                        this.lineChart4Labels.push(date.getMonth() + 1);
+                    }
+                    // this
+                }
+                if (this.mode == 'daily') {
+                    // lineChart4
+                    for (var item of data) {
+                        this.total_reward_redemptions += parseInt(item.number_of_reward);
+                    }
+                    for (var date=new Date(this.date_from); date <= this.date_end; date.setDate(date.getDate() + 1)){
+                        var number_for_daily = this.base_reward_redemptions;
+                        for (var item of data) {
+                            var date_range = new Date(date);
+                            date_range.setDate(date.getDate() + 1);
+                            var item_time = new Date(item.time);
+                            if (item_time >= date && item_time <= date_range) {
+                              number_for_daily += item.number_of_reward;
+                            }
+                        }
+                        this.lineChart4Data[0].data.push(number_for_daily);
+                        this.lineChart4Labels.push(date.getDate() + 1);
+                    }    
+                }
+                if (this.mode == 'hourly') {
+                    // lineChart4
+                    for (var item of data) {
+                        this.total_reward_redemptions += parseInt(item.number_of_reward);
+                    }
+                    for (var date=new Date(this.date_from); date <= this.date_end; date.setTime(date.getTime() + (this.hourly_unit*60*60*1000))){
+                        var number_for_hourly = this.base_reward_redemptions;
+                        for (var item of data) {
+                            var date_range = new Date(date);
+                            date_range.setTime(date.getTime() + (this.hourly_unit*60*60*1000));
+                            var item_time = new Date(item.time);
+                            if (item_time >= date && item_time <= date_range) {
+                              number_for_hourly += item.number_of_reward;
+                            }
+                        }
+                        this.lineChart4Data[0].data.push(number_for_hourly);
+                        this.lineChart4Labels.push(date.getHours() + 1);
+                    }    
+                }
+            },
+            error => {
+
+            }
+        );
+    }
+    change_setting_for_reward_redemptions(e) {
+        console.log(e);
+        this.user_id_reward_redemptions = e.user_id;
+        this.department_id_reward_redemptions = e.department_id;
+        this.date_from_reward_redemptions = e.date_from;
+        this.date_end_reward_redemptions = e.date_end;
+        this.chart_for_reward_redemptions();
+    }
+    chart_for_top_videos() {
+        this.adminService.getTopVideos(this.company_id, this.department_id_top_videos, this.user_id_top_videos, this.date_from_top_videos, this.date_end_top_videos).subscribe(
+            data => {
+                console.log("get top videos", data);
+                this.data_set_top_videos = [
+                    {data: [], label: 'Top Videos'},
+                ];
+                this.labels_top_videos = [];
+                for (let item of data) {
+                    this.data_set_top_videos[0].data.push(item.total);
+                    this.labels_top_videos.push(item._id);
+                }
+            },
+            error => {
+                console.log(error);
+            });
+    }
+    change_setting_top_videos(e) {
+        console.log(e);
+        this.user_id_top_videos = e.user_id;
+        this.department_id_top_videos = e.department_id;
+        this.date_from_top_videos = e.date_from;
+        this.date_end_top_videos = e.date_end;
+        this.chart_for_top_videos();
+    }
+    chart_for_top_quizzes() {
+        this.adminService.getTopQuizzes(this.company_id, this.department_id_top_quizzes, this.user_id_top_quizzes, this.date_from_top_quizzes, this.date_end_top_quizzes).subscribe(
+            data => {
+                console.log("get top quizzes", data);
+                this.data_set_top_quizzes = [
+                    {data: [], label: 'Top Quizzes'},
+                ];
+                this.labels_top_quizzes = [];
+                for (let item of data) {
+                    this.data_set_top_quizzes[0].data.push(item.total);
+                    this.labels_top_quizzes.push(item._id);
+                }
+            },
+            error => {
+                console.log(error);
+            });
+    }
+    change_setting_top_quizzes(e) {
+        console.log(e);
+        this.user_id_top_quizzes = e.user_id;
+        this.department_id_top_quizzes = e.department_id;
+        this.date_from_top_quizzes = e.date_from;
+        this.date_end_top_quizzes = e.date_end;
+        this.chart_for_top_quizzes();
+    }
+    chart_for_most_point_users() {
+        this.adminService.getMostPointUsers(this.company_id, this.department_id_most_point_users, this.date_from_most_point_users, this.date_end_most_point_users).subscribe(
+            data => {
+                this.data_set_most_point_users = [];
+                this.labels_most_point_users = [];
+                for (let item of data) {
+                    this.data_set_most_point_users.push(item.available_tokens);
+                    let full_name = item.first_name + item.last_name;
+                    this.labels_most_point_users.push(full_name);
+                }    
+            },
+            error => {
+
+            });
+    }
+    change_setting_most_point_users(e) {
+        console.log(e);
+        this.user_id_most_point_users = e.user_id;
+        this.department_id_most_point_users = e.department_id;
+        this.date_from_most_point_users = e.date_from;
+        this.date_end_most_point_users = e.date_end;
+        this.chart_for_most_point_users();
+    }
+    chart_for_most_point_departments() {
+        this.adminService.getMostPointDepartments(this.company_id, this.date_from_most_point_departments, this.date_end_most_point_departments).subscribe(
+            data => {
+                this.data_set_most_point_departments = [
+                    {data: [], label: 'Top Departments'},
+                ];
+                this.labels_most_point_departments = [];
+                for (let item of data) {
+                    this.data_set_most_point_departments[0].data.push(item.total);
+                    this.labels_most_point_departments.push(item._id);
+                }    
+            },
+            error => {
+
+            }); 
+    }
+    change_setting_most_point_departments(e) {
+        console.log(e);
+        this.user_id_most_point_departments = e.user_id;
+        this.department_id_most_point_departments = e.department_id;
+        this.date_from_most_point_departments = e.date_from;
+        this.date_end_most_point_departments = e.date_end;
+        this.chart_for_most_point_departments();
+    }    
+    chart_for_number_of_tasks_completed_by_user() {
+        this.adminService.getTotalNumberOfTasksByUser(this.company_id, this.department_id_number_of_tasks_completed_by_user, this.date_from_number_of_tasks_completed_by_user, this.date_end_number_of_tasks_completed_by_user).subscribe(
+            data => {
+                console.log(data);
+                this.data_set_number_of_tasks_completed_by_user = [
+                    {data: [], label: 'Number Of Tasks By User'}
+                ];
+                this.labels_number_of_tasks_completed_by_user = [];
+                for (let item of data) {
+                    this.data_set_number_of_tasks_completed_by_user[0].data.push(item.total);
+                    this.labels_number_of_tasks_completed_by_user.push(item._id.first_name + " " + item._id.last_name);
+                }    
+            },
+            error => {
+                console.log(error);
+            });
+    }
+    change_setting_number_of_tasks_completed_by_user(e) {
+        console.log(e);
+        this.user_id_number_of_tasks_completed_by_user = e.user_id;
+        this.department_id_number_of_tasks_completed_by_user = e.department_id;
+        this.date_from_number_of_tasks_completed_by_user = e.date_from;
+        this.date_end_number_of_tasks_completed_by_user = e.date_end;
+        this.chart_for_number_of_tasks_completed_by_user();
+    }
+    chart_for_average_point_of_assignment() {
+        this.adminService.getAveragePointPerAssignment(this.company_id, this.department_id_average_point_of_assignment, this.date_from_average_point_of_assignment, this.date_end_average_point_of_assignment).subscribe(
+            data => {
+                console.log(data);
+                this.data_set_average_point_of_assignment = [];
+                this.labels_average_point_of_assignment = [];
+                for (let item of data) {
+                    this.data_set_average_point_of_assignment.push(item.avg);
+                    this.labels_average_point_of_assignment.push(item.user.first_name + " " + item.user.last_name);
+                }    
+            },
+            error => {
+                console.log(error);
+            });
+    }
+    change_setting_average_point_of_assignment(e) {
+        console.log(e);
+        this.user_id_average_point_of_assignment = e.user_id;
+        this.department_id_average_point_of_assignment = e.department_id;
+        this.date_from_average_point_of_assignment = e.date_from;
+        this.date_end_average_point_of_assignment = e.date_end;
+        this.chart_for_average_point_of_assignment();
+    }
+    chart_for_most_reward_redemptions() {
+        this.adminService.getMostRewardRedemptions(this.company_id, this.department_id_most_reward_redemptions, this.user_id_most_reward_redemptions, this.date_from_most_reward_redemptions, this.date_end_most_reward_redemptions).subscribe(
+            data => {
+                console.log(data);
+                this.data_set_most_reward_redemptions = [
+                    {data: [], label: 'Most Reward Redemptions'}
+                ];
+                this.labels_most_reward_redemptions = [];
+                for (let item of data) {
+                    this.data_set_most_reward_redemptions[0].data.push(item.number_of_reward);
+                    this.labels_most_reward_redemptions.push(item.reward.name);
+                }    
+            },
+            error => {
+                console.log(error);
+            }); 
+    }
+    change_setting_most_reward_redemptions(e) {
+        console.log(e);
+        this.user_id_most_reward_redemptions = e.user_id;
+        this.department_id_most_reward_redemptions = e.department_id;
+        this.date_from_most_reward_redemptions = e.date_from;
+        this.date_end_most_reward_redemptions = e.date_end;
+        this.chart_for_most_reward_redemptions();
+    }
+    chart_for_point_value_over_time() {
+        this.adminService.getTaskCompleted(this.company_id, this.department_id_point_value_over_time, this.user_id_point_value_over_time, this.date_from_point_value_over_time, this.date_end_point_value_over_time).subscribe(
+            data => {
+                this.data_set_point_value_over_time = [
+                    {
+                        data: [],
+                        label: 'Series A'
+                    }
+                ];
+                this.labels_point_value_over_time = [];
+                if (this.mode == 'monthly') {
+                    // lineChart3
+                    for (var item of data) {
+                        this.total_points_awarded += parseInt(item.points_awarded);
+                    }
+                    for (var date=new Date(this.date_from); date <= this.date_end; date.setMonth(date.getMonth() + 1)){
+                        var number_for_monthly = this.base_points_awarded;
+                        for (var item of data) {
+                            var date_range = new Date(date);
+                            date_range.setMonth(date.getMonth() + 1);
+                            var item_time = new Date(item.time);
+                            if (item_time >= date && item_time <= date_range) {
+                              number_for_monthly += item.points_awarded;
+                            }
+                        }
+                        this.data_set_point_value_over_time[0].data.push(number_for_monthly);
+                        var num = date.getMonth() + 1;
+                        this.labels_point_value_over_time.push(num.toString());
+
+                    }
+                    // this
+                }
+                if (this.mode == 'daily') {
+                    // lineChart3
+                    for (var item of data) {
+                        this.total_points_awarded += parseInt(item.points_awarded);
+                    }
+                    for (var date=new Date(this.date_from); date <= this.date_end; date.setDate(date.getDate() + 1)){
+                        var number_for_daily = this.base_points_awarded;
+                        for (var item of data) {
+                            var date_range = new Date(date);
+                            date_range.setDate(date.getDate() + 1);
+                            var item_time = new Date(item.time);
+                            if (item_time >= date && item_time <= date_range) {
+                              number_for_daily += item.points_awarded;
+                            }
+                        }
+                        this.data_set_point_value_over_time[0].data.push(number_for_daily);
+                        var num = date.getDate() + 1;
+                        this.labels_point_value_over_time.push(num.toString());
+                    }    
+                }
+                if (this.mode == 'hourly') {
+                    // lineChart3
+                    for (var item of data) {
+                        this.total_points_awarded += parseInt(item.points_awarded);
+                    }
+                    for (var date=new Date(this.date_from); date <= this.date_end; date.setTime(date.getTime() + (this.hourly_unit*60*60*1000))){
+                        var number_for_hourly = this.base_points_awarded;
+                        for (var item of data) {
+                            var date_range = new Date(date);
+                            date_range.setTime(date.getTime() + (this.hourly_unit*60*60*1000));
+                            var item_time = new Date(item.time);
+                            if (item_time >= date && item_time <= date_range) {
+                              number_for_hourly += item.points_awarded;
+                            }
+                        }
+                        this.data_set_point_value_over_time[0].data.push(number_for_hourly);
+                        var num = date.getHours() + 1;
+                        this.labels_point_value_over_time.push(num.toString());
+
+                    }    
+                }
+            },
+            error => {
+
+            }
+        );
+    }
+    change_setting_point_value_over_time(e) {
+        console.log(e);
+        this.user_id_point_value_over_time = e.user_id;
+        this.department_id_point_value_over_time = e.department_id;
+        this.date_from_point_value_over_time = e.date_from;
+        this.date_end_point_value_over_time = e.date_end;
+        this.chart_for_point_value_over_time();
+    }
+    chart_for_most_sent_point_user() {
+        this.adminService.getMostSentPointUser(this.company_id, this.department_id_most_sent_point_user, this.date_from_most_sent_point_user, this.date_end_most_sent_point_user).subscribe(
+            data => {
+                console.log(data);
+                this.data_set_most_sent_point_user = [
+                    {data: [], label: 'Most Sent Point User'}
+                ];
+                this.labels_most_sent_point_user = [];
+                for (let item of data) {
+                    this.data_set_most_sent_point_user[0].data.push(item.total);
+                    this.labels_most_sent_point_user.push(item._id.first_name + " " + item._id.last_name);
+                }    
+            },
+            error => {
+                console.log(error);
+            });
+    }
+    change_setting_most_sent_point_user(e) {
+        console.log(e);
+        this.user_id_most_sent_point_user = e.user_id;
+        this.department_id_most_sent_point_user = e.department_id;
+        this.date_from_most_sent_point_user = e.date_from;
+        this.date_end_most_sent_point_user = e.date_end;
+        this.chart_for_most_sent_point_user();
+    }
+    chart_for_most_received_point_user() {
+        this.adminService.getMostReceivedPointUser(this.company_id, this.department_id_most_received_point_user, this.date_from_most_received_point_user, this.date_end_most_received_point_user).subscribe(
+            data => {
+                console.log(data);
+                this.data_set_most_received_point_user = [
+                    {data: [], label: 'Most Received Point User'}
+                ];
+                this.labels_most_received_point_user = [];
+                for (let item of data) {
+                    this.data_set_most_received_point_user[0].data.push(item.total);
+                    this.labels_most_received_point_user.push(item._id.first_name + " " + item._id.last_name);
+                }    
+            },
+            error => {
+                console.log(error);
+            }); 
+    }
+    change_setting_most_received_point_user(e) {
+        console.log(e);
+        this.user_id_most_received_point_user = e.user_id;
+        this.department_id_most_received_point_user = e.department_id;
+        this.date_from_most_received_point_user = e.date_from;
+        this.date_end_most_received_point_user = e.date_end;
+        this.chart_for_most_received_point_user();
+    }
+    employee_part() {
+        this.adminService.getUsers().subscribe(
+            data => {
+                this.users = data;
+            },    
+            error => {
+                console.log(error);
+            });
+        this.adminService.getDepartments().subscribe(
+            data => {
+                this.departments = data;
+                this.departments.push({_id: "undefined", "department": "all"});
+            },    
+            error => {
+                console.log(error);
+            }); 
+    }
+    ngOnInit() {
+        this.init_date_picker()
+        this.update_all_chart();
+    }
+
+    init_date_picker() {
+        jQuery(this.date_from_el.nativeElement).datepicker({
+              onSelect: (value) => {
+                this.date_from = new Date(value);
+                this.update_all_chart();
+              }
+            })
+            .datepicker('setDate', this.date_from);
+        jQuery(this.date_end_el.nativeElement).datepicker({
+              onSelect: (value) => {
+                this.date_end = new Date(value);
+                this.update_all_chart();
+              }
+            })
+            .datepicker('setDate', this.date_end);
+    }
+    update_all_chart() {
+        console.log("update all chart");
+        this.chart_for_log_ons();
+        this.chart_for_tasks_completed();
+        this.chart_for_points_awarded();
+        this.chart_for_reward_redemptions();
+        this.chart_for_top_videos();
+        this.chart_for_top_quizzes();
+        this.chart_for_most_point_users();
+        this.chart_for_most_point_departments();
+        this.chart_for_number_of_tasks_completed_by_user();
+        this.chart_for_average_point_of_assignment();
+        this.chart_for_most_reward_redemptions();
+        this.chart_for_point_value_over_time();
+        this.chart_for_most_sent_point_user();
+        this.chart_for_most_received_point_user();
+        this.employee_part();
+    }
+    setUser(e) {
+        this.user_id = e;
+        this.update_all_chart();
+    }
+
+    select_department() {
+        this.update_all_chart();
+    }
+
+    onMultipleSelected(item) {
+        console.log(item.value);
+    }
+    onMultipleDeselected(item) {
+        console.log(item.value);
+    }
+
+
+    dropdownItemClickEvent(event) {
+        let element = event.target;
+        if (element.classList.contains('fa-check')){
+            element.classList.remove('fa-check');
+            this.final_export_list.splice(this.final_export_list.indexOf(element.attributes.value.value), 1);
+        }
+        else {
+            element.classList.add('fa-check');
+            this.final_export_list.push(element.attributes.value.value)
+        }
+        console.log(this.final_export_list);
+    }
+
 }
