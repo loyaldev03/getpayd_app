@@ -1030,6 +1030,8 @@ export class AnalyticsComponent implements OnInit {
                 if (this.mode == 'daily') {
                     // lineChart3
                     console.log("daily------------------");
+                    console.log("total points awarded start", this.total_points_awarded);
+                    this.total_points_awarded = 0;
                     for (var item of data) {
                         this.total_points_awarded += parseInt(item.points_awarded);
                         console.log("points awarded-----------", parseInt(item.points_awarded));
@@ -1047,6 +1049,7 @@ export class AnalyticsComponent implements OnInit {
                         this.lineChart3Data[0].data.push(number_for_daily);
                         this.lineChart3Labels.push(date.getDate() + 1);
                     }    
+                    console.log("total points awarded end", this.total_points_awarded);
                 }
                 if (this.mode == 'hourly') {
                     // lineChart3
@@ -1348,9 +1351,6 @@ export class AnalyticsComponent implements OnInit {
                 this.labels_point_value_over_time = [];
                 if (this.mode == 'monthly') {
                     // lineChart3
-                    for (var item of data) {
-                        this.total_points_awarded += parseInt(item.points_awarded);
-                    }
                     for (var date=new Date(this.date_from); date <= this.date_end; date.setMonth(date.getMonth() + 1)){
                         var number_for_monthly = this.base_points_awarded;
                         for (var item of data) {
@@ -1370,9 +1370,6 @@ export class AnalyticsComponent implements OnInit {
                 }
                 if (this.mode == 'daily') {
                     // lineChart3
-                    for (var item of data) {
-                        this.total_points_awarded += parseInt(item.points_awarded);
-                    }
                     for (var date=new Date(this.date_from); date <= this.date_end; date.setDate(date.getDate() + 1)){
                         var number_for_daily = this.base_points_awarded;
                         for (var item of data) {
@@ -1390,9 +1387,6 @@ export class AnalyticsComponent implements OnInit {
                 }
                 if (this.mode == 'hourly') {
                     // lineChart3
-                    for (var item of data) {
-                        this.total_points_awarded += parseInt(item.points_awarded);
-                    }
                     for (var date=new Date(this.date_from); date <= this.date_end; date.setTime(date.getTime() + (this.hourly_unit*60*60*1000))){
                         var number_for_hourly = this.base_points_awarded;
                         for (var item of data) {
