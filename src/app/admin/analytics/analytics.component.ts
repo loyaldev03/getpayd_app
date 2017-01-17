@@ -995,6 +995,7 @@ export class AnalyticsComponent implements OnInit {
     }
     chart_for_points_awarded() {
         //Points Awarded
+        console.log("points awarded.................",this.company_id, this.department_id_points_awarded);
         this.adminService.getTaskCompleted(this.company_id, this.department_id_points_awarded, this.user_id_points_awarded, this.date_from_points_awarded, this.date_end_points_awarded).subscribe(
             data => {
                 this.lineChart3Data = [
@@ -1004,8 +1005,10 @@ export class AnalyticsComponent implements OnInit {
                     }
                 ];
                 this.lineChart3Labels = [];
+                this.total_points_awarded = 0;
                 if (this.mode == 'monthly') {
                     // lineChart3
+                    console.log("monthly------------------");
                     for (var item of data) {
                         this.total_points_awarded += parseInt(item.points_awarded);
                     }
@@ -1026,8 +1029,10 @@ export class AnalyticsComponent implements OnInit {
                 }
                 if (this.mode == 'daily') {
                     // lineChart3
+                    console.log("daily------------------");
                     for (var item of data) {
                         this.total_points_awarded += parseInt(item.points_awarded);
+                        console.log("points awarded-----------", parseInt(item.points_awarded));
                     }
                     for (var date=new Date(this.date_from); date <= this.date_end; date.setDate(date.getDate() + 1)){
                         var number_for_daily = this.base_points_awarded;
@@ -1045,6 +1050,7 @@ export class AnalyticsComponent implements OnInit {
                 }
                 if (this.mode == 'hourly') {
                     // lineChart3
+                    console.log("hourly------------------");
                     for (var item of data) {
                         this.total_points_awarded += parseInt(item.points_awarded);
                     }
@@ -1087,6 +1093,7 @@ export class AnalyticsComponent implements OnInit {
                     }
                 ];
                 this.lineChart4Labels = [];
+                this.total_reward_redemptions = 0;
                 if (this.mode == 'monthly') {
                     // lineChart4
                     for (var item of data) {
