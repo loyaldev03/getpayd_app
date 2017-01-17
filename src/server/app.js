@@ -33,8 +33,10 @@ var TransferTokens = require('./transfer_tokens.model.js');
 
 var development_server_ip = "http://localhost:3000";
 var production_server_ip = "http://app.getpayd.io";
-var server_ip = development_server_ip;
+var staging_server_ip = "https://getpayd-new-warzi117.c9users.io:8080";
+// var server_ip = development_server_ip;
 // var server_ip = production_server_ip;
+var server_ip = staging_server_ip;
 
 var api_key = 'key-9cc58f4c99d912d09f852845200a4803';
 var domain = 'app.getpayd.io';
