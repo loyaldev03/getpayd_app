@@ -25,7 +25,7 @@ export class AnalyticsComponent implements OnInit {
     public date_from: Date;
     public date_end: Date;
     public mode: String = "monthly";
-    public base_log_on = 50;
+    public base_log_on = 10;
     public unit_per_user = 5;
     public hourly_unit = 4;
 
@@ -155,16 +155,23 @@ export class AnalyticsComponent implements OnInit {
     public users_for_analytics: any = [];
     public users: any = [];
     public departments: any = [];
+    public export_list: any = [];
     constructor(
         private adminService: AdminService,
         private userService: UserService) 
     {
+        // // this.user_id = "587881a10eff174f93740995";
+        // // this.user_id = "5879c34f88701f3c1194665a"
+        // this.user_id = null;
+        // this.department_id = "5879f63530456b6947c6d665";
+        // console.log("current user", localStorage.getItem('currentUser'));
+
+        //monthly test
         this.date_end = new Date();
         this.date_from = new Date();
-        // this.user_id = "587881a10eff174f93740995";
-        // this.user_id = "5879c34f88701f3c1194665a"
-        this.user_id = null;
-        this.department_id = "5879f63530456b6947c6d665";
+        this.date_from.setDate(this.date_end.getDate() - 15);
+        this.company_id = JSON.parse(localStorage.getItem('currentUser'))._id;
+        this.mode = "daily"
 
         this.user_id_log_ons = this.user_id;
         this.department_id_log_ons = this.department_id;
@@ -246,11 +253,18 @@ export class AnalyticsComponent implements OnInit {
         this.date_end_most_received_point_user = this.date_end;
         this.chart_type_most_received_point_user = "line";
 
-        // //monthly test
-        // this.date_from.setDate(this.date_end.getDate() - 11);
-        // // console.log("current user", localStorage.getItem('currentUser'));
-        // this.company_id = JSON.parse(localStorage.getItem('currentUser'))._id;
-        // this.mode = "monthly"
+        this.export_list = [
+            {value:'top_videos', label: 'top videos'}, 
+            {value:'top_quizzes', label: 'top quizzes'},
+            {value: 'most_point_users', label: 'most point users'}, 
+            {value: 'most_point_departments', label: 'most point departments'}, 
+            {value: 'number_of_tasks_completed_by_user', label: 'number of tasks completed by user'}, 
+            {value: 'most_reward_redemptions', label: 'most reward redemptions'}, 
+            {value: 'average_point_of_assignment', label: 'average point of assignment'}, 
+            {value: 'point_value_over_time', label: 'point value over time'}, 
+            {value: 'most_sent_point_user', label: 'most sent point users'}, 
+            {value: 'most_received_point_user', label: 'most received point users'}
+        ];
 
         // //daily test
         // this.date_from.setDate(this.date_end.getDate() - 5);
@@ -260,10 +274,10 @@ export class AnalyticsComponent implements OnInit {
         // this.mode = "daily"
 
         //hourly test
-        this.date_from.setTime(this.date_end.getTime() - (24*60*60*1000));
-        console.log("date from", this.date_from);
-        this.company_id = JSON.parse(localStorage.getItem('currentUser'))._id;
-        this.mode = "hourly"
+        // this.date_from.setTime(this.date_end.getTime() - (24*60*60*1000));
+        // console.log("date from", this.date_from);
+        // this.company_id = JSON.parse(localStorage.getItem('currentUser'))._id;
+        // this.mode = "hourly"
     }
     chart_for_log_ons() {
         this.adminService.getLogOns(this.company_id, this.department_id_log_ons, this.user_id_log_ons, this.date_from_log_ons, this.date_end_log_ons).subscribe(
@@ -296,11 +310,11 @@ export class AnalyticsComponent implements OnInit {
                 }
                 if (this.mode == 'daily') {
                     // lineChart1
-                    for (var date=new Date(this.date_from); date <= this.date_end; date.setDate(date.getDate() + 1)){
+                    for (var date=new Date(this.date_from); date <= this.date_end; date.setDate(date.getDate() + 3)){
                         var number_for_daily = this.base_log_on;
                         for (var item of data) {
                             var date_range = new Date(date);
-                            date_range.setDate(date.getDate() + 1);
+                            date_range.setDate(date.getDate() + 2);
                             var item_time = new Date(item.time);
                             if (item_time >= date && item_time <= date_range) {
                               number_for_daily += this.unit_per_user;
@@ -950,7 +964,12 @@ export class AnalyticsComponent implements OnInit {
         this.update_all_chart();
     }
 
-
+    onMultipleSelected(item) {
+        console.log(item.value);
+    }
+    onMultipleDeselected(item) {
+        console.log(item.value);
+    }
 
 
 
@@ -1019,8 +1038,8 @@ export class AnalyticsComponent implements OnInit {
                 display: false,
                 ticks: {
                     display: false,
-                    min: 40 - 5,
-                    max: 84 + 5,
+                    min: 0,
+                    max: 100,
                 }
             }],
         },

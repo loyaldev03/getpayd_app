@@ -20,6 +20,14 @@
         <input #date_end_el type="text" class="form-control" [(ngModel)]="date_end">
       </div>
       <div class="col-sm-6 col-lg-3">
+        <!-- <ng-select
+          [options]="export_list"
+          [multiple]="'true'"
+          placeholder="Select Graph For Export"
+          formControlName="selectMultiple"
+          (selected)="onMultipleSelected($event)"
+          (deselected)="onMultipleDeselected($event)">
+        </ng-select> -->
         <!-- <datetime [(ngModel)]="date_end"></datetime> -->
       </div>
     </div>

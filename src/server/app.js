@@ -512,30 +512,45 @@ db.once('open', function() {
 
   // get_log_ons 
   app.get('/get_log_ons/:company_id/:department_id/:user_id/:date_from/:date_end', function(req, res){
-    if (req.params.user_id === "null") {
+    console.log("user id && department id",req.params.user_id, req.params.department_id);
+    if (req.params.user_id != "undefined") {
+      console.log("user");
+      UserLogOns.find({user_id: req.params.user_id, time: {$gte: req.params.date_from, $lte:req.params.date_end}}, function(err, log_ons) {
+          if (err) return console.log(err);
+          res.json(log_ons);
+      });      
+    } else if (req.params.department_id != "undefined") {
+      console.log("department");
       UserLogOns.find({company_id:req.params.company_id, department_id: req.params.department_id, time: {$gte: req.params.date_from, $lte:req.params.date_end}}, function(err, log_ons) {
           if (err) return console.log(err);
           res.json(log_ons);
       });
     } else {
-      UserLogOns.find({user_id: req.params.user_id, time: {$gte: req.params.date_from, $lte:req.params.date_end}}, function(err, log_ons) {
+      console.log("company");
+      UserLogOns.find({company_id:req.params.company_id, time: {$gte: req.params.date_from, $lte:req.params.date_end}}, function(err, log_ons) {
           if (err) return console.log(err);
           res.json(log_ons);
-      });      
+      });
     }
   })
   // get task completed
   app.get('/get_task_completed/:company_id/:department_id/:user_id/:date_from/:date_end', function(req, res) {
-    if (req.params.user_id === "null") {
+    if (req.params.user_id != "undefined") {
+      TaskCompleted.find({'user._id': req.params.user_id, time: {$gte: req.params.date_from, $lte:req.params.date_end}}, function(err, tasks){
+          if (err) return console.log(err);
+          res.json(tasks);
+      });
+    }
+    else if (req.params.department_id != "undefined") {
       TaskCompleted.find({'user.company._id':req.params.company_id, 'user.department._id': req.params.department_id, time: {$gte: req.params.date_from, $lte:req.params.date_end}}, function(err, tasks) {
         if (err) return console.log(err);
         res.json(tasks);
       });
     }
     else {
-      TaskCompleted.find({'user._id': req.params.user_id, time: {$gte: req.params.date_from, $lte:req.params.date_end}}, function(err, tasks){
-          if (err) return console.log(err);
-          res.json(tasks);
+      TaskCompleted.find({'user.company._id':req.params.company_id, time: {$gte: req.params.date_from, $lte:req.params.date_end}}, function(err, tasks) {
+        if (err) return console.log(err);
+        res.json(tasks);
       });
     }
   })
@@ -549,18 +564,25 @@ db.once('open', function() {
 
   // get points awarded
   app.get('/get_points_awarded/:company_id/:department_id/:user_id/:date_from/:date_end', function(req, res) {
-    if (req.params.user_id === "null") {
+    if (req.params.user_id != "undefined") {
+      PointsAwarded.find({'user._id': req.params.user_id, time: {$gte: req.params.date_from, $lte:req.params.date_end}}, function(err, tasks){
+          if (err) return console.log(err);
+          res.json(tasks);
+      });
+    }
+    else if (req.params.department_id != "undefined") {
       PointsAwarded.find({'user.company._id':req.params.company_id, 'user.department._id': req.params.department_id, time: {$gte: req.params.date_from, $lte:req.params.date_end}}, function(err, tasks) {
         if (err) return console.log(err);
         res.json(tasks);
       });
     }
     else {
-      PointsAwarded.find({'user._id': req.params.user_id, time: {$gte: req.params.date_from, $lte:req.params.date_end}}, function(err, tasks){
-          if (err) return console.log(err);
-          res.json(tasks);
-      });
+      PointsAwarded.find({'user.company._id':req.params.company_id, time: {$gte: req.params.date_from, $lte:req.params.date_end}}, function(err, tasks) {
+        if (err) return console.log(err);
+        res.json(tasks);
+      });      
     }
+
   })
   app.post('/new_points_awarded', function(req, res){
     var new_points_awarded = new PointsAwarded(req.body);
@@ -572,20 +594,23 @@ db.once('open', function() {
 
   // get reward redemptions
   app.get('/get_reward_redemptions/:company_id/:department_id/:user_id/:date_from/:date_end', function(req, res) {
-    if (req.params.user_id === "null") {
+    if (req.params.user_id != "undefined") {
+      RewardRedemptions.find({'user._id': req.params.user_id, time: {$gte: req.params.date_from, $lte:req.params.date_end}}, function(err, tasks){
+          if (err) return console.log(err);
+          res.json(tasks);
+      });
+    }
+    else if (req.params.department_id != "undefined") {
       RewardRedemptions.find({'user.company._id':req.params.company_id, 'user.department._id': req.params.department_id, time: {$gte: req.params.date_from, $lte:req.params.date_end}}, function(err, tasks) {
         if (err) return console.log(err);
         res.json(tasks);
       });
     }
     else {
-      console.log("user_id", req.params.user_id);
-      console.log("date_from", req.params.date_from);
-      console.log("date_end", req.params.date_end);
-      RewardRedemptions.find({'user._id': req.params.user_id, time: {$gte: req.params.date_from, $lte:req.params.date_end}}, function(err, tasks){
-          if (err) return console.log(err);
-          res.json(tasks);
-      });
+      RewardRedemptions.find({'user.company._id':req.params.company_id, time: {$gte: req.params.date_from, $lte:req.params.date_end}}, function(err, tasks) {
+        if (err) return console.log(err);
+        res.json(tasks);
+      });      
     }
   })
   app.post('/new_reward_redemptions', function(req, res){
@@ -607,34 +632,46 @@ db.once('open', function() {
   app.get('/get_top_videos/:company_id/:department_id/:user_id/:date_from/:date_end', function(req, res) {
     var date_from = new Date(req.params.date_from);
     var date_end = new Date(req.params.date_end);
-    if (req.params.user_id === "null") {
+    if (req.params.user_id != "undefined") {
+      TaskCompleted.aggregate([{$match: {'user._id':req.params.user_id, 'task.type':'video', time: {$gte: date_from, $lte: date_end}}}, {$group: {_id: '$task.title', total: {$sum: 1}}}, {$sort: {total:-1}}, {$limit: 10}], function(err, res1){
+        if (err) console.log(err);
+        res.json(res1);
+      });
+    }
+    else if (req.params.department_id != "undefined") {
       TaskCompleted.aggregate([{$match: {'user.company._id':req.params.company_id, 'user.department._id': req.params.department_id, 'task.type':'video', time: {$gte: date_from, $lte: date_end}}}, {$group: {_id: '$task.title', total: {$sum: 1}}}, {$sort: {total:-1}}, {$limit: 10}], function(err, res1){
         if (err) console.log(err);
         res.json(res1);
       });
     }
     else {
-      TaskCompleted.aggregate([{$match: {'user._id':req.params.user_id, 'task.type':'video', time: {$gte: date_from, $lte: date_end}}}, {$group: {_id: '$task.title', total: {$sum: 1}}}, {$sort: {total:-1}}, {$limit: 10}], function(err, res1){
+      TaskCompleted.aggregate([{$match: {'user.company._id':req.params.company_id, 'task.type':'video', time: {$gte: date_from, $lte: date_end}}}, {$group: {_id: '$task.title', total: {$sum: 1}}}, {$sort: {total:-1}}, {$limit: 10}], function(err, res1){
         if (err) console.log(err);
         res.json(res1);
-      });
+      });      
     }
   })
   //get top 10 videos
   app.get('/get_top_quizzes/:company_id/:department_id/:user_id/:date_from/:date_end', function(req, res) {
     var date_from = new Date(req.params.date_from);
     var date_end = new Date(req.params.date_end);
-    if (req.params.user_id === "null") {
+    if (req.params.user_id != "undefined") {
+      TaskCompleted.aggregate([{$match: {'user._id':req.params.user_id, 'task.type':'quiz', time: {$gte: date_from, $lte: date_end}}}, {$group: {_id: '$task.title', total: {$sum: 1}}}, {$sort: {total:-1}}, {$limit: 10}], function(err, res1){
+        if (err) return console.log(err);
+        res.json(res1);
+      });
+    }
+    else if (req.params.department_id != "undefined") {
       TaskCompleted.aggregate([{$match: {'user.company._id':req.params.company_id, 'user.department._id': req.params.department_id, 'task.type':'quiz', time: {$gte: date_from, $lte: date_end}}}, {$group: {_id: '$task.title', total: {$sum: 1}}}, {$sort: {total:-1}}, {$limit: 10}], function(err, res1){
         if (err) console.log(err);
         res.json(res1);
       });
     }
     else {
-      TaskCompleted.aggregate([{$match: {'user._id':req.params.user_id, 'task.type':'quiz', time: {$gte: date_from, $lte: date_end}}}, {$group: {_id: '$task.title', total: {$sum: 1}}}, {$sort: {total:-1}}, {$limit: 10}], function(err, res1){
-        if (err) return console.log(err);
+      TaskCompleted.aggregate([{$match: {'user.company._id':req.params.company_id, 'task.type':'quiz', time: {$gte: date_from, $lte: date_end}}}, {$group: {_id: '$task.title', total: {$sum: 1}}}, {$sort: {total:-1}}, {$limit: 10}], function(err, res1){
+        if (err) console.log(err);
         res.json(res1);
-      });
+      });      
     }
   })
   //get top Point Users
@@ -647,11 +684,20 @@ db.once('open', function() {
     console.log(date_from);
     console.log(date_end);
 
-    User.aggregate([{$match: {'company._id':req.params.company_id, 'department._id': req.params.department_id, date_joined: {$gte: date_from, $lte: date_end}}}, {$sort: {available_tokens: -1}}, {$limit: 10}], function(err, res1){
-      if (err) return console.log(err);
-      console.log("users", res1);
-      res.json(res1);
-    });
+    if (req.params.department_id != "undefined"){
+      User.aggregate([{$match: {'company._id':req.params.company_id, 'department._id': req.params.department_id, date_joined: {$gte: date_from, $lte: date_end}}}, {$sort: {available_tokens: -1}}, {$limit: 10}], function(err, res1){
+        if (err) return console.log(err);
+        console.log("users", res1);
+        res.json(res1);
+      });      
+    }
+    else {
+      User.aggregate([{$match: {'company._id':req.params.company_id, date_joined: {$gte: date_from, $lte: date_end}}}, {$sort: {available_tokens: -1}}, {$limit: 10}], function(err, res1){
+        if (err) return console.log(err);
+        console.log("users", res1);
+        res.json(res1);
+      });            
+    }
   })
   //get top Point Departments
   app.get('/get_most_point_departments/:company_id/:date_from/:date_end', function(req, res) {
@@ -685,71 +731,126 @@ db.once('open', function() {
   app.get('/get_total_tasks_completed_by_users/:company_id/:department_id/:date_from/:date_end', function(req, res) {
     var date_from = new Date(req.params.date_from);
     var date_end = new Date(req.params.date_end);
-    TaskCompleted.aggregate([{$match: {'user.company._id':req.params.company_id, 'user.department._id':req.params.department_id, time: {$gte: date_from, $lte: date_end}}}, {$group: {_id: {first_name: '$user.first_name', last_name: '$user.last_name', user_id: '$user._id'}, total: {$sum: 1}}}, {$sort: {total: -1}}, {$limit: 10}], function(err, res1) {
-      if (err) console.log(err);
-      res.json(res1);
-    })    
+    if (req.params.department_id != "undefined"){
+      TaskCompleted.aggregate([{$match: {'user.company._id':req.params.company_id, 'user.department._id':req.params.department_id, time: {$gte: date_from, $lte: date_end}}}, {$group: {_id: {first_name: '$user.first_name', last_name: '$user.last_name', user_id: '$user._id'}, total: {$sum: 1}}}, {$sort: {total: -1}}, {$limit: 10}], function(err, res1) {
+        if (err) console.log(err);
+        res.json(res1);
+      })          
+    }
+    else {
+      TaskCompleted.aggregate([{$match: {'user.company._id':req.params.company_id, time: {$gte: date_from, $lte: date_end}}}, {$group: {_id: {first_name: '$user.first_name', last_name: '$user.last_name', user_id: '$user._id'}, total: {$sum: 1}}}, {$sort: {total: -1}}, {$limit: 10}], function(err, res1) {
+        if (err) console.log(err);
+        res.json(res1);
+      })          
+    }
   })
   //get average points per assignment
   app.get('/get_average_points_per_assignment/:company_id/:department_id/:date_from/:date_end', function(req, res) {
     var date_from = new Date(req.params.date_from);
     var date_end = new Date(req.params.date_end);
-    User.find({'company._id':req.params.company_id, 'department._id':req.params.department_id}, function(err, users){
-      if (err) return console.log(err);
-      var avg_array = [];
-      for (var user of users) {
-        var sum = 0.0;
-        for (var activity of user.activities) {
-          sum += activity.points_awarded;
+    if (req.params.department_id != "undefined") {
+      User.find({'company._id':req.params.company_id, 'department._id':req.params.department_id}, function(err, users){
+        if (err) return console.log(err);
+        var avg_array = [];
+        for (var user of users) {
+          var sum = 0.0;
+          for (var activity of user.activities) {
+            sum += activity.points_awarded;
+          }
+          avg_array.push({user: user, avg: sum/user.activities.length});
         }
-        avg_array.push({user: user, avg: sum/user.activities.length});
-      }
-      for (var i=0;i<users.length;i++) {
-        for (var j=i+1;j<users.length;j++) {
-          if (avg_array[i].avg < avg_array[j].avg) {
-            var temp = avg_array[i];
-            avg_array[i] = avg_array[j];
-            avg_array[j] = temp;
+        for (var i=0;i<users.length;i++) {
+          for (var j=i+1;j<users.length;j++) {
+            if (avg_array[i].avg < avg_array[j].avg) {
+              var temp = avg_array[i];
+              avg_array[i] = avg_array[j];
+              avg_array[j] = temp;
+            }
           }
         }
-      }
-      res.json(avg_array.slice(0, 10));
-    });
+        res.json(avg_array.slice(0, 10));
+      });      
+    }
+    else {
+      User.find({'company._id':req.params.company_id}, function(err, users){
+        if (err) return console.log(err);
+        var avg_array = [];
+        for (var user of users) {
+          var sum = 0.0;
+          for (var activity of user.activities) {
+            sum += activity.points_awarded;
+          }
+          avg_array.push({user: user, avg: sum/user.activities.length});
+        }
+        for (var i=0;i<users.length;i++) {
+          for (var j=i+1;j<users.length;j++) {
+            if (avg_array[i].avg < avg_array[j].avg) {
+              var temp = avg_array[i];
+              avg_array[i] = avg_array[j];
+              avg_array[j] = temp;
+            }
+          }
+        }
+        res.json(avg_array.slice(0, 10));
+      });      
+    }
   })
   //get most reward redemptions
   app.get('/get_most_reward_redemptions/:company_id/:department_id/:user_id/:date_from/:date_end', function(req, res) {
     var date_from = new Date(req.params.date_from);
     var date_end = new Date(req.params.date_end);
-    if (req.params.user_id === 'null') {
+    if (req.params.user_id != "undefined") {
+      RewardRedemptions.aggregate([{$match: {'user._id':req.params.user_id, time: {$gte: date_from, $lte: date_end}}},{$sort: {number_of_reward: -1}}, {$limit: 10} ], function(err, res1) {
+        if (err) return console.log(err);
+        res.json(res1);
+      })    
+    }
+    else if (req.params.department_id != 'undefined') {
       RewardRedemptions.aggregate([{$match: {'user.company._id':req.params.company_id, 'user.department._id':req.params.department_id, time: {$gte: date_from, $lte: date_end}}},{$sort: {number_of_reward: -1}}, {$limit: 10} ], function(err, res1) {
         if (err) return console.log(err);
         res.json(res1);
       })    
     }
     else {
-      RewardRedemptions.aggregate([{$match: {'user._id':req.params.user_id, time: {$gte: date_from, $lte: date_end}}},{$sort: {number_of_reward: -1}}, {$limit: 10} ], function(err, res1) {
+      RewardRedemptions.aggregate([{$match: {'user.company._id':req.params.company_id, time: {$gte: date_from, $lte: date_end}}},{$sort: {number_of_reward: -1}}, {$limit: 10} ], function(err, res1) {
         if (err) return console.log(err);
         res.json(res1);
-      })    
+      })          
     }
   })
   //get most sent point user
   app.get('/get_most_sent_point_user/:company_id/:department_id/:date_from/:date_end', function(req, res) {
     var date_from = new Date(req.params.date_from);
     var date_end = new Date(req.params.date_end);
-    TransferTokens.aggregate([{$match: {'send_user.company._id':req.params.company_id, 'send_user.department._id':req.params.department_id, time: {$gte: date_from, $lte: date_end}}}, {$group: {_id:{sender: '$send_user._id', first_name: '$send_user.first_name', last_name: '$send_user.last_name'}, total: {$sum: '$number_of_tokens'}}}, {$limit: 10}], function(err, res1) {
-      if (err) return console.log(err);
-      res.json(res1);
-    });
+    if (req.params.department_id != "undefined") {
+      TransferTokens.aggregate([{$match: {'send_user.company._id':req.params.company_id, 'send_user.department._id':req.params.department_id, time: {$gte: date_from, $lte: date_end}}}, {$group: {_id:{sender: '$send_user._id', first_name: '$send_user.first_name', last_name: '$send_user.last_name'}, total: {$sum: '$number_of_tokens'}}}, {$limit: 10}], function(err, res1) {
+        if (err) return console.log(err);
+        res.json(res1);
+      });      
+    }
+    else {
+      TransferTokens.aggregate([{$match: {'send_user.company._id':req.params.company_id, time: {$gte: date_from, $lte: date_end}}}, {$group: {_id:{sender: '$send_user._id', first_name: '$send_user.first_name', last_name: '$send_user.last_name'}, total: {$sum: '$number_of_tokens'}}}, {$limit: 10}], function(err, res1) {
+        if (err) return console.log(err);
+        res.json(res1);
+      });      
+    }
   })
   //get most received point user
   app.get('/get_most_received_point_user/:company_id/:department_id/:date_from/:date_end', function(req, res) {
     var date_from = new Date(req.params.date_from);
     var date_end = new Date(req.params.date_end);
-    TransferTokens.aggregate([{$match: {'receive_user.company._id':req.params.company_id, 'receive_user.department._id':req.params.department_id, time: {$gte: date_from, $lte: date_end}}}, {$group: {_id:{receiver: '$receive_user._id', first_name: '$receive_user.first_name', last_name: '$receive_user.last_name'}, total: {$sum: '$number_of_tokens'}}}, {$limit: 10}], function(err, res1) {
-      if (err) return console.log(err);
-      res.json(res1);
-    });
+    if (req.params.department_id != "undefined") {
+      TransferTokens.aggregate([{$match: {'receive_user.company._id':req.params.company_id, 'receive_user.department._id':req.params.department_id, time: {$gte: date_from, $lte: date_end}}}, {$group: {_id:{receiver: '$receive_user._id', first_name: '$receive_user.first_name', last_name: '$receive_user.last_name'}, total: {$sum: '$number_of_tokens'}}}, {$limit: 10}], function(err, res1) {
+        if (err) return console.log(err);
+        res.json(res1);
+      });      
+    }
+    else {
+      TransferTokens.aggregate([{$match: {'receive_user.company._id':req.params.company_id, time: {$gte: date_from, $lte: date_end}}}, {$group: {_id:{receiver: '$receive_user._id', first_name: '$receive_user.first_name', last_name: '$receive_user.last_name'}, total: {$sum: '$number_of_tokens'}}}, {$limit: 10}], function(err, res1) {
+        if (err) return console.log(err);
+        res.json(res1);
+      });            
+    }
   })
   //get user for analytic
   app.get('/get_user_for_analytic/:company_id/:department_id/:date_from/:date_end', function(req, res) {
