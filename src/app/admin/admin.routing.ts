@@ -16,7 +16,7 @@ import { DashboardComponent }         from './dashboard/dashboard.component';
 import { AnalyticsComponent } from './analytics/analytics.component';
 
 export const routes: Routes = [
-    { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+    { path: '', redirectTo: 'analytics', pathMatch: 'full' },
     { path: 'manage_company',            component: ManageCompanyComponent },
     { path: 'new_company',                component: NewCompanyComponent },
     { path: 'manage_user',            component: ManageUserComponent },
