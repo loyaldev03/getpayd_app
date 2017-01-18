@@ -3,7 +3,7 @@ import { ChartsModule }             from 'ng2-charts/ng2-charts';
 import { AdminService } from '../../_services/admin.service';            
 import { UserService } from '../../_services/user.service';         
 import {CsvService} from "angular2-json2csv";
-
+declare let jsPDF;
 import 'rxjs/Rx' ;
 declare var jQuery: any;
 
@@ -20,6 +20,7 @@ export class AnalyticsComponent implements OnInit {
 
     @ViewChild('date_from_el') date_from_el: ElementRef;
     @ViewChild('date_end_el') date_end_el: ElementRef;
+    @ViewChild('content') content: ElementRef;
 
     public total_logons: number = 0;
     public company_id: string;
@@ -57,18 +58,21 @@ export class AnalyticsComponent implements OnInit {
     public date_from_top_videos: Date;
     public date_end_top_videos: Date;
     public chart_type_top_videos: string;
+    public canvas_tag_top_videos: any;
 
     public user_id_top_quizzes: string;
     public department_id_top_quizzes: string;
     public date_from_top_quizzes: Date;
     public date_end_top_quizzes: Date;
     public chart_type_top_quizzes: string;
+    public canvas_tag_top_quizzes: any;
 
     public user_id_most_point_users: string;
     public department_id_most_point_users: string;
     public date_from_most_point_users: Date;
     public date_end_most_point_users: Date;
     public chart_type_most_point_users: string;
+    public canvas_tag_most_point_users: any;
 
 
     public user_id_most_point_departments: string;
@@ -76,42 +80,49 @@ export class AnalyticsComponent implements OnInit {
     public date_from_most_point_departments: Date;
     public date_end_most_point_departments: Date;
     public chart_type_most_point_departments: string;
+    public canvas_tag_most_point_departments: any;
 
     public user_id_number_of_tasks_completed_by_user: string;
     public department_id_number_of_tasks_completed_by_user: string;
     public date_from_number_of_tasks_completed_by_user: Date;
     public date_end_number_of_tasks_completed_by_user: Date;
     public chart_type_number_of_tasks_completed_by_user: string;
+    public canvas_tag_number_of_tasks_completed_by_user: any;
 
     public user_id_most_reward_redemptions: string;
     public department_id_most_reward_redemptions: string;
     public date_from_most_reward_redemptions: Date;
     public date_end_most_reward_redemptions: Date;
     public chart_type_most_reward_redemptions: string;
+    public canvas_tag_most_reward_redemptions: any;
 
     public user_id_average_point_of_assignment: string;
     public department_id_average_point_of_assignment: string;
     public date_from_average_point_of_assignment: Date;
     public date_end_average_point_of_assignment: Date;
     public chart_type_average_point_of_assignment: string;
+    public canvas_tag_average_point_of_assignment: any;
 
     public user_id_point_value_over_time: string;
     public department_id_point_value_over_time: string;
     public date_from_point_value_over_time: Date;
     public date_end_point_value_over_time: Date;
     public chart_type_point_value_over_time: string;
+    public canvas_tag_point_value_over_time: any;
 
     public user_id_most_sent_point_user: string;
     public department_id_most_sent_point_user: string;
     public date_from_most_sent_point_user: Date;
     public date_end_most_sent_point_user: Date;
     public chart_type_most_sent_point_user: string;
+    public canvas_tag_most_sent_point_user: any;
 
     public user_id_most_received_point_user: string;
     public department_id_most_received_point_user: string;
     public date_from_most_received_point_user: Date;
     public date_end_most_received_point_user: Date;
     public chart_type_most_received_point_user: string;
+    public canvas_tag_most_received_point_user: any;
 
     public total_tasks_completed: number = 0;
     public base_tasks_completed: number=20;
@@ -542,32 +553,32 @@ export class AnalyticsComponent implements OnInit {
     public labels_top_videos:Array<any> = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
     public lineChartOptions:any = {
         animation: false,
-        responsive: true
+        responsive: true,        
     };
     public lineChartColours:Array<any> = [
         { // grey
-            backgroundColor: 'rgba(148,159,177,0.2)',
-            borderColor: 'rgba(148,159,177,1)',
-            pointBackgroundColor: 'rgba(148,159,177,1)',
-            pointBorderColor: '#fff',
-            pointHoverBackgroundColor: '#fff',
-            pointHoverBorderColor: 'rgba(148,159,177,0.8)'
+            backgroundColor: 'rgba(255,0,0,1)',
+            borderColor: 'rgba(255,0,0,1)',
+            pointBackgroundColor: 'rgba(255,0,0,1)',
+            pointBorderColor: 'rgba(255,0,0,1)',
+            pointHoverBackgroundColor: 'rgba(255,0,0,1)',
+            pointHoverBorderColor: 'rgba(255,0,0,1)'
         },
         { // dark grey
-            backgroundColor: 'rgba(77,83,96,0.2)',
-            borderColor: 'rgba(77,83,96,1)',
-            pointBackgroundColor: 'rgba(77,83,96,1)',
-            pointBorderColor: '#fff',
-            pointHoverBackgroundColor: '#fff',
-            pointHoverBorderColor: 'rgba(77,83,96,1)'
+            backgroundColor: 'rgba(255,0,0,1)',
+            borderColor: 'rgba(255,0,0,1)',
+            pointBackgroundColor: 'rgba(255,0,0,1)',
+            pointBorderColor: 'rgba(255,0,0,1)',
+            pointHoverBackgroundColor: 'rgba(255,0,0,1)',
+            pointHoverBorderColor: 'rgba(255,0,0,1)'
         },
         { // grey
-            backgroundColor: 'rgba(148,159,177,0.2)',
-            borderColor: 'rgba(148,159,177,1)',
-            pointBackgroundColor: 'rgba(148,159,177,1)',
-            pointBorderColor: '#fff',
-            pointHoverBackgroundColor: '#fff',
-            pointHoverBorderColor: 'rgba(148,159,177,0.8)'
+            backgroundColor: 'rgba(255,0,0,1)',
+            borderColor: 'rgba(255,0,0,1)',
+            pointBackgroundColor: 'rgba(255,0,0,1)',
+            pointBorderColor: 'rgba(255,0,0,1)',
+            pointHoverBackgroundColor: 'rgba(255,0,0,1)',
+            pointHoverBorderColor: 'rgba(255,0,0,1)'
         }
     ];
     public lineChartLegend:boolean = true;
@@ -737,15 +748,53 @@ export class AnalyticsComponent implements OnInit {
         // this.company_id = JSON.parse(localStorage.getItem('currentUser'))._id;
         // this.mode = "hourly"
     }
+    get_canvas_tag_top_video(e) {
+        this.canvas_tag_top_videos = e;
+    }
+    get_canvas_tag_top_quizzes(e) {
+        this.canvas_tag_top_quizzes = e;
+    }
+    get_canvas_tag_most_point_users(e) {
+        this.canvas_tag_most_point_users = e;
+    }
+    get_canvas_tag_most_point_departments(e) {
+        this.canvas_tag_most_point_departments = e;
+    }
+    get_canvas_tag_number_of_tasks_completed_by_user(e) {
+        this.canvas_tag_number_of_tasks_completed_by_user = e;
+    }
+    get_canvas_tag_most_reward_redemptions(e) {
+        this.canvas_tag_most_reward_redemptions = e;
+    }
+    get_canvas_tag_average_point_of_assignment(e) {
+        this.canvas_tag_average_point_of_assignment = e;
+    }
+    get_canvas_tag_point_value_over_time(e) {
+        this.canvas_tag_point_value_over_time = e;
+    }
+    get_canvas_tag_most_sent_point_user(e) {
+        this.canvas_tag_most_sent_point_user = e;
+    }
+    get_canvas_tag_most_received_point_user(e) {
+        this.canvas_tag_most_received_point_user = e;
+    }
 
-    exportChart(){
+    exportChartAsCsv() {
+        var pdf = new jsPDF();
+        let height_per_graph: number = 60;
+        let width_per_graph: number = 100; 
+        let i: number = 0;
         let export_data = [];
         if (this.final_export_list.indexOf("top_videos") >= 0) {
             let top_videos = {};
             for (let index in this.data_set_top_videos[0].data) {
                 top_videos[this.labels_top_videos[index]] = this.data_set_top_videos[0].data[index]; 
             }
-            export_data.push({"top_videos":top_videos});
+            export_data.push(top_videos);
+            let canvas = this.canvas_tag_top_videos.nativeElement;
+            var imgData = canvas.toDataURL("image/jpeg", 1.0);
+            pdf.addImage(imgData, 'JPEG', (i % 2) * width_per_graph, i * height_per_graph + 20);
+            i++;
         }
         if (this.final_export_list.indexOf("top_quizzes") >= 0) {
             let top_quizzes = {};
@@ -753,6 +802,10 @@ export class AnalyticsComponent implements OnInit {
                 top_quizzes[this.labels_top_quizzes[index]] = this.data_set_top_quizzes[0].data[index]; 
             }
             export_data.push(top_quizzes);
+            let canvas = this.canvas_tag_top_quizzes.nativeElement;
+            var imgData = canvas.toDataURL("image/jpeg", 1.0);
+            pdf.addImage(imgData, 'JPEG', (i % 2) * width_per_graph, i * height_per_graph + 20);
+            i++;
         }
         if (this.final_export_list.indexOf("most_point_users") >= 0) {
             let most_point_users = {};
@@ -760,6 +813,10 @@ export class AnalyticsComponent implements OnInit {
                 most_point_users[this.labels_most_point_users[index]] = this.data_set_most_point_users[index]; 
             }
             export_data.push(most_point_users);
+            let canvas = this.canvas_tag_most_point_users.nativeElement;
+            var imgData = canvas.toDataURL("image/jpeg", 1.0);
+            pdf.addImage(imgData, 'JPEG', (i % 2) * width_per_graph, i * height_per_graph + 20);
+            i++;
         }
         if (this.final_export_list.indexOf("most_point_departments") >= 0) {
             let most_point_departments = {};
@@ -767,6 +824,14 @@ export class AnalyticsComponent implements OnInit {
                 most_point_departments[this.labels_most_point_departments[index]] = this.data_set_most_point_departments[0].data[index]; 
             }
             export_data.push(most_point_departments);
+            if (i === 4) {
+                pdf.addPage();
+                i = 0;
+            }
+            let canvas = this.canvas_tag_most_point_departments.nativeElement;
+            var imgData = canvas.toDataURL("image/jpeg", 1.0);
+            pdf.addImage(imgData, 'JPEG', (i % 2) * width_per_graph, i * height_per_graph + 20);
+            i++;
         }
         if (this.final_export_list.indexOf("number_of_tasks_completed_by_user") >= 0) {
             let data_set_number_of_tasks_completed_by_user = {};
@@ -774,6 +839,14 @@ export class AnalyticsComponent implements OnInit {
                 data_set_number_of_tasks_completed_by_user[this.labels_number_of_tasks_completed_by_user[index]] = this.data_set_number_of_tasks_completed_by_user[0].data[index]; 
             }
             export_data.push(data_set_number_of_tasks_completed_by_user);
+            if (i === 4) {
+                pdf.addPage();
+                i = 0;
+            }
+            let canvas = this.canvas_tag_number_of_tasks_completed_by_user.nativeElement;
+            var imgData = canvas.toDataURL("image/jpeg", 1.0);
+            pdf.addImage(imgData, 'JPEG', (i % 2) * width_per_graph, i * height_per_graph + 20);
+            i++;
         }
         if (this.final_export_list.indexOf("most_reward_redemptions") >= 0) {
             let most_reward_redemptions = {};
@@ -781,6 +854,14 @@ export class AnalyticsComponent implements OnInit {
                 most_reward_redemptions[this.labels_most_reward_redemptions[index]] = this.data_set_most_reward_redemptions[0].data[index]; 
             }
             export_data.push(most_reward_redemptions);
+            if (i === 4) {
+                pdf.addPage();
+                i = 0;
+            }
+            let canvas = this.canvas_tag_most_reward_redemptions.nativeElement;
+            var imgData = canvas.toDataURL("image/jpeg", 1.0);
+            pdf.addImage(imgData, 'JPEG', (i % 2) * width_per_graph, i * height_per_graph + 20);
+            i++;
         }        
         if (this.final_export_list.indexOf("average_point_of_assignment") >= 0) {
             let average_point_of_assignment = {};
@@ -788,6 +869,14 @@ export class AnalyticsComponent implements OnInit {
                 average_point_of_assignment[this.labels_average_point_of_assignment[index]] = this.data_set_average_point_of_assignment[0].data[index]; 
             }
             export_data.push(average_point_of_assignment);
+            if (i === 4) {
+                pdf.addPage();
+                i = 0;
+            }
+            let canvas = this.canvas_tag_average_point_of_assignment.nativeElement;
+            var imgData = canvas.toDataURL("image/jpeg", 1.0);
+            pdf.addImage(imgData, 'JPEG', (i % 2) * width_per_graph, i * height_per_graph + 20);
+            i++;
         }
         if (this.final_export_list.indexOf("point_value_over_time") >= 0) {
             let point_value_over_time = {};
@@ -795,6 +884,14 @@ export class AnalyticsComponent implements OnInit {
                 point_value_over_time[this.labels_point_value_over_time[index]] = this.data_set_point_value_over_time[0].data[index]; 
             }
             export_data.push(point_value_over_time);
+            if (i === 4) {
+                pdf.addPage();
+                i = 0;
+            }
+            let canvas = this.canvas_tag_point_value_over_time.nativeElement;
+            var imgData = canvas.toDataURL("image/jpeg", 1.0);
+            pdf.addImage(imgData, 'JPEG', (i % 2) * width_per_graph, i * height_per_graph + 20);
+            i++;
         }
         if (this.final_export_list.indexOf("most_sent_point_user") >= 0) {
             let most_sent_point_user = {};
@@ -802,6 +899,14 @@ export class AnalyticsComponent implements OnInit {
                 most_sent_point_user[this.labels_most_sent_point_user[index]] = this.data_set_most_sent_point_user[0].data[index]; 
             }
             export_data.push(most_sent_point_user);
+            if (i === 4) {
+                pdf.addPage();
+                i = 0;
+            }
+            let canvas = this.canvas_tag_most_sent_point_user.nativeElement;
+            var imgData = canvas.toDataURL("image/jpeg", 1.0);
+            pdf.addImage(imgData, 'JPEG', (i % 2) * width_per_graph, i * height_per_graph + 20);
+            i++;
         }
         if (this.final_export_list.indexOf("most_received_point_user") >= 0) {
             let most_received_point_user = {};
@@ -809,9 +914,167 @@ export class AnalyticsComponent implements OnInit {
                 most_received_point_user[this.labels_most_received_point_user[index]] = this.data_set_most_received_point_user[0].data[index]; 
             }
             export_data.push(most_received_point_user);
+            if (i === 4) {
+                pdf.addPage();
+                i = 0;
+            }
+            let canvas = this.canvas_tag_most_received_point_user.nativeElement;
+            var imgData = canvas.toDataURL("image/jpeg", 1.0);
+            pdf.addImage(imgData, 'JPEG', (i % 2) * width_per_graph, i * height_per_graph + 20);
+            i++;
         }
-        // this.downloadFile(this.ConvertToCSV({a:1, b:2, c:3}));
+        // let csv_data = json2csv({data: export_data, flatten: true});
         this.csvService.download(export_data, 'Filename');
+    }
+    exportChartAsGraph(){
+        // let canvas = this.canvas_tag_top_videos.nativeElement;
+        // var imgData = canvas.toDataURL("image/jpeg", 1.0);
+        // pdf.addImage(imgData, 'JPEG', 0, 0);
+        var pdf = new jsPDF();
+        let height_per_graph: number = 60;
+        let width_per_graph: number = 100; 
+        let i: number = 0;
+        let export_data = [];
+        if (this.final_export_list.indexOf("top_videos") >= 0) {
+            let top_videos = {};
+            for (let index in this.data_set_top_videos[0].data) {
+                top_videos[this.labels_top_videos[index]] = this.data_set_top_videos[0].data[index]; 
+            }
+            export_data.push(top_videos);
+            let canvas = this.canvas_tag_top_videos.nativeElement;
+            var imgData = canvas.toDataURL("image/jpeg", 1.0);
+            pdf.addImage(imgData, 'JPEG', (i % 2) * width_per_graph, i * height_per_graph + 20);
+            i++;
+        }
+        if (this.final_export_list.indexOf("top_quizzes") >= 0) {
+            let top_quizzes = {};
+            for (let index in this.data_set_top_quizzes[0].data) {
+                top_quizzes[this.labels_top_quizzes[index]] = this.data_set_top_quizzes[0].data[index]; 
+            }
+            export_data.push(top_quizzes);
+            let canvas = this.canvas_tag_top_quizzes.nativeElement;
+            var imgData = canvas.toDataURL("image/jpeg", 1.0);
+            pdf.addImage(imgData, 'JPEG', (i % 2) * width_per_graph, i * height_per_graph + 20);
+            i++;
+        }
+        if (this.final_export_list.indexOf("most_point_users") >= 0) {
+            let most_point_users = {};
+            for (let index in this.data_set_most_point_users) {
+                most_point_users[this.labels_most_point_users[index]] = this.data_set_most_point_users[index]; 
+            }
+            export_data.push(most_point_users);
+            let canvas = this.canvas_tag_most_point_users.nativeElement;
+            var imgData = canvas.toDataURL("image/jpeg", 1.0);
+            pdf.addImage(imgData, 'JPEG', (i % 2) * width_per_graph, i * height_per_graph + 20);
+            i++;
+        }
+        if (this.final_export_list.indexOf("most_point_departments") >= 0) {
+            let most_point_departments = {};
+            for (let index in this.data_set_most_point_departments[0].data) {
+                most_point_departments[this.labels_most_point_departments[index]] = this.data_set_most_point_departments[0].data[index]; 
+            }
+            export_data.push(most_point_departments);
+            if (i === 4) {
+                pdf.addPage();
+                i = 0;
+            }
+            let canvas = this.canvas_tag_most_point_departments.nativeElement;
+            var imgData = canvas.toDataURL("image/jpeg", 1.0);
+            pdf.addImage(imgData, 'JPEG', (i % 2) * width_per_graph, i * height_per_graph + 20);
+            i++;
+        }
+        if (this.final_export_list.indexOf("number_of_tasks_completed_by_user") >= 0) {
+            let data_set_number_of_tasks_completed_by_user = {};
+            for (let index in this.data_set_number_of_tasks_completed_by_user[0].data) {
+                data_set_number_of_tasks_completed_by_user[this.labels_number_of_tasks_completed_by_user[index]] = this.data_set_number_of_tasks_completed_by_user[0].data[index]; 
+            }
+            export_data.push(data_set_number_of_tasks_completed_by_user);
+            if (i === 4) {
+                pdf.addPage();
+                i = 0;
+            }
+            let canvas = this.canvas_tag_number_of_tasks_completed_by_user.nativeElement;
+            var imgData = canvas.toDataURL("image/jpeg", 1.0);
+            pdf.addImage(imgData, 'JPEG', (i % 2) * width_per_graph, i * height_per_graph + 20);
+            i++;
+        }
+        if (this.final_export_list.indexOf("most_reward_redemptions") >= 0) {
+            let most_reward_redemptions = {};
+            for (let index in this.data_set_most_reward_redemptions[0].data) {
+                most_reward_redemptions[this.labels_most_reward_redemptions[index]] = this.data_set_most_reward_redemptions[0].data[index]; 
+            }
+            export_data.push(most_reward_redemptions);
+            if (i === 4) {
+                pdf.addPage();
+                i = 0;
+            }
+            let canvas = this.canvas_tag_most_reward_redemptions.nativeElement;
+            var imgData = canvas.toDataURL("image/jpeg", 1.0);
+            pdf.addImage(imgData, 'JPEG', (i % 2) * width_per_graph, i * height_per_graph + 20);
+            i++;
+        }        
+        if (this.final_export_list.indexOf("average_point_of_assignment") >= 0) {
+            let average_point_of_assignment = {};
+            for (let index in this.data_set_average_point_of_assignment[0].data) {
+                average_point_of_assignment[this.labels_average_point_of_assignment[index]] = this.data_set_average_point_of_assignment[0].data[index]; 
+            }
+            export_data.push(average_point_of_assignment);
+            if (i === 4) {
+                pdf.addPage();
+                i = 0;
+            }
+            let canvas = this.canvas_tag_average_point_of_assignment.nativeElement;
+            var imgData = canvas.toDataURL("image/jpeg", 1.0);
+            pdf.addImage(imgData, 'JPEG', (i % 2) * width_per_graph, i * height_per_graph + 20);
+            i++;
+        }
+        if (this.final_export_list.indexOf("point_value_over_time") >= 0) {
+            let point_value_over_time = {};
+            for (let index in this.data_set_point_value_over_time[0].data) {
+                point_value_over_time[this.labels_point_value_over_time[index]] = this.data_set_point_value_over_time[0].data[index]; 
+            }
+            export_data.push(point_value_over_time);
+            if (i === 4) {
+                pdf.addPage();
+                i = 0;
+            }
+            let canvas = this.canvas_tag_point_value_over_time.nativeElement;
+            var imgData = canvas.toDataURL("image/jpeg", 1.0);
+            pdf.addImage(imgData, 'JPEG', (i % 2) * width_per_graph, i * height_per_graph + 20);
+            i++;
+        }
+        if (this.final_export_list.indexOf("most_sent_point_user") >= 0) {
+            let most_sent_point_user = {};
+            for (let index in this.data_set_most_sent_point_user[0].data) {
+                most_sent_point_user[this.labels_most_sent_point_user[index]] = this.data_set_most_sent_point_user[0].data[index]; 
+            }
+            export_data.push(most_sent_point_user);
+            if (i === 4) {
+                pdf.addPage();
+                i = 0;
+            }
+            let canvas = this.canvas_tag_most_sent_point_user.nativeElement;
+            var imgData = canvas.toDataURL("image/jpeg", 1.0);
+            pdf.addImage(imgData, 'JPEG', (i % 2) * width_per_graph, i * height_per_graph + 20);
+            i++;
+        }
+        if (this.final_export_list.indexOf("most_received_point_user") >= 0) {
+            let most_received_point_user = {};
+            for (let index in this.data_set_most_received_point_user[0].data) {
+                most_received_point_user[this.labels_most_received_point_user[index]] = this.data_set_most_received_point_user[0].data[index]; 
+            }
+            export_data.push(most_received_point_user);
+            if (i === 4) {
+                pdf.addPage();
+                i = 0;
+            }
+            let canvas = this.canvas_tag_most_received_point_user.nativeElement;
+            var imgData = canvas.toDataURL("image/jpeg", 1.0);
+            pdf.addImage(imgData, 'JPEG', (i % 2) * width_per_graph, i * height_per_graph + 20);
+            i++;
+        }
+        // this.csvService.download(export_data, 'Filename');
+        pdf.save("download.pdf");        
     }
     // convert Json to CSV data in Angular2
     ConvertToCSV(objArray) {

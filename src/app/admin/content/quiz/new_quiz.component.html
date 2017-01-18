@@ -37,6 +37,8 @@
     </div>
     <div class="form-group">
       <input class="form-control" type="text" name="reference_link" formControlName="reference_link" placeholder="Reference Link(optional)">
+      Attachment(Optional)
+      <input class="form-control" type="file" (change)="selectAttachmentFile($event)">
     </div>
     <div>
       Send Message to Users?

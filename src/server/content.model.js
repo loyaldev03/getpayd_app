@@ -16,6 +16,7 @@
 //   email:
 // }
 // reference_link
+// attachment_data
 //]
 
 var mongoose = require('mongoose');
@@ -30,6 +31,7 @@ var contentSchema = mongoose.Schema({
     quizzes: Array,
     company: Object,
     reference_link: String,
+    attachment_data: String,
     date_created: Date,
 });
 

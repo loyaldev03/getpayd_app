@@ -1,31 +1,25 @@
 <div class="container" *ngIf="content">
   <div class="row">
-    <div class="offset-sm-5 col-sm-2">
+    <div class="col-sm-12 title">
       <h1>{{content.title}}</h1>
     </div>
   </div>
   <div class="row">
-    <div class="offset-sm-5 col-sm-2">
-      Rewards: {{content.reward}}
+    <div class="col-sm-12 reward">
+      <h4> Rewards: {{content.reward}} </h4>
     </div>
   </div>
   <div class="row">
-    <div class="offset-sm-5 col-sm-2">
-      End Date: {{content.date_end | date: 'dd/MM/yyyy'}}
+    <div class="col-sm-12 date">
+      <h4> End Date: {{content.date_end | date: 'dd/MM/yyyy'}} </h4>
     </div>
   </div>
-  <div class="row">
-    <div class="offset-sm-5 col-sm-2">
-      <a [href]="content.reference_link">Reference Link</a>
-    </div>
-  </div>
-
-  <div class="row" *ngFor="let question of content.quizzes">
-    <div class="offset-sm-3 col-sm-9">
-      {{content.quizzes.indexOf(question) + 1}} : {{question.question}}
+  <div class="row notice">
+    <div class="col-sm-12">
+      Please review the following content prior to taking the quiz.(<a *ngIf="content.reference_link" [href]="content.reference_link">Reference Link</a>) or PDF attachment to open in browser(<a *ngIf="content.attachment_data" [href]="content.attachment_data">Attachment</a>).      
     </div>
   </div>
   <div class="row take-me-button">
-    <button class="btn btn-primary btn-sm" (click)="to_quiz_activity()">Take me to quiz</button>
+    <button class="btn btn-primary btn-sm" (click)="to_quiz_activity()">Start quiz</button>
   </div>
 </div>

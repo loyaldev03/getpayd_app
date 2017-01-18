@@ -18,6 +18,7 @@ export class BlockChartComponent implements OnInit {
 
     @ViewChild('date_from_el') date_from_el: ElementRef;
     @ViewChild('date_end_el') date_end_el: ElementRef;
+    @ViewChild('canvas') canvasRef: ElementRef;
 
     @Input() public iframe_class: string = "card-primary";
     @Input() public iframe_options: any;
@@ -39,13 +40,16 @@ export class BlockChartComponent implements OnInit {
     @Input() public date_end: Date;
 
     @Output() public changeSettingEvent:EventEmitter<any> = new EventEmitter<any>();
- 
+    @Output() public getCanvasTag: EventEmitter<any> = new EventEmitter<any>();
     public user_name: string;
  
     setUser(e) {
 
     }
-
+    ngAfterViewInit() {
+        console.log(this.canvasRef)
+        this.getCanvasTag.emit(this.canvasRef)   
+    }
     ngOnInit() {
         if (this.user_name != null) {
             this.adminService.getUser(this.user_id).subscribe(

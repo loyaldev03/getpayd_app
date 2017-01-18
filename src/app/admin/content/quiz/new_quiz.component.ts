@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { Department }           from '../../../_models/index';
 import { AdminService }     from '../../../_services/admin.service';
 import { FormGroup, FormControl, Validators, FormBuilder }  from '@angular/forms';
+require ('aws-sdk/dist/aws-sdk');
+declare var AWS: any;
 
 @Component({
     templateUrl: 'new_quiz.component.html',
@@ -26,6 +28,7 @@ export class NewQuizComponent implements OnInit{
   private message_content = new FormControl("");
   private reference_link = new FormControl("");
   private isSendMessage = 1;
+  private attachment_data: any="";
 
   constructor( 
     private router: Router,
@@ -68,15 +71,40 @@ export class NewQuizComponent implements OnInit{
       result.correct_answer = Number(quiz.correct_answer);
       return result;
     });
-    console.log(content);
-    this.adminService.addContent(content)
-    .subscribe(
-        data => {
-            this.router.navigate(['/admin/manage_content']);
-        },
-        error => {
-            console.log("service error");
-        });
+    //attachment data upload
+
+    if (this.attachment_data != "") {
+      console.log("attachment data", this.attachment_data);
+      let file = this.attachment_data;
+      AWS.config.region = "us-east-1";
+      AWS.config.accessKeyId = "AKIAIMSEK6YLJZGNTIJQ";
+      AWS.config.secretAccessKey = "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";
+      let bucket = new AWS.S3({params: {Bucket:"ledgerofthings"}});
+      let params = {Key: file.name, Body: file, ACL: 'public-read'};
+      bucket.upload(params, (error, res) => {
+        if (error) return console.log(error);
+        content.attachment_data = res.Location;
+        this.adminService.addContent(content)
+        .subscribe(
+            data => {
+                this.router.navigate(['/admin/manage_content']);
+            },
+            error => {
+                console.log("service error");
+            });      
+      });
+    }
+    else {
+      content.attachment_data = "";
+      this.adminService.addContent(content)
+      .subscribe(
+          data => {
+              this.router.navigate(['/admin/manage_content']);
+          },
+          error => {
+              console.log("service error");
+          });      
+    }
   }
 
   addQuiz() {
@@ -98,5 +126,8 @@ export class NewQuizComponent implements OnInit{
   toggleSendMessage() {
     this.isSendMessage = 1 - this.isSendMessage;
     console.log("SendMessage", this.isSendMessage);
+  }
+  selectAttachmentFile(fileInput: any) {
+    this.attachment_data = fileInput.target.files[0];
   }
 }

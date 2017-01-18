@@ -36,6 +36,7 @@
     "express": "^4.14.0",
     "font-awesome": "^4.7.0",
     "jquery": "^3.1.1",
+    "json2csv": "^3.7.3",
     "mailgun-js": "^0.8.0",
     "mongoose": "^4.6.6",
     "morgan": "^1.7.0",

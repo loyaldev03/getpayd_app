@@ -20,13 +20,15 @@
         <input #date_end_el type="text" class="form-control" [(ngModel)]="date_end">
       </div>
       <div class="col-sm-6 col-lg-2 export">
-        Export
-        <button class="form-control" (click)="exportChart()">Export</button>
+        <span class="export-span">Export</span>
+        <button class="form-control col-lg-1 export-graph" (click)="exportChartAsGraph()">Graph</button>
+        <button class="form-control col-lg-1 export-csv" (click)="exportChartAsCsv()">CSV</button>
         <ul class="dropdown">
           <li class="fa" *ngFor="let item of export_list" [attr.value]="item.value" (click)="dropdownItemClickEvent($event)">{{item.label}}</li>
         </ul>
       </div>
     </div>
+    <div id="editor"></div>
     <div class="row">
       <div class="col-sm-6 col-lg-3">
         <block_iframe [iframe_class]="'card-primary'" [iframe_options]="lineChart1Options" [iframe_color]="lineChart1Colours" [iframe_type]="lineChart1Type" [iframe_labels]="lineChart1Labels" [iframe_data_sets]="lineChart1Data" [iframe_legent]="lineChart1Legend" [iframe_number]="total_logons" [iframe_title]="'Log Ons'"  [users]="users" [departments]="departments" [user_id]="user_id_log_ons" [department_id]="department_id_log_ons" [date_from]="date_from_log_ons" [date_end]="date_end_log_ons" (changeSettingEvent)="change_setting_for_log_ons($event)"></block_iframe>
@@ -44,51 +46,51 @@
     <div class="row">
       <div class="col-sm-6">
         <block_chart [isDataSet] = "'1'" [iframe_class]="'card-danger'" [iframe_options]="lineChartOptions" [iframe_color]="lineChartColours" [iframe_data_sets]="data_set_top_videos" [iframe_type]="chart_type_top_videos" [iframe_labels]="labels_top_videos" [iframe_legent]="lineChartlegend" [iframe_number]="total_reward_redemptions" [iframe_title]="'Top Videos'"  [users]="users" [departments]="departments" [user_id]="user_id_top_videos" [department_id]="department_id_top_videos" [date_from]="date_from_top_videos" [date_end]="date_end_top_videos"
-        (changeSettingEvent)="change_setting_top_videos($event)"></block_chart>
+        (changeSettingEvent)="change_setting_top_videos($event)" (getCanvasTag)="get_canvas_tag_top_video($event)"></block_chart>
       </div>
       <div class="col-sm-6">
         <block_chart [isDataSet] = "'1'" [iframe_class]="'card-danger'" [iframe_options]="barChartOptions" [iframe_color]="barChartColours" [iframe_data_sets]="data_set_top_quizzes" [iframe_type]="chart_type_top_quizzes" [iframe_labels]="labels_top_quizzes" [iframe_legent]="barChartlegend" [iframe_number]="total_reward_redemptions" [iframe_title]="'Top Quizzes'"  [users]="users" [departments]="departments" [user_id]="user_id_top_quizzes" [department_id]="department_id_top_quizzes" [date_from]="date_from_top_quizzes" [date_end]="date_end_top_quizzes"
-        (changeSettingEvent)="change_setting_top_quizzes($event)"></block_chart>
+        (changeSettingEvent)="change_setting_top_quizzes($event)" (getCanvasTag)="get_canvas_tag_top_quizzes($event)"></block_chart>
       </div>
     </div>
     <div class="row second">
       <div class="col-sm-6">
         <block_chart [isDataSet] = "'0'" [iframe_data]="data_set_most_point_users" [iframe_type]="chart_type_most_point_users" [iframe_labels]="labels_most_point_users" [iframe_title]="'Most Point Users'"  [users]="users" [departments]="departments" [user_id]="user_id_most_point_users" [department_id]="department_id_most_point_users" [date_from]="date_from_most_point_users" [date_end]="date_end_most_point_users"
-        (changeSettingEvent)="change_setting_most_point_users($event)"></block_chart>
+        (changeSettingEvent)="change_setting_most_point_users($event)" (getCanvasTag)="get_canvas_tag_most_point_users($event)"></block_chart>
       </div>
       <div class="col-sm-6">
         <block_chart [isDataSet] = "'1'" [iframe_data_sets]="data_set_most_point_departments" [iframe_type]="chart_type_most_point_departments" [iframe_labels]="labels_most_point_departments" [iframe_title]="'Most Point Departments'"  [users]="users" [departments]="departments" [user_id]="user_id_most_point_departments" [department_id]="department_id_most_point_departments" [date_from]="date_from_most_point_departments" [date_end]="date_end_most_point_departments"
-        (changeSettingEvent)="change_setting_most_point_departments($event)"></block_chart>
+        (changeSettingEvent)="change_setting_most_point_departments($event)" (getCanvasTag)="get_canvas_tag_most_point_departments($event)"></block_chart>
       </div>
     </div>
     <div class="row third">
       <div class="col-sm-6">
         <block_chart [isDataSet] = "'1'" [iframe_class]="'card-danger'" [iframe_options]="barChartOptions" [iframe_color]="barChartColours" [iframe_data_sets]="data_set_number_of_tasks_completed_by_user" [iframe_type]="chart_type_number_of_tasks_completed_by_user" [iframe_labels]="labels_number_of_tasks_completed_by_user" [iframe_legent]="barChartlegend" [iframe_number]="total_reward_redemptions" [iframe_title]="'Number Of Tasks Completed By User'"  [users]="users" [departments]="departments" [user_id]="user_id_number_of_tasks_completed_by_user" [department_id]="department_id_number_of_tasks_completed_by_user" [date_from]="date_from_number_of_tasks_completed_by_user" [date_end]="date_end_number_of_tasks_completed_by_user"
-        (changeSettingEvent)="change_setting_number_of_tasks_completed_by_user($event)"></block_chart>
+        (changeSettingEvent)="change_setting_number_of_tasks_completed_by_user($event)" (getCanvasTag)="get_canvas_tag_number_of_tasks_completed_by_user($event)"></block_chart>
       </div>
       <div class="col-sm-6">
         <block_chart [isDataSet] = "'1'" [iframe_class]="'card-danger'" [iframe_options]="lineChartOptions" [iframe_color]="lineChartColours" [iframe_data_sets]="data_set_most_reward_redemptions" [iframe_type]="chart_type_most_reward_redemptions" [iframe_labels]="labels_most_reward_redemptions" [iframe_legent]="lineChartlegend" [iframe_number]="total_reward_redemptions" [iframe_title]="'Most Reward Redemptions'"  [users]="users" [departments]="departments" [user_id]="user_id_most_reward_redemptions" [department_id]="department_id_most_reward_redemptions" [date_from]="date_from_most_reward_redemptions" [date_end]="date_end_most_reward_redemptions"
-        (changeSettingEvent)="change_setting_most_reward_redemptions($event)"></block_chart>
+        (changeSettingEvent)="change_setting_most_reward_redemptions($event)" (getCanvasTag)="get_canvas_tag_most_reward_redemptions($event)"></block_chart>
       </div>
     </div>
     <div class="row third">
       <div class="col-sm-6">
         <block_chart [isDataSet] = "'0'" [iframe_data]="data_set_average_point_of_assignment" [iframe_type]="chart_type_average_point_of_assignment" [iframe_labels]="labels_average_point_of_assignment" [iframe_title]="'Average Point of Assignment'"  [users]="users" [departments]="departments" [user_id]="user_id_average_point_of_assignment" [department_id]="department_id_average_point_of_assignment" [date_from]="date_from_average_point_of_assignment" [date_end]="date_end_average_point_of_assignment"
-        (changeSettingEvent)="change_setting_average_point_of_assignment($event)"></block_chart>
+        (changeSettingEvent)="change_setting_average_point_of_assignment($event)" (getCanvasTag)="get_canvas_tag_average_point_of_assignment($event)"></block_chart>
       </div>
       <div class="col-sm-6">
         <block_chart [isDataSet] = "'1'" [iframe_class]="'card-danger'" [iframe_options]="lineChartOptions" [iframe_color]="lineChartColours" [iframe_data_sets]="data_set_point_value_over_time" [iframe_type]="chart_type_point_value_over_time" [iframe_labels]="labels_point_value_over_time" [iframe_legent]="lineChartlegend" [iframe_number]="total_reward_redemptions" [iframe_title]="'Point Value Over Time'"  [users]="users" [departments]="departments" [user_id]="user_id_point_value_over_time" [department_id]="department_id_point_value_over_time" [date_from]="date_from_point_value_over_time" [date_end]="date_end_point_value_over_time"
-        (changeSettingEvent)="change_setting_point_value_over_time($event)"></block_chart>
+        (changeSettingEvent)="change_setting_point_value_over_time($event)" (getCanvasTag)="get_canvas_tag_point_value_over_time($event)"></block_chart>
       </div>
     </div>
     <div class="row third">
       <div class="col-sm-6">
         <block_chart [isDataSet] = "'1'" [iframe_class]="'card-danger'" [iframe_options]="lineChartOptions" [iframe_color]="lineChartColours" [iframe_data_sets]="data_set_most_sent_point_user" [iframe_type]="chart_type_most_sent_point_user" [iframe_labels]="labels_most_sent_point_user" [iframe_legent]="lineChartlegend" [iframe_number]="total_reward_redemptions" [iframe_title]="'Most Sent Point User'"  [users]="users" [departments]="departments" [user_id]="user_id_most_sent_point_user" [department_id]="department_id_most_sent_point_user" [date_from]="date_from_most_sent_point_user" [date_end]="date_end_most_sent_point_user"
-        (changeSettingEvent)="change_setting_most_sent_point_user($event)"></block_chart>
+        (changeSettingEvent)="change_setting_most_sent_point_user($event)" (getCanvasTag)="get_canvas_tag_most_sent_point_user($event)"></block_chart>
       </div>
       <div class="col-sm-6">
         <block_chart [isDataSet] = "'1'" [iframe_class]="'card-danger'" [iframe_options]="lineChartOptions" [iframe_color]="lineChartColours" [iframe_data_sets]="data_set_most_received_point_user" [iframe_type]="chart_type_most_received_point_user" [iframe_labels]="labels_most_received_point_user" [iframe_legent]="lineChartlegend" [iframe_number]="total_reward_redemptions" [iframe_title]="'Most Received Point User'"  [users]="users" [departments]="departments" [user_id]="user_id_most_received_point_user" [department_id]="department_id_most_received_point_user" [date_from]="date_from_most_received_point_user" [date_end]="date_end_most_received_point_user"
-        (changeSettingEvent)="change_setting_most_received_point_user($event)"></block_chart>
+        (changeSettingEvent)="change_setting_most_received_point_user($event)" (getCanvasTag)="get_canvas_tag_most_received_point_user($event)"></block_chart>
       </div>
     </div>
     <users_for_analytics [company_id]="company_id" [department_id]="department_id"></users_for_analytics>

@@ -198,6 +198,7 @@ db.once('open', function() {
   // create content
   app.post('/content', function(req, res) {
     var obj = new Content(req.body);
+    console.log("content------------------------------", req.body);
     obj.date_created = new Date();
     obj.save(function(err, obj) {
       if(err) return console.error(err);
