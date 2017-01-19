@@ -643,7 +643,7 @@ export class AnalyticsComponent implements OnInit {
             xAxes: [{
                 display: true,          
                 ticks: {
-                  fontColor: "rgb(255,0,0)" // this here
+                  fontColor: "rgb(0,0,255)" // this here
                 },
                 gridLines:{
                   color:"rgba(255,0,0,0.5)",
@@ -653,7 +653,7 @@ export class AnalyticsComponent implements OnInit {
             yAxes: [{
                 display: true,
                 ticks: {
-                  fontColor: "rgb(255,0,0)" // this here
+                  fontColor: "rgb(0,0,255)" // this here
                 },
                 gridLines:{
                   color:"rgba(255,0,0,0.5)",
@@ -692,7 +692,7 @@ export class AnalyticsComponent implements OnInit {
             xAxes: [{
                 display: true,          
                 ticks: {
-                  fontColor: "rgb(255,0,0)" // this here
+                  fontColor: "rgb(0,0,255)" // this here
                 },
                 gridLines:{
                   color:"rgba(255,0,0,0.5)",
@@ -702,7 +702,7 @@ export class AnalyticsComponent implements OnInit {
             yAxes: [{
                 display: true,
                 ticks: {
-                  fontColor: "rgb(255,0,0)" // this here
+                  fontColor: "rgb(0,0,255)" // this here
                 },
                 gridLines:{
                   color:"rgba(255,0,0,0.5)",
@@ -927,8 +927,8 @@ export class AnalyticsComponent implements OnInit {
             }
             export_data.push(top_videos);
             let canvas = this.canvas_tag_top_videos.nativeElement;
-            var imgData = canvas.toDataURL("image/jpeg", 1.0);
-            pdf.addImage(imgData, 'JPEG', (i % 2) * width_per_graph, i * height_per_graph + 20);
+            var imgData = canvas.toDataURL("image/png", 1.0);
+            pdf.addImage(imgData, 'png', 50, i * height_per_graph + 20);
             i++;
         }
         if (this.final_export_list.indexOf("top_quizzes") >= 0) {
@@ -938,8 +938,8 @@ export class AnalyticsComponent implements OnInit {
             }
             export_data.push(top_quizzes);
             let canvas = this.canvas_tag_top_quizzes.nativeElement;
-            var imgData = canvas.toDataURL("image/jpeg", 1.0);
-            pdf.addImage(imgData, 'JPEG', (i % 2) * width_per_graph, i * height_per_graph + 20);
+            var imgData = canvas.toDataURL("image/png", 1.0);
+            pdf.addImage(imgData, 'png', 50, i * height_per_graph + 20);
             i++;
         }
         if (this.final_export_list.indexOf("most_point_users") >= 0) {
@@ -949,8 +949,8 @@ export class AnalyticsComponent implements OnInit {
             }
             export_data.push(most_point_users);
             let canvas = this.canvas_tag_most_point_users.nativeElement;
-            var imgData = canvas.toDataURL("image/jpeg", 1.0);
-            pdf.addImage(imgData, 'JPEG', (i % 2) * width_per_graph, i * height_per_graph + 20);
+            var imgData = canvas.toDataURL("image/png", 1.0);
+            pdf.addImage(imgData, 'png', 50, i * height_per_graph + 20);
             i++;
         }
         if (this.final_export_list.indexOf("most_point_departments") >= 0) {
@@ -964,8 +964,8 @@ export class AnalyticsComponent implements OnInit {
                 i = 0;
             }
             let canvas = this.canvas_tag_most_point_departments.nativeElement;
-            var imgData = canvas.toDataURL("image/jpeg", 1.0);
-            pdf.addImage(imgData, 'JPEG', (i % 2) * width_per_graph, i * height_per_graph + 20);
+            var imgData = canvas.toDataURL("image/png", 1.0);
+            pdf.addImage(imgData, 'png', 50, i * height_per_graph + 20);
             i++;
         }
         if (this.final_export_list.indexOf("number_of_tasks_completed_by_user") >= 0) {
@@ -979,8 +979,8 @@ export class AnalyticsComponent implements OnInit {
                 i = 0;
             }
             let canvas = this.canvas_tag_number_of_tasks_completed_by_user.nativeElement;
-            var imgData = canvas.toDataURL("image/jpeg", 1.0);
-            pdf.addImage(imgData, 'JPEG', (i % 2) * width_per_graph, i * height_per_graph + 20);
+            var imgData = canvas.toDataURL("image/png", 1.0);
+            pdf.addImage(imgData, 'png', 50, i * height_per_graph + 20);
             i++;
         }
         if (this.final_export_list.indexOf("most_reward_redemptions") >= 0) {
@@ -994,14 +994,14 @@ export class AnalyticsComponent implements OnInit {
                 i = 0;
             }
             let canvas = this.canvas_tag_most_reward_redemptions.nativeElement;
-            var imgData = canvas.toDataURL("image/jpeg", 1.0);
-            pdf.addImage(imgData, 'JPEG', (i % 2) * width_per_graph, i * height_per_graph + 20);
+            var imgData = canvas.toDataURL("image/png", 1.0);
+            pdf.addImage(imgData, 'png', 50, i * height_per_graph + 20);
             i++;
         }        
         if (this.final_export_list.indexOf("average_point_of_assignment") >= 0) {
             let average_point_of_assignment = {};
-            for (let index in this.data_set_average_point_of_assignment[0].data) {
-                average_point_of_assignment[this.labels_average_point_of_assignment[index]] = this.data_set_average_point_of_assignment[0].data[index]; 
+            for (let index in this.data_set_average_point_of_assignment) {
+                average_point_of_assignment[this.labels_average_point_of_assignment[index]] = this.data_set_average_point_of_assignment[index]; 
             }
             export_data.push(average_point_of_assignment);
             if (i === 4) {
@@ -1009,8 +1009,8 @@ export class AnalyticsComponent implements OnInit {
                 i = 0;
             }
             let canvas = this.canvas_tag_average_point_of_assignment.nativeElement;
-            var imgData = canvas.toDataURL("image/jpeg", 1.0);
-            pdf.addImage(imgData, 'JPEG', (i % 2) * width_per_graph, i * height_per_graph + 20);
+            var imgData = canvas.toDataURL("image/png", 1.0);
+            pdf.addImage(imgData, 'png', 50, i * height_per_graph + 20);
             i++;
         }
         if (this.final_export_list.indexOf("point_value_over_time") >= 0) {
@@ -1024,8 +1024,8 @@ export class AnalyticsComponent implements OnInit {
                 i = 0;
             }
             let canvas = this.canvas_tag_point_value_over_time.nativeElement;
-            var imgData = canvas.toDataURL("image/jpeg", 1.0);
-            pdf.addImage(imgData, 'JPEG', (i % 2) * width_per_graph, i * height_per_graph + 20);
+            var imgData = canvas.toDataURL("image/png", 1.0);
+            pdf.addImage(imgData, 'png', 50, i * height_per_graph + 20);
             i++;
         }
         if (this.final_export_list.indexOf("most_sent_point_user") >= 0) {
@@ -1039,8 +1039,8 @@ export class AnalyticsComponent implements OnInit {
                 i = 0;
             }
             let canvas = this.canvas_tag_most_sent_point_user.nativeElement;
-            var imgData = canvas.toDataURL("image/jpeg", 1.0);
-            pdf.addImage(imgData, 'JPEG', (i % 2) * width_per_graph, i * height_per_graph + 20);
+            var imgData = canvas.toDataURL("image/png", 1.0);
+            pdf.addImage(imgData, 'png', 50, i * height_per_graph + 20);
             i++;
         }
         if (this.final_export_list.indexOf("most_received_point_user") >= 0) {
@@ -1054,8 +1054,8 @@ export class AnalyticsComponent implements OnInit {
                 i = 0;
             }
             let canvas = this.canvas_tag_most_received_point_user.nativeElement;
-            var imgData = canvas.toDataURL("image/jpeg", 1.0);
-            pdf.addImage(imgData, 'JPEG', (i % 2) * width_per_graph, i * height_per_graph + 20);
+            var imgData = canvas.toDataURL("image/png", 1.0);
+            pdf.addImage(imgData, 'png', 50, i * height_per_graph + 20);
             i++;
         }
         // let csv_data = json2csv({data: export_data, flatten: true});
@@ -1079,7 +1079,7 @@ export class AnalyticsComponent implements OnInit {
         // var imgData = canvas.toDataURL("image/jpeg", 1.0);
         // pdf.addImage(imgData, 'JPEG', 0, 0);
         var pdf = new jsPDF();
-        let height_per_graph: number = 60;
+        let height_per_graph: number = 70;
         let width_per_graph: number = 100; 
         let i: number = 0;
         let export_data = [];
@@ -1090,8 +1090,8 @@ export class AnalyticsComponent implements OnInit {
             }
             export_data.push(top_videos);
             let canvas = this.canvas_tag_top_videos.nativeElement;
-            var imgData = canvas.toDataURL("image/jpeg", 1.0);
-            pdf.addImage(imgData, 'JPEG', (i % 2) * width_per_graph, i * height_per_graph + 20);
+            var imgData = canvas.toDataURL("image/png", 1.0);
+            pdf.addImage(imgData, 'png', 50, i * height_per_graph + 20);
             i++;
         }
         if (this.final_export_list.indexOf("top_quizzes") >= 0) {
@@ -1101,8 +1101,8 @@ export class AnalyticsComponent implements OnInit {
             }
             export_data.push(top_quizzes);
             let canvas = this.canvas_tag_top_quizzes.nativeElement;
-            var imgData = canvas.toDataURL("image/jpeg", 1.0);
-            pdf.addImage(imgData, 'JPEG', (i % 2) * width_per_graph, i * height_per_graph + 20);
+            var imgData = canvas.toDataURL("image/png", 1.0);
+            pdf.addImage(imgData, 'png', 50, i * height_per_graph + 20);
             i++;
         }
         if (this.final_export_list.indexOf("most_point_users") >= 0) {
@@ -1112,8 +1112,8 @@ export class AnalyticsComponent implements OnInit {
             }
             export_data.push(most_point_users);
             let canvas = this.canvas_tag_most_point_users.nativeElement;
-            var imgData = canvas.toDataURL("image/jpeg", 1.0);
-            pdf.addImage(imgData, 'JPEG', (i % 2) * width_per_graph, i * height_per_graph + 20);
+            var imgData = canvas.toDataURL("image/png", 1.0);
+            pdf.addImage(imgData, 'png', 50, i * height_per_graph + 20);
             i++;
         }
         if (this.final_export_list.indexOf("most_point_departments") >= 0) {
@@ -1127,8 +1127,8 @@ export class AnalyticsComponent implements OnInit {
                 i = 0;
             }
             let canvas = this.canvas_tag_most_point_departments.nativeElement;
-            var imgData = canvas.toDataURL("image/jpeg", 1.0);
-            pdf.addImage(imgData, 'JPEG', (i % 2) * width_per_graph, i * height_per_graph + 20);
+            var imgData = canvas.toDataURL("image/png", 1.0);
+            pdf.addImage(imgData, 'png', 50, i * height_per_graph + 20);
             i++;
         }
         if (this.final_export_list.indexOf("number_of_tasks_completed_by_user") >= 0) {
@@ -1142,8 +1142,8 @@ export class AnalyticsComponent implements OnInit {
                 i = 0;
             }
             let canvas = this.canvas_tag_number_of_tasks_completed_by_user.nativeElement;
-            var imgData = canvas.toDataURL("image/jpeg", 1.0);
-            pdf.addImage(imgData, 'JPEG', (i % 2) * width_per_graph, i * height_per_graph + 20);
+            var imgData = canvas.toDataURL("image/png", 1.0);
+            pdf.addImage(imgData, 'png', 50, i * height_per_graph + 20);
             i++;
         }
         if (this.final_export_list.indexOf("most_reward_redemptions") >= 0) {
@@ -1157,14 +1157,14 @@ export class AnalyticsComponent implements OnInit {
                 i = 0;
             }
             let canvas = this.canvas_tag_most_reward_redemptions.nativeElement;
-            var imgData = canvas.toDataURL("image/jpeg", 1.0);
-            pdf.addImage(imgData, 'JPEG', (i % 2) * width_per_graph, i * height_per_graph + 20);
+            var imgData = canvas.toDataURL("image/png", 1.0);
+            pdf.addImage(imgData, 'png', 50, i * height_per_graph + 20);
             i++;
         }        
         if (this.final_export_list.indexOf("average_point_of_assignment") >= 0) {
             let average_point_of_assignment = {};
-            for (let index in this.data_set_average_point_of_assignment[0].data) {
-                average_point_of_assignment[this.labels_average_point_of_assignment[index]] = this.data_set_average_point_of_assignment[0].data[index]; 
+            for (let index in this.data_set_average_point_of_assignment) {
+                average_point_of_assignment[this.labels_average_point_of_assignment[index]] = this.data_set_average_point_of_assignment[index]; 
             }
             export_data.push(average_point_of_assignment);
             if (i === 4) {
@@ -1172,8 +1172,8 @@ export class AnalyticsComponent implements OnInit {
                 i = 0;
             }
             let canvas = this.canvas_tag_average_point_of_assignment.nativeElement;
-            var imgData = canvas.toDataURL("image/jpeg", 1.0);
-            pdf.addImage(imgData, 'JPEG', (i % 2) * width_per_graph, i * height_per_graph + 20);
+            var imgData = canvas.toDataURL("image/png", 1.0);
+            pdf.addImage(imgData, 'png', 50, i * height_per_graph + 20);
             i++;
         }
         if (this.final_export_list.indexOf("point_value_over_time") >= 0) {
@@ -1187,8 +1187,8 @@ export class AnalyticsComponent implements OnInit {
                 i = 0;
             }
             let canvas = this.canvas_tag_point_value_over_time.nativeElement;
-            var imgData = canvas.toDataURL("image/jpeg", 1.0);
-            pdf.addImage(imgData, 'JPEG', (i % 2) * width_per_graph, i * height_per_graph + 20);
+            var imgData = canvas.toDataURL("image/png", 1.0);
+            pdf.addImage(imgData, 'png', 50, i * height_per_graph + 20);
             i++;
         }
         if (this.final_export_list.indexOf("most_sent_point_user") >= 0) {
@@ -1202,8 +1202,8 @@ export class AnalyticsComponent implements OnInit {
                 i = 0;
             }
             let canvas = this.canvas_tag_most_sent_point_user.nativeElement;
-            var imgData = canvas.toDataURL("image/jpeg", 1.0);
-            pdf.addImage(imgData, 'JPEG', (i % 2) * width_per_graph, i * height_per_graph + 20);
+            var imgData = canvas.toDataURL("image/png", 1.0);
+            pdf.addImage(imgData, 'png', 50, i * height_per_graph + 20);
             i++;
         }
         if (this.final_export_list.indexOf("most_received_point_user") >= 0) {
@@ -1217,8 +1217,8 @@ export class AnalyticsComponent implements OnInit {
                 i = 0;
             }
             let canvas = this.canvas_tag_most_received_point_user.nativeElement;
-            var imgData = canvas.toDataURL("image/jpeg", 1.0);
-            pdf.addImage(imgData, 'JPEG', (i % 2) * width_per_graph, i * height_per_graph + 20);
+            var imgData = canvas.toDataURL("image/png", 1.0);
+            pdf.addImage(imgData, 'png', 50, i * height_per_graph + 20);
             i++;
         }
         // this.csvService.download(export_data, 'Filename');

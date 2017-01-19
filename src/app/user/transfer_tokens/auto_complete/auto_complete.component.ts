@@ -47,7 +47,7 @@ const KEY_TAB = 9;
             </div>
         </div>  
         `,
-  	styleUrls: [ 'auto_complete.component.css' ],
+  	styleUrls: [ 'auto_complete.component.scss' ],
 
 })
 export class AutoCompleteComponent implements OnInit {

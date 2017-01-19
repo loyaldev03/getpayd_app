@@ -3,7 +3,6 @@
     50%  {background-color:#fefefe; }
     100% {background-color:white;  }
 }
-
 .autocomplete{
 }   
 .autocomplete input{
@@ -51,4 +50,11 @@
 }*/
 .autocomplete .suggestions ul li:hover a .stressWord{
     font-weight: bold;
+}
+ul {
+    li {
+        padding-left: 10px;
+    }
+    background: white;
+    z-index: 1000;
 }
