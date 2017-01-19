@@ -29,6 +29,7 @@ export class NewQuizComponent implements OnInit{
   private reference_link = new FormControl("");
   private isSendMessage = 1;
   private attachment_data: any="";
+  private isUploading = false;
 
   constructor( 
     private router: Router,
@@ -74,6 +75,7 @@ export class NewQuizComponent implements OnInit{
     //attachment data upload
 
     if (this.attachment_data != "") {
+      this.isUploading = true;
       console.log("attachment data", this.attachment_data);
       let file = this.attachment_data;
       AWS.config.region = "us-east-1";
@@ -87,6 +89,7 @@ export class NewQuizComponent implements OnInit{
         this.adminService.addContent(content)
         .subscribe(
             data => {
+                this.isUploading = false;
                 this.router.navigate(['/admin/manage_content']);
             },
             error => {
