@@ -30,7 +30,7 @@
     </div>
     <div id="editor"></div>
     <div class="row">
-      <div class="col-sm-6 col-lg-3">
+      <div class="col-sm-6 col-lg-3" id="exportthis" exportthis>
         <block_iframe [iframe_class]="'card-primary'" [iframe_options]="lineChart1Options" [iframe_color]="lineChart1Colours" [iframe_type]="lineChart1Type" [iframe_labels]="lineChart1Labels" [iframe_data_sets]="lineChart1Data" [iframe_legent]="lineChart1Legend" [iframe_number]="total_logons" [iframe_title]="'Log Ons'"  [users]="users" [departments]="departments" [user_id]="user_id_log_ons" [department_id]="department_id_log_ons" [date_from]="date_from_log_ons" [date_end]="date_end_log_ons" (changeSettingEvent)="change_setting_for_log_ons($event)"></block_iframe>
       </div>
       <div class="col-sm-6 col-lg-3">

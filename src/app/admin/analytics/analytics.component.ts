@@ -6,6 +6,7 @@ import {CsvService} from "angular2-json2csv";
 declare let jsPDF;
 import 'rxjs/Rx' ;
 declare var jQuery: any;
+declare var html2canvas: any;
 
 @Component({
     templateUrl: 'analytics.component.html',
@@ -21,7 +22,7 @@ export class AnalyticsComponent implements OnInit {
     @ViewChild('date_from_el') date_from_el: ElementRef;
     @ViewChild('date_end_el') date_end_el: ElementRef;
     @ViewChild('content') content: ElementRef;
-
+    @ViewChild('exportthis') exportthis: ElementRef;
     public total_logons: number = 0;
     public company_id: string;
     public department_id: string;
@@ -267,7 +268,6 @@ export class AnalyticsComponent implements OnInit {
                     fontSize: 2,
                     fontColor: 'transparent',
                 }
-
             }],
             yAxes: [{
                 display: false,
@@ -551,43 +551,178 @@ export class AnalyticsComponent implements OnInit {
         {data: [18, 48, 77, 9, 100, 27, 40], label: 'Series C'}
     ];
     public labels_top_videos:Array<any> = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-    public lineChartOptions:any = {
-        animation: false,
-        responsive: true,        
-    };
-    public lineChartColours:Array<any> = [
+    // public lineChartOptions:any = {
+    //     animation: false,
+    //     responsive: true,        
+    //     defaultFontColor: 'rgba(255,0,0,1)',
+    //     legend: {
+    //         display: true,
+    //         labels: {
+    //             fontColor: 'rgb(255,0,0)'
+    //         }
+    //     },
+    //     scales: {
+    //         xAxes: [{
+    //             gridLines: {
+    //                 show: true,
+    //                 color: "F3F3F3",
+    //             },
+    //             // display: true,
+    //             ticks: {
+    //               fontColor: "rgb(255,0,0)" // this here
+    //             },
+    //         }],
+    //         yAxes: [{
+    //             gridLines: {
+    //                 show: true,
+    //                 color: "F3F3F3",
+    //             },
+    //         //     display: true,
+    //             ticks: {
+    //               fontColor: "rgb(255,0,0)" // this here
+    //             },
+    //         }],
+    //         // scaleLineColor: "red"
+    //     },
+    // };
+    // public lineChartColours:Array<any> = [
+    //     { // grey
+    //         backgroundColor: 'rgba(255,0,0,1)',
+    //         borderColor: 'rgba(255,0,0,1)',
+    //         pointBackgroundColor: 'rgba(255,0,0,1)',
+    //         pointBorderColor: 'rgba(255,0,0,1)',
+    //         pointHoverBackgroundColor: 'rgba(255,0,0,1)',
+    //         pointHoverBorderColor: 'rgba(255,0,0,1)'
+    //     },
+    //     { // dark grey
+    //         backgroundColor: 'rgba(255,0,0,1)',
+    //         borderColor: 'rgba(255,0,0,1)',
+    //         pointBackgroundColor: 'rgba(255,0,0,1)',
+    //         pointBorderColor: 'rgba(255,0,0,1)',
+    //         pointHoverBackgroundColor: 'rgba(255,0,0,1)',
+    //         pointHoverBorderColor: 'rgba(255,0,0,1)'
+    //     },
+    //     { // grey
+    //         backgroundColor: 'rgba(255,0,0,1)',
+    //         borderColor: 'rgba(255,0,0,1)',
+    //         pointBackgroundColor: 'rgba(255,0,0,1)',
+    //         pointBorderColor: 'rgba(255,0,0,1)',
+    //         pointHoverBackgroundColor: 'rgba(255,0,0,1)',
+    //         pointHoverBorderColor: 'rgba(255,0,0,1)'
+    //     }
+    // ];
+        public lineChartColours:Array<any> = [
         { // grey
-            backgroundColor: 'rgba(255,0,0,1)',
-            borderColor: 'rgba(255,0,0,1)',
-            pointBackgroundColor: 'rgba(255,0,0,1)',
-            pointBorderColor: 'rgba(255,0,0,1)',
-            pointHoverBackgroundColor: 'rgba(255,0,0,1)',
-            pointHoverBorderColor: 'rgba(255,0,0,1)'
+            backgroundColor: 'rgba(148,159,177,0.2)',
+            borderColor: 'rgba(148,159,177,1)',
+            pointBackgroundColor: 'rgba(148,159,177,1)',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgba(148,159,177,0.8)'
         },
         { // dark grey
-            backgroundColor: 'rgba(255,0,0,1)',
-            borderColor: 'rgba(255,0,0,1)',
-            pointBackgroundColor: 'rgba(255,0,0,1)',
-            pointBorderColor: 'rgba(255,0,0,1)',
-            pointHoverBackgroundColor: 'rgba(255,0,0,1)',
-            pointHoverBorderColor: 'rgba(255,0,0,1)'
+            backgroundColor: 'rgba(77,83,96,0.2)',
+            borderColor: 'rgba(77,83,96,1)',
+            pointBackgroundColor: 'rgba(77,83,96,1)',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgba(77,83,96,1)'
         },
         { // grey
-            backgroundColor: 'rgba(255,0,0,1)',
-            borderColor: 'rgba(255,0,0,1)',
-            pointBackgroundColor: 'rgba(255,0,0,1)',
-            pointBorderColor: 'rgba(255,0,0,1)',
-            pointHoverBackgroundColor: 'rgba(255,0,0,1)',
-            pointHoverBorderColor: 'rgba(255,0,0,1)'
+            backgroundColor: 'rgba(148,159,177,0.2)',
+            borderColor: 'rgba(148,159,177,1)',
+            pointBackgroundColor: 'rgba(148,159,177,1)',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgba(148,159,177,0.8)'
         }
     ];
+    public lineChartOptions:any = {
+        // maintainAspectRatio: false,
+        scales: {
+            xAxes: [{
+                display: true,          
+                ticks: {
+                  fontColor: "rgb(255,0,0)" // this here
+                },
+                gridLines:{
+                  color:"rgba(255,0,0,0.5)",
+                  zeroLineColor:"rgba(255,0,0,0.5)"
+                }
+            }],
+            yAxes: [{
+                display: true,
+                ticks: {
+                  fontColor: "rgb(255,0,0)" // this here
+                },
+                gridLines:{
+                  color:"rgba(255,0,0,0.5)",
+                  zeroLineColor:"rgba(255,0,0,0.5)"
+                }
+            }],
+        },
+        elements: {
+            line: {
+                borderWidth: 2
+            },
+            point: {
+                radius: 0,
+                hitRadius: 10,
+                hoverRadius: 4,
+            },
+        },
+        legend: {
+            display: true,
+        }
+    };
+    // public lineChartColours:Array<any> = [
+    //     {
+    //         backgroundColor: 'rgba(0,0,0,1)',
+    //         borderColor: 'rgba(0,0,0,1)',
+    //         defaultFontColor: 'rgba(255,0,0,1)'
+    //     }
+    // ];
     public lineChartLegend:boolean = true;
     public lineChartType:string = 'line';
 
     // barChart
     public barChartOptions:any = {
-        scaleShowVerticalLines: false,
-        responsive: true
+        // maintainAspectRatio: false,
+        scales: {
+            xAxes: [{
+                display: true,          
+                ticks: {
+                  fontColor: "rgb(255,0,0)" // this here
+                },
+                gridLines:{
+                  color:"rgba(255,0,0,0.5)",
+                  zeroLineColor:"rgba(255,0,0,0.5)"
+                }
+            }],
+            yAxes: [{
+                display: true,
+                ticks: {
+                  fontColor: "rgb(255,0,0)" // this here
+                },
+                gridLines:{
+                  color:"rgba(255,0,0,0.5)",
+                  zeroLineColor:"rgba(255,0,0,0.5)"
+                }
+            }],
+        },
+        elements: {
+            line: {
+                borderWidth: 2
+            },
+            point: {
+                radius: 0,
+                hitRadius: 10,
+                hoverRadius: 4,
+            },
+        },
+        legend: {
+            display: true,
+        }
     };
     public labels_top_quizzes:string[] = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
     public barChartType:string = 'bar';
@@ -924,7 +1059,20 @@ export class AnalyticsComponent implements OnInit {
             i++;
         }
         // let csv_data = json2csv({data: export_data, flatten: true});
+
         this.csvService.download(export_data, 'Filename');
+    }
+    getCsvFromNestedJson(json_data) {
+        let row="";
+        for (let i in json_data) {
+            for (let index in json_data[i]) {
+                let data = json_data[i][index];
+                if(typeof data === 'object'){
+                    data = data.name;
+                }
+                row += '"' + data + '",';
+            }            
+        }
     }
     exportChartAsGraph(){
         // let canvas = this.canvas_tag_top_videos.nativeElement;

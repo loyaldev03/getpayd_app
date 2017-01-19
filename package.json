@@ -23,6 +23,7 @@
     "@angular/platform-browser": "~2.1.2",
     "@angular/platform-browser-dynamic": "~2.1.2",
     "@angular/router": "~3.1.2",
+    "@types/html2canvas": "^0.5.33",
     "@types/jquery": "^2.0.39",
     "angular2-json2csv": "^1.1.2",
     "angular2-select": "^1.0.0-beta.2",

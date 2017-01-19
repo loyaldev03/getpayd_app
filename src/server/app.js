@@ -686,14 +686,14 @@ db.once('open', function() {
     console.log(date_end);
 
     if (req.params.department_id != "undefined"){
-      User.aggregate([{$match: {'company._id':req.params.company_id, 'department._id': req.params.department_id, date_joined: {$gte: date_from, $lte: date_end}}}, {$sort: {available_tokens: -1}}, {$limit: 10}], function(err, res1){
+      User.aggregate([{$match: {'company._id':req.params.company_id, 'department._id': req.params.department_id}}, {$sort: {available_tokens: -1}}, {$limit: 10}], function(err, res1){
         if (err) return console.log(err);
         console.log("users", res1);
         res.json(res1);
       });      
     }
     else {
-      User.aggregate([{$match: {'company._id':req.params.company_id, date_joined: {$gte: date_from, $lte: date_end}}}, {$sort: {available_tokens: -1}}, {$limit: 10}], function(err, res1){
+      User.aggregate([{$match: {'company._id':req.params.company_id}}, {$sort: {available_tokens: -1}}, {$limit: 10}], function(err, res1){
         if (err) return console.log(err);
         console.log("users", res1);
         res.json(res1);
@@ -705,7 +705,7 @@ db.once('open', function() {
     var date_from = new Date(req.params.date_from);
     var date_end = new Date(req.params.date_end);
 
-    User.aggregate([{$match: {'company._id':req.params.company_id, date_joined: {$gte: date_from, $lte: date_end}}}, {$group: {_id: '$department.department', total: {$sum : '$available_tokens'}}}, {$sort: {total: -1}}, {$limit: 10}], function(err, res1){
+    User.aggregate([{$match: {'company._id':req.params.company_id}}, {$group: {_id: '$department.department', total: {$sum : '$available_tokens'}}}, {$sort: {total: -1}}, {$limit: 10}], function(err, res1){
       if (err) return console.log(err);
       console.log("departments", res1);
       res.json(res1);
