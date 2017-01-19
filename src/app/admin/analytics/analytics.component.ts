@@ -1581,21 +1581,21 @@ export class AnalyticsComponent implements OnInit {
         this.chart_for_reward_redemptions();
     }
     chart_for_top_videos() {
-        // this.adminService.getTopVideos(this.company_id, this.department_id_top_videos, this.user_id_top_videos, this.date_from_top_videos, this.date_end_top_videos).subscribe(
-        //     data => {
-        //         console.log("get top videos", data);
-        //         this.data_set_top_videos = [
-        //             {data: [], label: 'Top Videos'},
-        //         ];
-        //         this.labels_top_videos = [];
-        //         for (let item of data) {
-        //             this.data_set_top_videos[0].data.push(item.total);
-        //             this.labels_top_videos.push(item._id);
-        //         }
-        //     },
-        //     error => {
-        //         console.log(error);
-        //     });
+        this.adminService.getTopVideos(this.company_id, this.department_id_top_videos, this.user_id_top_videos, this.date_from_top_videos, this.date_end_top_videos).subscribe(
+            data => {
+                console.log("get top videos", data);
+                this.data_set_top_videos = [
+                    {data: [], label: 'Top Videos'},
+                ];
+                this.labels_top_videos = [];
+                for (let item of data) {
+                    this.data_set_top_videos[0].data.push(item.total);
+                    this.labels_top_videos.push(item._id);
+                }
+            },
+            error => {
+                console.log(error);
+            });
     }
     change_setting_top_videos(e) {
         console.log(e);
