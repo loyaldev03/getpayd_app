@@ -3,6 +3,7 @@ import { ChartsModule }             from 'ng2-charts/ng2-charts';
 import { AdminService } from '../../_services/admin.service';            
 import { UserService } from '../../_services/user.service';         
 import {CsvService} from "angular2-json2csv";
+
 declare let jsPDF;
 import 'rxjs/Rx' ;
 declare var jQuery: any;
@@ -919,13 +920,13 @@ export class AnalyticsComponent implements OnInit {
         let height_per_graph: number = 60;
         let width_per_graph: number = 100; 
         let i: number = 0;
-        let export_data = [];
+        let export_data = {};
         if (this.final_export_list.indexOf("top_videos") >= 0) {
             let top_videos = {};
             for (let index in this.data_set_top_videos[0].data) {
                 top_videos[this.labels_top_videos[index]] = this.data_set_top_videos[0].data[index]; 
             }
-            export_data.push(top_videos);
+            export_data["top_vieos"] = top_videos;
             let canvas = this.canvas_tag_top_videos.nativeElement;
             var imgData = canvas.toDataURL("image/png", 1.0);
             pdf.addImage(imgData, 'png', 50, i * height_per_graph + 20);
@@ -936,7 +937,7 @@ export class AnalyticsComponent implements OnInit {
             for (let index in this.data_set_top_quizzes[0].data) {
                 top_quizzes[this.labels_top_quizzes[index]] = this.data_set_top_quizzes[0].data[index]; 
             }
-            export_data.push(top_quizzes);
+            export_data["top_quizzes"] = top_quizzes;
             let canvas = this.canvas_tag_top_quizzes.nativeElement;
             var imgData = canvas.toDataURL("image/png", 1.0);
             pdf.addImage(imgData, 'png', 50, i * height_per_graph + 20);
@@ -947,7 +948,7 @@ export class AnalyticsComponent implements OnInit {
             for (let index in this.data_set_most_point_users) {
                 most_point_users[this.labels_most_point_users[index]] = this.data_set_most_point_users[index]; 
             }
-            export_data.push(most_point_users);
+            export_data["most_point_users"] = most_point_users;
             let canvas = this.canvas_tag_most_point_users.nativeElement;
             var imgData = canvas.toDataURL("image/png", 1.0);
             pdf.addImage(imgData, 'png', 50, i * height_per_graph + 20);
@@ -958,7 +959,7 @@ export class AnalyticsComponent implements OnInit {
             for (let index in this.data_set_most_point_departments[0].data) {
                 most_point_departments[this.labels_most_point_departments[index]] = this.data_set_most_point_departments[0].data[index]; 
             }
-            export_data.push(most_point_departments);
+            export_data["most_point_departments"] = most_point_departments; 
             if (i === 4) {
                 pdf.addPage();
                 i = 0;
@@ -973,7 +974,7 @@ export class AnalyticsComponent implements OnInit {
             for (let index in this.data_set_number_of_tasks_completed_by_user[0].data) {
                 data_set_number_of_tasks_completed_by_user[this.labels_number_of_tasks_completed_by_user[index]] = this.data_set_number_of_tasks_completed_by_user[0].data[index]; 
             }
-            export_data.push(data_set_number_of_tasks_completed_by_user);
+            export_data["data_set_number_of_tasks_completed_by_user"] = data_set_number_of_tasks_completed_by_user; 
             if (i === 4) {
                 pdf.addPage();
                 i = 0;
@@ -988,7 +989,7 @@ export class AnalyticsComponent implements OnInit {
             for (let index in this.data_set_most_reward_redemptions[0].data) {
                 most_reward_redemptions[this.labels_most_reward_redemptions[index]] = this.data_set_most_reward_redemptions[0].data[index]; 
             }
-            export_data.push(most_reward_redemptions);
+            export_data["most_reward_redemptions"] = most_reward_redemptions;
             if (i === 4) {
                 pdf.addPage();
                 i = 0;
@@ -1003,7 +1004,7 @@ export class AnalyticsComponent implements OnInit {
             for (let index in this.data_set_average_point_of_assignment) {
                 average_point_of_assignment[this.labels_average_point_of_assignment[index]] = this.data_set_average_point_of_assignment[index]; 
             }
-            export_data.push(average_point_of_assignment);
+            export_data["average_point_of_assignment"] = average_point_of_assignment;
             if (i === 4) {
                 pdf.addPage();
                 i = 0;
@@ -1018,7 +1019,7 @@ export class AnalyticsComponent implements OnInit {
             for (let index in this.data_set_point_value_over_time[0].data) {
                 point_value_over_time[this.labels_point_value_over_time[index]] = this.data_set_point_value_over_time[0].data[index]; 
             }
-            export_data.push(point_value_over_time);
+            export_data["point_value_over_time"] = point_value_over_time
             if (i === 4) {
                 pdf.addPage();
                 i = 0;
@@ -1033,7 +1034,7 @@ export class AnalyticsComponent implements OnInit {
             for (let index in this.data_set_most_sent_point_user[0].data) {
                 most_sent_point_user[this.labels_most_sent_point_user[index]] = this.data_set_most_sent_point_user[0].data[index]; 
             }
-            export_data.push(most_sent_point_user);
+            export_data["most_sent_point_user"] = most_sent_point_user;
             if (i === 4) {
                 pdf.addPage();
                 i = 0;
@@ -1048,7 +1049,7 @@ export class AnalyticsComponent implements OnInit {
             for (let index in this.data_set_most_received_point_user[0].data) {
                 most_received_point_user[this.labels_most_received_point_user[index]] = this.data_set_most_received_point_user[0].data[index]; 
             }
-            export_data.push(most_received_point_user);
+            export_data["most_received_point_user"] = most_received_point_user;
             if (i === 4) {
                 pdf.addPage();
                 i = 0;
@@ -1059,8 +1060,29 @@ export class AnalyticsComponent implements OnInit {
             i++;
         }
         // let csv_data = json2csv({data: export_data, flatten: true});
+        console.log("export data", this.ConvertToCSV_second(export_data));
+      var blob = new Blob([this.ConvertToCSV_second(export_data)], { type: 'text/csv' });
+      var url= window.URL.createObjectURL(blob);
+      window.open(url);
+        // console.log("export data", this.ConvertToCSV(export_data));
+        // this.csvService.download(export_data, 'Filename');
+    }
+    ConvertToCSV(objArray) {
+        var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+        var str = '';
 
-        this.csvService.download(export_data, 'Filename');
+        for (var i = 0; i < array.length; i++) {
+            var line = '';
+            for (var index in array[i]) {
+                if (line != '') line += ','
+
+                line += array[i][index];
+            }
+
+            str += line + '\r\n';
+        }
+
+        return str;
     }
     getCsvFromNestedJson(json_data) {
         let row="";
@@ -1225,29 +1247,30 @@ export class AnalyticsComponent implements OnInit {
         pdf.save("download.pdf");        
     }
     // convert Json to CSV data in Angular2
-    ConvertToCSV(objArray) {
+    ConvertToCSV_second(objArray) {
         var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
         var str = '';
-        var row = "";
+        var value_row = "";
+        var label_row = "";
+        var graph_row = "";
         console.log("convert to csv, ")
-        for (var index in objArray[0]) {
-            //Now convert each value to string and comma-separated
-            row += index + ',';
-        }
-        row = row.slice(0, -1);
-        //append Label row with line break
-        str += row + '\r\n';
-
-        for (var i = 0; i < array.length; i++) {
-            var line = '';
-            for (var index in array[i]) {
-                if (line != '') line += ','
-
-                line += array[i][index];
+        for (var graph in objArray) {
+            graph_row = "";
+            value_row = "";
+            label_row = "";
+            graph_row += graph;
+            str += graph_row + '\r\n';
+            for (var index in objArray[graph]) {
+                //Now convert each value to string and comma-separated
+                label_row += index + ',';
+                value_row += objArray[graph][index] + ',';
             }
-            str += line + '\r\n';
+            label_row = label_row.slice(0, -1);
+            value_row = value_row.slice(0, -1);
+            //append Label row with line break
+            str += label_row + '\r\n';
+            str += value_row + '\r\n';
         }
-        console.log("csv convert", str);
         return str;
     }
     downloadFile(data){
