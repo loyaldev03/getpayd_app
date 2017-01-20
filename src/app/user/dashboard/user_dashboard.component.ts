@@ -28,6 +28,7 @@ export class UserDashboardComponent implements OnInit{
     getUserInfo(id){
       this.adminService.getUser(id).subscribe(
         data => {
+          console.log("user_data", data);
           this.user = data;
           this.available_tokens = this.user.available_tokens
           this.getAvailableContents();

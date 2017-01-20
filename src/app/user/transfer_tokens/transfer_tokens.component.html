@@ -5,11 +5,11 @@
       <autocomplete (setUser)="setUser($event)" [data]="users" ></autocomplete>
     </div>
     <div class="form-group">
-      <input class="form-control" type="Number" #number_of_tokens name="value" formControlName="value" placeholder="Number Of Tokens" min="0" [max]="user.available_tokens">
+      <input class="form-control" type="Number" #number_of_tokens name="value" formControlName="value" placeholder="Number Of Tokens" min="0">
     </div>
     <div class="form-group">
       <input class="form-control" type="text" name="message" formControlName="message" placeholder="Message">
     </div>    
-    <button class="btn btn-primary" type="submit" [disabled]="user_id === 0 || !transfer_form.valid ||  number_of_tokens.value > user.available_tokens"><i class="fa fa-floppy-o"></i> Transfer</button>
+    <button class="btn btn-primary" type="submit" [disabled]="user_id === 0 || !transfer_form.valid ||  number_of_tokens.value > available_tokens"><i class="fa fa-floppy-o"></i> Transfer</button>
   </form>
 </div>
