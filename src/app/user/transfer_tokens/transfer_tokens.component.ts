@@ -20,7 +20,8 @@ export class TransferTokensComponent implements OnInit{
   private searchStr: string;
   private user_id:any = 0;
   private user: any;
-
+  private available_tokens: any = 0;
+  
   constructor(
     private adminService: AdminService,
     private userService: UserService,
@@ -35,8 +36,21 @@ export class TransferTokensComponent implements OnInit{
   public setUser(e){
     this.user_id = e;
   }
+  
+  getUserInfo(id){
+    this.adminService.getUser(id).subscribe(
+      data => {
+        this.user = data;
+        this.available_tokens = this.user.available_tokens;
+        console.log("user data transfer tokens", this.user);
+      },
+      error => console.log(error),
+      () => {}
+    );
+  }   
+  
   ngOnInit() {
-    this.user = JSON.parse(localStorage.getItem('currentUser'));
+    this.getUserInfo(JSON.parse(localStorage.getItem('currentUser'))._id);
     this.transfer_form = this.formBuilder.group({
       value: this.value,
       message: this.message
