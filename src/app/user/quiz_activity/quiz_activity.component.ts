@@ -63,10 +63,6 @@ export class QuizActivityComponent implements OnInit{
   }
 
   finalizeTest(){
-    if (this.result[this.quiz_index] === this.quizzes[this.quiz_index].correct_answer){
-      this.correct_answers_number += 1;
-      this.tokens_awarded = this.user.available_tokens + this.correct_answers_number * this.content.reward;
-    }
     this.onFinish();
   }
 
@@ -82,6 +78,10 @@ export class QuizActivityComponent implements OnInit{
   }
 
   onFinish() {
+    if (this.result[this.quiz_index] === this.quizzes[this.quiz_index].correct_answer){
+      this.correct_answers_number += 1;
+      this.tokens_awarded = this.user.available_tokens + this.correct_answers_number * this.content.reward;
+    }
     if (!this.user.activities){
       this.user.activities = [];
     }
