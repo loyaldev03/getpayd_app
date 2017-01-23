@@ -916,7 +916,7 @@ export class AnalyticsComponent implements OnInit {
     }
 
     exportChartAsCsv() {
-        var pdf = new jsPDF();
+        var pdf = new jsPDF('p', 'mm', [297, 210]);
         let height_per_graph: number = 60;
         let width_per_graph: number = 100; 
         let i: number = 0;
@@ -960,7 +960,7 @@ export class AnalyticsComponent implements OnInit {
                 most_point_departments[this.labels_most_point_departments[index]] = this.data_set_most_point_departments[0].data[index]; 
             }
             export_data["most_point_departments"] = most_point_departments; 
-            if (i === 4) {
+            if (i === 3) {
                 pdf.addPage();
                 i = 0;
             }
@@ -975,7 +975,7 @@ export class AnalyticsComponent implements OnInit {
                 data_set_number_of_tasks_completed_by_user[this.labels_number_of_tasks_completed_by_user[index]] = this.data_set_number_of_tasks_completed_by_user[0].data[index]; 
             }
             export_data["data_set_number_of_tasks_completed_by_user"] = data_set_number_of_tasks_completed_by_user; 
-            if (i === 4) {
+            if (i === 3) {
                 pdf.addPage();
                 i = 0;
             }
@@ -990,7 +990,7 @@ export class AnalyticsComponent implements OnInit {
                 most_reward_redemptions[this.labels_most_reward_redemptions[index]] = this.data_set_most_reward_redemptions[0].data[index]; 
             }
             export_data["most_reward_redemptions"] = most_reward_redemptions;
-            if (i === 4) {
+            if (i === 3) {
                 pdf.addPage();
                 i = 0;
             }
@@ -1005,7 +1005,7 @@ export class AnalyticsComponent implements OnInit {
                 average_point_of_assignment[this.labels_average_point_of_assignment[index]] = this.data_set_average_point_of_assignment[index]; 
             }
             export_data["average_point_of_assignment"] = average_point_of_assignment;
-            if (i === 4) {
+            if (i === 3) {
                 pdf.addPage();
                 i = 0;
             }
@@ -1020,7 +1020,7 @@ export class AnalyticsComponent implements OnInit {
                 point_value_over_time[this.labels_point_value_over_time[index]] = this.data_set_point_value_over_time[0].data[index]; 
             }
             export_data["point_value_over_time"] = point_value_over_time
-            if (i === 4) {
+            if (i === 3) {
                 pdf.addPage();
                 i = 0;
             }
@@ -1035,7 +1035,7 @@ export class AnalyticsComponent implements OnInit {
                 most_sent_point_user[this.labels_most_sent_point_user[index]] = this.data_set_most_sent_point_user[0].data[index]; 
             }
             export_data["most_sent_point_user"] = most_sent_point_user;
-            if (i === 4) {
+            if (i === 3) {
                 pdf.addPage();
                 i = 0;
             }
@@ -1050,7 +1050,7 @@ export class AnalyticsComponent implements OnInit {
                 most_received_point_user[this.labels_most_received_point_user[index]] = this.data_set_most_received_point_user[0].data[index]; 
             }
             export_data["most_received_point_user"] = most_received_point_user;
-            if (i === 4) {
+            if (i === 3) {
                 pdf.addPage();
                 i = 0;
             }
@@ -1100,7 +1100,7 @@ export class AnalyticsComponent implements OnInit {
         // let canvas = this.canvas_tag_top_videos.nativeElement;
         // var imgData = canvas.toDataURL("image/jpeg", 1.0);
         // pdf.addImage(imgData, 'JPEG', 0, 0);
-        var pdf = new jsPDF();
+        var pdf = new jsPDF('1', 'mm', [200, 250]);
         let height_per_graph: number = 70;
         let width_per_graph: number = 100; 
         let i: number = 0;
@@ -1144,7 +1144,7 @@ export class AnalyticsComponent implements OnInit {
                 most_point_departments[this.labels_most_point_departments[index]] = this.data_set_most_point_departments[0].data[index]; 
             }
             export_data.push(most_point_departments);
-            if (i === 4) {
+            if (i === 3) {
                 pdf.addPage();
                 i = 0;
             }
@@ -1159,7 +1159,7 @@ export class AnalyticsComponent implements OnInit {
                 data_set_number_of_tasks_completed_by_user[this.labels_number_of_tasks_completed_by_user[index]] = this.data_set_number_of_tasks_completed_by_user[0].data[index]; 
             }
             export_data.push(data_set_number_of_tasks_completed_by_user);
-            if (i === 4) {
+            if (i === 3) {
                 pdf.addPage();
                 i = 0;
             }
@@ -1174,7 +1174,7 @@ export class AnalyticsComponent implements OnInit {
                 most_reward_redemptions[this.labels_most_reward_redemptions[index]] = this.data_set_most_reward_redemptions[0].data[index]; 
             }
             export_data.push(most_reward_redemptions);
-            if (i === 4) {
+            if (i === 3) {
                 pdf.addPage();
                 i = 0;
             }
@@ -1189,7 +1189,7 @@ export class AnalyticsComponent implements OnInit {
                 average_point_of_assignment[this.labels_average_point_of_assignment[index]] = this.data_set_average_point_of_assignment[index]; 
             }
             export_data.push(average_point_of_assignment);
-            if (i === 4) {
+            if (i === 3) {
                 pdf.addPage();
                 i = 0;
             }
@@ -1204,7 +1204,7 @@ export class AnalyticsComponent implements OnInit {
                 point_value_over_time[this.labels_point_value_over_time[index]] = this.data_set_point_value_over_time[0].data[index]; 
             }
             export_data.push(point_value_over_time);
-            if (i === 4) {
+            if (i === 3) {
                 pdf.addPage();
                 i = 0;
             }
@@ -1219,7 +1219,7 @@ export class AnalyticsComponent implements OnInit {
                 most_sent_point_user[this.labels_most_sent_point_user[index]] = this.data_set_most_sent_point_user[0].data[index]; 
             }
             export_data.push(most_sent_point_user);
-            if (i === 4) {
+            if (i === 3) {
                 pdf.addPage();
                 i = 0;
             }
@@ -1234,7 +1234,7 @@ export class AnalyticsComponent implements OnInit {
                 most_received_point_user[this.labels_most_received_point_user[index]] = this.data_set_most_received_point_user[0].data[index]; 
             }
             export_data.push(most_received_point_user);
-            if (i === 4) {
+            if (i === 3) {
                 pdf.addPage();
                 i = 0;
             }
