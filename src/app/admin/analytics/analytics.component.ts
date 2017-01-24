@@ -1100,7 +1100,7 @@ export class AnalyticsComponent implements OnInit {
         // let canvas = this.canvas_tag_top_videos.nativeElement;
         // var imgData = canvas.toDataURL("image/jpeg", 1.0);
         // pdf.addImage(imgData, 'JPEG', 0, 0);
-        var pdf = new jsPDF('1', 'mm', [200, 250]);
+        var pdf = new jsPDF('1', 'mm', [500, 250]);
         let height_per_graph: number = 70;
         let width_per_graph: number = 100; 
         let i: number = 0;
