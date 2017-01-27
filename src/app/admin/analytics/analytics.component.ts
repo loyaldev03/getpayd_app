@@ -1068,7 +1068,7 @@ export class AnalyticsComponent implements OnInit {
         // console.log("export data", this.ConvertToCSV(export_data));
         // this.csvService.download(export_data, 'Filename');
     }
-    exportChartAsExcel() {
+    exportChartAsXls() {
         console.log("export char as excel--------------------------------");
         var pdf = new jsPDF('p', 'mm', [297, 210]);
         let height_per_graph: number = 60;
@@ -1215,7 +1215,7 @@ export class AnalyticsComponent implements OnInit {
         }
         // let csv_data = json2csv({data: export_data, flatten: true});
         console.log("export data", this.ConvertToCSV_second(export_data));
-      var blob = new Blob([this.ConvertToCSV_second(export_data)], { type: 'text/csv' });
+      var blob = new Blob([this.ConvertToCSV_second(export_data)], { type: 'text/xls' });
       var url= window.URL.createObjectURL(blob);
       window.open(url);
         // console.log("export data", this.ConvertToCSV(export_data));

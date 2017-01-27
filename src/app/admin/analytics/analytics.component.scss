@@ -16,15 +16,18 @@
 .export:hover .dropdown {
   display: block;
 }
+.export-graph {
+  width: 94%;
+}
 .dropdown {
   position: absolute;
   z-index: 100;
   background: white;
-  left: 15px;
+  left: 16px;
   right: 25px;
   list-style: none;
   padding: 0;
-  margin-top: 1px;
+  margin-top: 36px;
   display: none;
   top: 56px;
 
@@ -37,7 +40,7 @@
     border-bottom: 1px solid RGB(200,200,200);  
   } 
 }
-.export-graph {
+.export-xls {
   width:47%;
   display: block;
 }
