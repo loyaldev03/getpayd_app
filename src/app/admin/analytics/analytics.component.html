@@ -22,7 +22,7 @@
       <div class="col-sm-6 col-lg-2 export">
         <span class="export-span">Export</span>
         <button class="form-control col-lg-1 export-graph" (click)="exportChartAsGraph()">Graph</button>
-        <button class="form-control col-lg-1 export-csv" (click)="exportChartAsCsv()">CSV</button>
+        <button class="form-control col-lg-1 export-csv" (click)="exportChartAsCsv()">CSV/XLS</button>
         <ul class="dropdown">
           <li class="fa" *ngFor="let item of export_list" [attr.value]="item.value" (click)="dropdownItemClickEvent($event)">{{item.label}}</li>
         </ul>

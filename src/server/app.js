@@ -34,8 +34,8 @@ var TransferTokens = require('./transfer_tokens.model.js');
 var development_server_ip = "http://localhost:3000";
 var production_server_ip = "http://app.getpayd.io";
 var staging_server_ip = "https://getpayd-new-warzi117.c9users.io:8080";
-// var server_ip = development_server_ip;
-var server_ip = production_server_ip;
+var server_ip = development_server_ip;
+// var server_ip = production_server_ip;
 //var server_ip = staging_server_ip;
 
 var api_key = 'key-9cc58f4c99d912d09f852845200a4803';
@@ -602,6 +602,7 @@ db.once('open', function() {
       });
     }
     else if (req.params.department_id != "undefined") {
+      console.log("department", req.params.department_id);
       RewardRedemptions.find({'user.company._id':req.params.company_id, 'user.department._id': req.params.department_id, time: {$gte: req.params.date_from, $lte:req.params.date_end}}, function(err, tasks) {
         if (err) return console.log(err);
         res.json(tasks);
@@ -623,7 +624,7 @@ db.once('open', function() {
   })
 
   app.put('/update_reward_redemptions', function(req, res){
-    RewardRedemptions.findOneAndUpdate({'reward._id': req.body.reward_id, 'user._id':req.body.user._id}, {number_of_reward: req.body.number_of_reward}, function(err, reward){
+    RewardRedemptions.findOneAndUpdate({'reward._id': req.body.reward._id, 'user._id':req.body.user._id}, {number_of_reward: req.body.number_of_reward}, function(err, reward){
       if (err) console.log(err);
       res.status(200).json(reward);
     });
@@ -798,6 +799,7 @@ db.once('open', function() {
   })
   //get most reward redemptions
   app.get('/get_most_reward_redemptions/:company_id/:department_id/:user_id/:date_from/:date_end', function(req, res) {
+    console.log("------------------------get most reward redemptions-------------------------------------");
     var date_from = new Date(req.params.date_from);
     var date_end = new Date(req.params.date_end);
     if (req.params.user_id != "undefined") {
@@ -807,6 +809,7 @@ db.once('open', function() {
       })    
     }
     else if (req.params.department_id != 'undefined') {
+      console.log("--------------------department id---------------------", req.params.department_id);
       RewardRedemptions.aggregate([{$match: {'user.company._id':req.params.company_id, 'user.department._id':req.params.department_id, time: {$gte: date_from, $lte: date_end}}},{$sort: {number_of_reward: -1}}, {$limit: 10} ], function(err, res1) {
         if (err) return console.log(err);
         res.json(res1);
