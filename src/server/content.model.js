@@ -38,3 +38,25 @@ var contentSchema = mongoose.Schema({
 var Content = mongoose.model('Content', contentSchema);
 
 module.exports = Content;
+
+
+
+var mongoose = require('mongoose');
+
+var contentSchema = mongoose.Schema({
+    title: String,
+    content: String,
+    type: String,
+    available_to: Array,
+    reward: Number,
+    date_end: Date,
+    quizzes: Array,
+    company: Object,
+    reference_link: String,
+    attachment_data: String,
+    date_created: Date,
+});
+
+var Content = mongoose.model('Content', contentSchema);
+
+module.exports = Content;           
