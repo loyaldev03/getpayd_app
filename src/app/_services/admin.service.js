@@ -84,6 +84,54 @@ var AdminService = (function () {
     AdminService.prototype.getQuizzes = function () {
         return this.http.get('/quizzes').map(function (res) { return res.json(); });
     };
+    
+    AdminService.prototype.send_password_reset_email = function (user) {
+        return this.http.post('/send_password_reset_email', JSON.stringify(user), this.options);
+    };
+    AdminService.prototype.editUser = function (user) {
+        return this.http.put("/user/" + user._id, JSON.stringify(user), this.options);
+    };
+    AdminService.prototype.deleteUser = function (user) {
+        return this.http.delete("/user/" + user._id, this.options);
+    };
+    //Company Service
+    AdminService.prototype.getCompanies = function () {
+        return this.http.get('/companies').map(function (res) { return res.json(); });
+    };
+    AdminService.prototype.getCompany = function (company_id) {
+        return this.http.get("/specific_company/" + company_id).map(function (res) { return res.json(); });
+    };
+    AdminService.prototype.addCompany = function (company) {
+        company.date_joined = Date.now();
+        return this.http.post("/company", JSON.stringify(company), this.options);
+    };
+    AdminService.prototype.editCompany = function (company) {
+        return this.http.put("/company/" + company._id, JSON.stringify(company), this.options);
+    };
+    AdminService.prototype.deleteCompany = function (company) {
+        return this.http.delete("/company/" + company._id, this.options);
+    };
+    //Content Service
+    AdminService.prototype.getContents = function () {
+        var current_user = JSON.parse(localStorage.getItem('currentUser'));
+        return this.http.get("/contents/" + current_user._id).map(function (res) { return res.json(); });
+    };
+    AdminService.prototype.getContent = function (content_id) {
+        return this.http.get("/content/" + content_id).map(function (res) { return res.json(); });
+    };
+    AdminService.prototype.addContent = function (content) {
+        return this.http.post("/content", JSON.stringify(content), this.options);
+    };
+    AdminService.prototype.editContent = function (content) {
+        return this.http.put("/content/" + content._id, JSON.stringify(content), this.options);
+    };
+    AdminService.prototype.deleteContent = function (content) {
+        return this.http.delete("/content/" + content._id, this.options);
+    };
+    //Quiz
+    AdminService.prototype.getQuizzes = function () {
+        return this.http.get('/quizzes').map(function (res) { return res.json(); });
+    };
     AdminService.prototype.addQuiz = function (quiz) {
         return this.http.post("/quiz", JSON.stringify(quiz), this.options);
     };
