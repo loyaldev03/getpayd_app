@@ -53,3 +53,60 @@
         </table>
     </div>
 </div>
+
+
+<div class="container">
+    <h1> Manage Company </h1>
+    <div class="row">
+        <div class="col-sm-8">
+           <div class="input-group">
+              <input type="text" class="form-control" placeholder="Search for..." [(ngModel)] = "search_str">
+              <span class="input-group-btn">
+                <button class="btn btn-secondary" type="button">Go!</button>
+              </span>
+            </div> 
+        </div>
+        <div class="offset-sm-2 col-sm-2">
+            <a class="btn btn-primary btn-block" [routerLink] = "'/admin/new_company'">ADD</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <h3 class="offset-sm-4 col-sm-4"> Current Companies </h3>
+        <div class="form-group col-sm-4">
+            <label for="ccmonth">Filter</label>
+            <select class="form-control" id="ccmonth" [(ngModel)]='filter_str'>
+                <option value="first_name">Company</option>
+                <option value="department">Email</option>
+                <option value="date_joined">Date Joined</option>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <table class="table table-bordered table-striped">
+            <thead class="thead-default">
+                <tr>
+                    <th>Company Name</th>
+                    <th>Email</th>
+                    <th>Date Joined</th>
+                    <th col=1></th>
+                </tr>
+            </thead>
+            <tbody *ngIf="companies.length === 0">
+                <tr>
+                    <td colspan="4">There are no companies in the DB. Add a new company below.</td>
+                </tr>  
+            </tbody>
+            <tbody>
+                <tr *ngFor="let company of companies | orderBy : filter_str | search: search_str">
+                    <td>{{company.company_name}}</td>
+                    <td>{{company.email}}</td>
+                    <td>{{company.date_joined | date: 'dd/MM/yyyy'}}</td>
+                    <td class="remove-col">
+                        <i class="fa fa-remove fa-lg mt-2 remove-icon" (click)="onClick(company)"></i>
+                    </td>                    
+                </tr>  
+            </tbody>
+        </table>
+    </div>
+</div>
