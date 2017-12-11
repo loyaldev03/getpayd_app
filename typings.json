@@ -3,3 +3,9 @@
     "jquery": "registry:dt/jquery#1.10.0+20170104155652"
   }
 }
+
+{
+  "globalDependencies": {
+    "jquery": "registry:dt/jquery#1.10.0+20170104155652"
+  }
+}
