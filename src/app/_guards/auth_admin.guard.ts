@@ -38,4 +38,12 @@ export class AuthAdminGuard implements CanActivate {
         this.router.navigate(['/user/user']);
         return false;
     }
+    
+    canActivate_admin() {
+        if (localStorage.getItem('currentUser') && ((JSON.parse(localStorage.getItem('currentUser')).email === 'admin@gmail.com') || (JSON.parse(localStorage.getItem('currentUser')).company_name != null))) {
+            return true;
+        }
+        this.router.navigate(['/user/user']);
+        return false;
+    }    
 }
