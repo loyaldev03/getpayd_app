@@ -17,7 +17,6 @@ export class AuthUserGuard implements CanActivate {
 
 
 import { Injectable } from '@angular/core';
-import { Router, CanActivate } from '@angular/router';
 
 @Injectable()
 export class AuthUserGuard implements CanActivate {
