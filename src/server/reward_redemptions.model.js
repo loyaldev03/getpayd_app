@@ -19,3 +19,4 @@ var rewardRedemptionsSchema = mongoose.Schema({
 var RewardRedemptions = mongoose.model('RewardRedemptions', rewardRedemptionsSchema);
 
 module.exports = RewardRedemptions;
+module.exports = RewardRedemptionss;
