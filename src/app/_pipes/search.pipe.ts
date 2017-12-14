@@ -19,6 +19,22 @@ export class SearchPipe implements PipeTransform {
         return value.includes(orderer);
       });
     } 
+    if (input && orderer)
+    {
+      return input.filter((item) => {
+        let value:string = "";
+        for(var key in item) {
+          if (item[key]["department"] === undefined) {
+            value += item[key];
+          }
+          else {
+            value += item[key]["department"]
+          }
+        }
+        return value.includes(orderer);
+      });
+    } 
+
     return input; 
   }
 }
