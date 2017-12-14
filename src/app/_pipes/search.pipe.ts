@@ -22,3 +22,5 @@ export class SearchPipe implements PipeTransform {
     return input; 
   }
 }
+
+import { MockBackend, MockConnection } from '@angular/http/testing';
