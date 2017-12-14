@@ -5,6 +5,7 @@ var rewardRedemptionsSchema = mongoose.Schema({
     number_of_reward: Number,
     user: Object,
     time: Date
+    time: Date
 });
 
 var RewardRedemptions = mongoose.model('RewardRedemptions', rewardRedemptionsSchema);
