@@ -13,7 +13,6 @@ var companySchema = mongoose.Schema({
     email: String,
     password: String,
     date_joined: Date,
-    number_of_users: Number
 });
 
 var Company = mongoose.model('Company', companySchema);
