@@ -8,6 +8,14 @@ var companySchema = mongoose.Schema({
     number_of_users: Number
 });
 
+var companySchema = mongoose.Schema({
+    company_name: String,
+    email: String,
+    password: String,
+    date_joined: Date,
+    number_of_users: Number
+});
+
 var Company = mongoose.model('Company', companySchema);
 
 module.exports = Company;
