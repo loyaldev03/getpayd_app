@@ -18,6 +18,25 @@
 // reference_link
 // attachment_data
 //]
+//title
+//content
+//type
+//available_to
+//reward
+//date_end
+//quizzes [
+//{
+//  question:
+//  answers: []
+//  correct_answer:
+//} 
+// company {
+//   _id:
+//   company_name:
+//   email:
+// }
+// reference_link
+// attachment_data
 
 var mongoose = require('mongoose');
 
