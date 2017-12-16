@@ -43,6 +43,8 @@ audio:not([controls]) {
 
 progress {
   vertical-align: baseline; }
+progress {
+  vertical-align: baseline; }
 
 template,
 [hidden] {
