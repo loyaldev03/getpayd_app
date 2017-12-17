@@ -83,6 +83,12 @@ export class ViewActivityComponent implements OnInit{
       this.getActivities(params["user_id"]);
     });
   }
+    
+  ngOnInit() {
+    this.route.params.subscribe(params => {
+      this.getActivities(params["user_id"]);
+    });
+  }    
 
   getActivities(user_id) {
     if (user_id === 'all'){
@@ -110,4 +116,30 @@ export class ViewActivityComponent implements OnInit{
     }
   }
 
+  getActivities(user_id) {
+    if (user_id === 'all'){
+      this.adminService.getUsers().subscribe(
+        data => {
+          this.activities = [];
+          for (let index in data) {
+            this.activities = this.activities.concat(data[index].activities);
+          }        
+          console.log(this.activities);
+        },
+        error => console.log(error),
+        () => {this.isLoading = false}
+      );      
+    }
+    else {
+      this.adminService.getUser(user_id).subscribe(
+        data => {
+          this.activities = data.activities;
+          console.log(this.activities);
+        },
+        error => console.log(error),
+        () => {this.isLoading = false}
+      );            
+    }
+  }
+    
 }
