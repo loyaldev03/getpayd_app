@@ -3,6 +3,11 @@ import { Ng2Bs3ModalModule } from 'ng2-bs3-modal/ng2-bs3-modal';
 import { AdminService }             from '../../../_services/admin.service.ts';
 declare var jQuery: any;
 
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef }        from '@angular/core';
+import { Ng2Bs3ModalModule } from 'ng2-bs3-modal/ng2-bs3-modal';
+import { AdminService }             from '../../../_services/admin.service.ts';
+declare var jQuery: any;
+
 @Component({
     selector: 'block_chart',
     templateUrl: 'block_chart.component.html',
