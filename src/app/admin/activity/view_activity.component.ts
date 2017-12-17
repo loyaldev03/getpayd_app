@@ -2,6 +2,10 @@ import { Component, OnInit }        from '@angular/core';
 import { AdminService }     from '../../_services/admin.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { Component, OnInit }        from '@angular/core';
+import { AdminService }     from '../../_services/admin.service';
+import { ActivatedRoute, Router } from '@angular/router';
+
 @Component({
     templateUrl: 'view_activity.component.html',
     styleUrls: [ './view_activity.component.scss' ]
