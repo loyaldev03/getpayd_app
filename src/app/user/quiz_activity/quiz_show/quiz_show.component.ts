@@ -118,4 +118,8 @@ export class QuizShowComponent implements OnInit{
   to_quiz_activity() {
     this.router.navigate(['/user/quiz_activity/', this.quiz_id]); 
   }
+
+  to_quiz_activity() {
+    this.router.navigate(['/user/quiz_activity/', this.quiz_id]); 
+  }
 }
