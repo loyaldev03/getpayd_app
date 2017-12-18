@@ -67,6 +67,29 @@ export class UserDashboardComponent implements OnInit{
         () => {this.isLoading = false}
       );
     }
+    getAvailableContents1() {
+      this.userService.getAvailableContents(JSON.parse(localStorage.getItem('currentUser')).department.__v,JSON.parse(localStorage.getItem('currentUser')).department._id, JSON.parse(localStorage.getItem('currentUser')).department.department).subscribe(
+        data => {
+          this.available_ids = data.map((content) => {return content._id;})
+          let unavailable_ids = this.user.activities.map((activity) => {return activity.content._id})
+          this.available_ids = this.available_ids.filter( function( el ) {
+            return unavailable_ids.indexOf( el ) < 0;
+          });
+          console.log(this.available_ids);
+          this.available_contents = [];
+          for (let index in data){
+            if (this.available_ids.indexOf(data[index]._id) < 0) {
+              continue;
+            }
+            this.available_contents.push(data[index]);
+          }
+          console.log(this.available_contents);
+        },
+        error => console.log(error),
+        () => {this.isLoading = false}
+      );
+    }
+}    
 }
 
 import { Component, OnInit }        from '@angular/core';
