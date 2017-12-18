@@ -4,6 +4,12 @@ import { UserService, AdminService }             from '../../../_services/index'
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location }                 from '@angular/common';
 
+import { Component, OnInit }        from '@angular/core';
+import { Content }                  from '../../../_models/index'
+import { UserService, AdminService }             from '../../../_services/index';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Location }                 from '@angular/common';
+
 @Component({
     templateUrl: 'quiz_show.component.html',
     styleUrls: [ './quiz_show.component.scss' ]
