@@ -51,6 +51,18 @@ export class QuizShowComponent implements OnInit{
     );
   }
 
+      getContent(id) {
+    this.adminService.getContent(id).subscribe(
+      data => {
+        console.log("quiz log", data);
+        this.content = data;
+      },
+      error => console.log(error),
+      () => {this.isLoading = false}
+    );
+  }
+
+    
   to_quiz_activity() {
     this.router.navigate(['/user/quiz_activity/', this.quiz_id]); 
   }
