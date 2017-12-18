@@ -37,6 +37,18 @@ export class BlockChartComponent implements OnInit {
     @Input() public isDataSet: number = 1;
     @Input() public iframe_data: any;
     
+    @Input() public iframe_class: string = "card-primary";
+    @Input() public iframe_options: any;
+    @Input() public iframe_color: any;
+    @Input() public iframe_data_sets: any;
+    @Input() public iframe_type: any;
+    @Input() public iframe_labels: any;
+    @Input() public iframe_legent: any;
+    @Input() public iframe_number: any;
+    @Input() public iframe_title: any;
+    @Input() public isDataSet: number = 1;
+    @Input() public iframe_data: any;
+
     @Input() public users:any;
     @Input() public departments:any;
     @Input() public user_id: string;
