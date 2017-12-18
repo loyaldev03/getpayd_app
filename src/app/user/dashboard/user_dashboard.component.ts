@@ -25,6 +25,10 @@ export class UserDashboardComponent implements OnInit{
       private adminService: AdminService
     ){ }
 
+        constructor(
+      private userService: UserService,
+      private adminService: AdminService
+    ){ }
     ngOnInit() {
       this.getUserInfo(JSON.parse(localStorage.getItem('currentUser'))._id);
     }
