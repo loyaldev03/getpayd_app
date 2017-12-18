@@ -3,6 +3,10 @@ import { Content }                  from '../../_models/index'
 import { UserService }             from '../../_services/index';
 import { AdminService }             from '../../_services/index';
 
+import { Component, OnInit }        from '@angular/core';
+import { Content }                  from '../../_models/index'
+import { UserService }             from '../../_services/index';
+import { AdminService }             from '../../_services/index';
 
 @Component({
     templateUrl: 'user_dashboard.component.html',
