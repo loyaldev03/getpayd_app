@@ -47,6 +47,17 @@ import { ShoppingCartComponent }   from './shopping_cart/shopping_cart.component
     RewardDetailComponent,
     ShoppingCartComponent,
   ],
+  _declarations: [
+    UserDashboardComponent,
+    RedeemComponent,
+    TransferTokensComponent,
+    AutoCompleteComponent,
+    VideoActivityComponent,
+    QuizActivityComponent,
+    QuizShowComponent,
+    RewardDetailComponent,
+    ShoppingCartComponent,
+  ],  
   providers: [
     AuthenticationService,
     AdminService,
