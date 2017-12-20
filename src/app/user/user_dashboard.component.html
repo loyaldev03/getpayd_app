@@ -217,4 +217,29 @@
             </tbody>
         </table>
     </div>
+    <div class="row">
+        <table class="table table-bordered table-striped">
+            <thead class="thead-default">
+                <tr>
+                    <th>Content Name</th>
+                    <th>Quiz/Video Type</th>
+                    <th>Tokens Value</th>
+                    <th>Date End</th>
+                </tr>
+            </thead>
+            <tbody *ngIf="sample_contents.length === 0">
+                <tr>
+                    <td colspan="4">There are no users in the DB. Add a new user below.</td>
+                </tr>  
+            </tbody>
+            <tbody>
+                <tr *ngFor="let content of sample_contents">
+                    <td>{{content.content_name}}</td>
+                    <td>{{content.type}}</td>
+                    <td>{{content.tokens_value}}</td>
+                    <td>{{content.date_end}}</td>
+                </tr>  
+            </tbody>
+        </table>
+    </div>    
 </div>
