@@ -57,6 +57,10 @@ import { Component } from '@angular/core'
 import { Reward }           from '../../_models/index';
 import { AdminService }     from '../../_services/index';
 
+import { Component } from '@angular/core'
+import { Reward }           from '../../_models/index';
+import { AdminService }     from '../../_services/index';
+
 @Component({
   templateUrl: "shopping_cart.component.html",
   styleUrls: ["./shopping_cart.component.scss"]
