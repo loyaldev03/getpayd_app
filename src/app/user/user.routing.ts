@@ -22,7 +22,18 @@ export const routes: Routes = [
     { path: 'shopping_cart',        component: ShoppingCartComponent },
     { path: '**', redirectTo: '' }
 ];
-
+export const routes: Routes = [
+    { path: '', redirectTo: 'user', pathMatch: 'full' },
+    { path: 'user',                    component: UserDashboardComponent},
+    { path: 'redeem',                  component: RedeemComponent},
+    { path: 'transfer_tokens',         component: TransferTokensComponent},
+    { path: 'video_activity/:id',       component: VideoActivityComponent },
+    { path: 'quiz_activity/:id',       component: QuizActivityComponent },
+    { path: 'quiz_show/:id',            component: QuizShowComponent},    
+    { path: 'reward_detail/:id',        component: RewardDetailComponent },
+    { path: 'shopping_cart',        component: ShoppingCartComponent },
+    { path: '**', redirectTo: '' }
+];
 @NgModule({
     imports: [ RouterModule.forChild(routes) ],
     exports: [ RouterModule ]
