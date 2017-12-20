@@ -5,6 +5,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { UserRoutingModule } from './user.routing';
 // import { Ng2CompleterModule } from "ng2-completer";
+import { NgModule }      from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpModule } from '@angular/http';
+import { UserRoutingModule } from './user.routing';
+// import { Ng2CompleterModule } from "ng2-completer";
+
 
 import { AlertService, AuthenticationService, UserService, AdminService } from '../_services/index';
 
