@@ -28,6 +28,25 @@ export class ShoppingCartComponent{
       () => {this.isLoading = false}
     );
   }
+
+    constructor(
+    private adminService: AdminService
+  ){ }
+
+  ngOnInit() {
+    this.getRewardsForUser();
+  }
+
+  getRewardsForUser() {
+    this.adminService.getUser(JSON.parse(localStorage.getItem('currentUser'))._id).subscribe(
+      data => {
+        this.rewards = data.rewards;   
+      },
+      error => console.log(error),
+      () => {this.isLoading = false}
+    );
+  }
+
 }
 
 import { Component } from '@angular/core'
