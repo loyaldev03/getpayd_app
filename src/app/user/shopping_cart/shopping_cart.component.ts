@@ -58,6 +58,11 @@ import { AdminService }     from '../../_services/index';
   styleUrls: ["./shopping_cart.component.scss"]
 })
 
+@Component({
+  templateUrl: "shopping_cart.component.html",
+  styleUrls: ["./shopping_cart.component.scss"]
+})
+
 export class ShoppingCartComponent{
   private rewards: Reward[] = [];
   private isLoading = true;
